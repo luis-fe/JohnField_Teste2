@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: var(--cor2);
+}
+
+:root.palheta-empresa-a {
+    --cor1: rgb(255, 255, 255);
+    --cor2: rgb(17, 45, 126);
+    --cor3: rgb(93, 140, 233);
+    --cor4: #fff;
+}
+
+:root.palheta-empresa-b {
+    --cor1: rgb(255, 255, 255);
+    --cor2: black;
+    --cor3: darkgray;
+    --cor4: white;
+}
+
+.Corpo{
+    background-color: var(--cor2);
+}
+
+.Menu {
+    width: 100%; /* Ocupar toda a largura da tela */
+    display: flex;
+    justify-content: space-between; /* Distribui os elementos uniformemente */
+    align-items: center;
+}
+
+.left-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.right-menu-item {
+    margin-left: auto; /* Isso empurrará o item "Nome do Usuário" para a direita */
+}
+
+
+
+.TituloPrograma {
+    margin-top: 15px;
+    font-size: 25px;
+    background-color: var(--cor2);
+    width: 100%;
+    text-align: center;
+    color: var(--cor4);
+}
+
+
+#TabelaComparativo {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.DivTabela{
+    width: 100%;
+    height: 78vh;
+    background-color: #fff;
+    margin-top: 10px;
+    border: 1px solid black;
+    overflow-y: scroll;
+}
+
+#TabelaComparativo{
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid black;
+    overflow-y: scroll;
+    margin-top: 10px
+    
+
+}
+
+#TabelaComparativo th, #TabelaComparativo td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    color: var(--cor2);
+    background-color: var(--cor4);
+    font-size: 25px
+}
+
+#TabelaComparativo thead {
+    background-color: var(--cor2);
+    font-weight: bold;
+    color: var(--cor4)
+}
+
+/* Estilos para tornar a tabela responsiva em telas menores */
+@media (max-width: 767px) {
+    #TabelaComparativo {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    #TabelaComparativo th, #TabelaComparativo td {
+        white-space: nowrap;
+    }
+}

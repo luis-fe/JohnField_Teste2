@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGQ (Gestão da Qualidade)</title>
+    <link rel="stylesheet" href="static/css/Cabecalho.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .Tabela {
+            width: 80%;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: auto;
+        }
+
+        #TabelaGrades {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        th {
+            background-color: rgb(17, 45, 126);
+            color: white;
+        }
+
+        .Informacoes {
+            margin: 20px auto;
+            padding: 15px;
+            width: 80%;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #Atualizar{
+            cursor: pointer;
+            font-size: 25PX;
+
+        }
+
+        .Finalizar{
+            width: 100%;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+        }
+
+        #ButtonFinalizar,
+        #ButtonAtualizarOps{
+            font-size: 15px;
+            font-weight: bold;
+            width: 15%;
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: var(--cor2);
+            color: white;
+        }
+
+        #ButtonFinalizar:hover,
+        #ButtonAtualizarOps:hover{
+            background-color: rgb(16, 131, 255);
+        }
+
+
+.Informacoes label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.ModalDefinirLinha {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 2;
+}
+
+.ModalDefinirLinha-content {
+    position: relative;
+    background-color: #fff;
+    margin: 8% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+    max-width: 500px;
+    z-index: 3;
+}
+
+.ModalDefinirLinha-content h3 {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: var(--cor2); /* Lembre-se de definir --cor2 no seu CSS global */
+    text-align: center;
+    font-size: 24px; /* Ajustei o tamanho do texto para 24px */
+    font-family: Arial;
+    color: #fff; /* Adicionei uma cor de texto para garantir visibilidade */
+    border: 5px;
+    margin: 0;
+    z-index: 3;
+}
+
+
+button {
+    padding: 10px 20px;
+    background-color: var(--cor2);
+    color: var(--cor4);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 25px;
+}
+
+.ModalDefinirLinha-content #SelecaoLinha {
+    display: block;
+    margin-top: 60px;
+}
+
+.fechar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--cor1);
+    z-index: 1000;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="CABECALHO">
+        <div class="Corpo">
+            <nav class="Menu">
+                <ul>
+                    <li><a href="TelaPrincipal.html">Home</a></li>
+                    <li><a href="#">Configurações</a>
+                        <ul>
+                            <li><a href="CadastroUsuario.html">Gerenciamento de Usuários</a></li>
+                            <li><a href="GerenciamentoDeLinhas.html">Gerenciamento de Linhas</a></li>
+                            <li><a href="/TelaCaixas">Gerenciamento de Caixas</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Relatórios</a>
+                        <ul>
+                            <li><a href="/TelaLiberacao">Lista Op's</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="TituloRotina">
+            <h2>CONFERÊNCIA REPOSIÇÃO</h2>
+        </div>
+
+        <div class="Informacoes">
+            <label for="text" id="LabelOp"></label>
+            <label for="text" id="PecasLidas"></label>
+            <label for="text" id="PecasOps"></label>        
+            <i title="Atualizar Grades" id="Atualizar" class="bi bi-arrow-clockwise"></i>
+        </div>
+
+        <div class="Tabela">
+            <table id="TabelaGrades"></table>
+        </div>
+        
+        <div class="Finalizar">
+            <button id="ButtonFinalizar">FINALIZAR OP</button>
+            <button id="ButtonAtualizarOps">ATUALIZAR TAG'S</button>
+        </div>
+
+        <div id="ModalDefinirLinha" class="ModalDefinirLinha">
+            <div class="ModalDefinirLinha-content">
+                <span id="FecharModalNovoUsuario" class="fechar">&times;</span>
+                <h3>Selecionar Linha</h3>
+                <label for="text" id="SelecaoLinha" class="SelecaoLinha">Selecione A Linha de Atribuição:</label>
+                <select id="SelectLinha">
+                    <option value="">Linha</option>
+                    <option value="ATIVO">Linha 1</option>
+                    <option value="INATIVO">Linha 2</option>
+                    <option value="INATIVO">Linha 3</option>
+                    <option value="INATIVO">Linha 4</option>
+                    <option value="INATIVO">Linha 5</option>
+                    <option value="INATIVO">Linha 6</option>
+                    <option value="INATIVO">Linha 7</option>
+                    <option value="INATIVO">Linha 8</option>
+                    <option value="INATIVO">Linha 9</option>
+                    <option value="INATIVO">Linha 10</option>
+                  </select>
+                  <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                    <button type="button" id="ButtonConfirmar">Confirmar</button>
+                    <button type="button" id="buttonCancelar">Cancelar</button>
+                </div>
+                <div class="NomesDaLinha" id="NomesDaLinha" style="display: none;">
+                    <Input id="InputOperadores" style="font-size: 25px; font-weight: bold;" readonly></Input>
+                    <button type="button" id="ButtonConfirmarOperadores">Confirmar Operadores?</button>
+                    <button type="button" id="EditarOperadores">Editar Operadores?</button>
+                    <button type="button" id="buttonCancelar2">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const ApiAtualizar = "http://192.168.0.183:5000/api/AtualizacaoFilaOFF";
+            const Token = "a40016aabcx9";
+
+            let dadosApi = [];
+
+            async function Api(Op) {
+                try {
+                    const numeroOP = localStorage.getItem('numeroOP');
+                    const response = await fetch(`http://192.168.0.183:5000/api/DetalhaOPQuantidade?empresa=1&numeroop=${Op}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'a40016aabcx9'
+                        },
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        dadosApi = data[0]["3- Detalhamento da Grade"];
+                        const QtdLida = data[0]["2.2- Total Bipado"];
+                        const QtdOp = data[0]["2.1 - Total OP"];
+                        criarTabela(dadosApi);
+                        document.getElementById('LabelOp').textContent = `Numero da Op: ${numeroOP}` ;
+                        document.getElementById('PecasLidas').textContent = `Qtd Peças Lidas: ${QtdLida}`;
+                        document.getElementById('PecasOps').textContent = `Qtd Peças Op: ${QtdOp}`
+                        console.log(data);
+                    } else {
+                        throw new Error('Erro No Retorno');
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            function criarTabela(dados) {
+    const tabela = document.getElementById('TabelaGrades');
+    tabela.innerHTML = '';
+
+    const cabecalho = tabela.createTHead();
+    const linhaCabecalho = cabecalho.insertRow();
+    linhaCabecalho.insertCell().textContent = 'Cores';
+
+    // Defina a ordem desejada para os tamanhos
+    const ordemTamanhos = ['2', '4', '6', '8', '10', '12', 'PP', 'P', 'M', 'G', 'GG', 'XG', 'XGG', 'G1', 'G2', 'G3'];
+
+    ordemTamanhos.forEach(tamanho => {
+        const th = document.createElement('th');
+        th.textContent = tamanho;
+        linhaCabecalho.appendChild(th);
+    });
+
+    dados.forEach(item => {
+        const linha = tabela.insertRow();
+        const celulaCor = linha.insertCell();
+        celulaCor.textContent = item['2-sortimentosCores'];
+
+        ordemTamanhos.forEach(tamanho => {
+            const celulaQuantidade = linha.insertCell();
+            const indice = item.tamanho.indexOf(tamanho);
+            
+            if (indice !== -1) {
+                const quantidade = item.quantidade[indice];
+                const [atual, total] = quantidade.split('/').map(Number);
+
+                if (atual === 0) {
+                    celulaQuantidade.textContent = quantidade;
+                    celulaQuantidade.style.backgroundColor = 'white';
+                } else if (atual < total) {
+                    celulaQuantidade.textContent = quantidade;
+                    celulaQuantidade.style.backgroundColor = '#FA8072';
+                }
+                else if (atual === total) {
+                    celulaQuantidade.textContent = quantidade;
+                    celulaQuantidade.style.backgroundColor = '#2E8B57';
+                }
+                else if (atual > total) {
+                    celulaQuantidade.textContent = quantidade;
+                    celulaQuantidade.style.backgroundColor = '#FFFF66';
+                } else {
+                    celulaQuantidade.textContent = quantidade;
+                }
+            } else {
+                celulaQuantidade.textContent = '-';
+            }
+        });
+    });
+}
+
+
+
+
+            window.addEventListener('load', () => {
+                const numeroOP = localStorage.getItem('numeroOP');
+                if (numeroOP) {
+                    Api(numeroOP);
+                } else {
+                    console.error('Número da OP não encontrado.');
+                    alert('Selecione uma Op para Prosseguir!');
+                    window.location.href = '/TelaLiberacao';
+                }
+            });
+
+            async function ChamadaAtualizar(Op) {
+            try {
+                const response = await fetch(`${ApiAtualizar}?op=${Op}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': Token
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                } else {
+                    throw new Error('Erro No Retorno');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+
+    const AtualizarPagina = document.getElementById('Atualizar');
+    const ButtonFinalizarOp = document.getElementById('ButtonFinalizar');
+    const ModalDefinirLinha = document.getElementById('ModalDefinirLinha');
+    const FecharModal = document.getElementById('FecharModalNovoUsuario');
+    const InputOperadores = document.getElementById('InputOperadores');
+    const EditarOperadores = document.getElementById('EditarOperadores');
+    const ButtonConfirmar = document.getElementById('ButtonConfirmar');
+    const ButtonCancelar = document.getElementById('buttonCancelar');
+    const ButtonCancelar1 = document.getElementById('buttonCancelar2');
+    const NomesDaLinha = document.getElementById('NomesDaLinha');
+    const AtualizarOps = document.getElementById('ButtonAtualizarOps');
+    
+    
+    
+    
+
+    ButtonConfirmar.addEventListener('click', () =>{
+        NomesDaLinha.style.display = 'block';
+        ButtonConfirmar.style.display = 'none';
+        ButtonCancelar.style.display = 'none';
+        
+        
+    });
+
+    ButtonCancelar.addEventListener('click', () =>{
+        NomesDaLinha.style.display = 'none';
+        ModalDefinirLinha.style.display = 'none';
+        InputOperadores.value = "";
+
+    });
+
+    ButtonCancelar1.addEventListener('click', () =>{
+        NomesDaLinha.style.display = 'none';
+        ModalDefinirLinha.style.display = 'none';
+        InputOperadores.value = "";
+
+    });
+    
+
+    FecharModal.addEventListener('click', () =>{
+        NomesDaLinha.style.display = 'none';
+        ModalDefinirLinha.style.display = 'none';
+        InputOperadores.value = "";
+
+    });
+
+    ButtonFinalizarOp.addEventListener('click', () =>{
+        ModalDefinirLinha.style.display = 'block';
+        ButtonConfirmar.style.display = 'flex';
+        ButtonCancelar.style.display = 'flex';
+        InputOperadores.value = "Dionatan/ Maria/ Francielle";
+        
+    });
+
+    AtualizarPagina.addEventListener('click', () =>{
+        const numeroOP = localStorage.getItem('numeroOP');
+                if (numeroOP) {
+                    Api(numeroOP);
+                } else {
+                    console.error('Número da OP não encontrado.');
+                    alert('Selecione uma Op para Prosseguir!');
+                    window.location.href = '/TelaLiberacao';
+                }
+
+    });
+
+    EditarOperadores.addEventListener('click', () =>{
+        InputOperadores.removeAttribute('readonly');
+        InputOperadores.focus()
+        });
+
+        AtualizarOps.addEventListener('click', () =>{
+            const numeroOP = localStorage.getItem('numeroOP');
+            ChamadaAtualizar(numeroOP)
+
+        })
+
+
+           
+        </script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGQ (Gestão da Qualidade)</title>
+    <link rel="stylesheet" href="static/css/Cabecalho.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/1.5.4/js/dataTables.colReorder.min.js"></script>
+
+    <!-- DataTables Buttons CSS e JS -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+    <style>
+        :root {
+            --cor1: rgb(255, 255, 255);
+            --cor2: rgb(17, 45, 126);
+            --cor3: rgb(93, 140, 233);
+            --cor4: #fff;
+        }
+
+        /* Reset de Estilos Padrão para Melhor Cross-Browser Consistency */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--cor1);
+            margin: 0;
+        }
+
+        h2 {
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+
+        .Corpo {
+            background-color: var(--cor2);
+        }
+
+
+        .TituloPrograma {
+            margin-top: 15px;
+            font-size: 25px;
+            background-color: var(--cor2);
+            color: var(--cor4);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Estilo da Seção de Seleção de Caixa */
+        .SelecaoEnderecos,
+        .SelecaoTag {
+            background-color: var(--cor2);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .SelecaoEnderecos label,
+        .SelecaoTag label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--cor4);
+        }
+
+        .SelecaoEnderecos input[type="text"],
+        .SelecaoTag input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .SelecaoEnderecos button,
+        .SelecaoTag button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .SelecaoEnderecos button:hover,
+        .SelecaoTag button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Adicionando Estilo para Centralizar a Div da Tabela */
+        .Tabela {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            border: 2px solid black;
+            border-radius: 10px;
+            max-height: 50vh;
+            overflow: auto;
+            margin: 20px auto;
+            /* Alteração: Margem ajustada para auto para centralizar */
+            width: 60%;
+            /* Adição: Largura ajustada para 80% da largura do contêiner pai */
+        }
+
+        /* Estilo da Tabela */
+        #TabelaTags {
+            min-width: 150%;
+            width: 100%;
+        }
+
+        #TabelaTags th,
+        #TabelaTags td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        #TabelaTags th {
+            background-color: var(--cor2);
+            color: var(--cor1);
+        }
+
+
+        .dt-buttons {
+            margin-bottom: 20px;
+        }
+
+        .dataTables_wrapper .dt-buttons {
+            width: 60%;
+            display: flex;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            height: 20vh;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #333;
+            text-decoration: none;
+        }
+
+        #Conteudo {
+            margin-top: 20px;
+            font-size: 18px;
+            color: black;
+        }
+
+
+
+        @media (max-width: 1100px) {
+            .Tabela {
+                width: 90%;
+                /* Adição: Reduz a largura para 90% em telas menores */
+            }
+
+            #TabelaTags {
+                font-size: 12px;
+                /* Adição: Reduz o tamanho da fonte em telas menores */
+            }
+
+            .dt-buttons {
+                display: flex;
+                align-items: center;
+            }
+            
+            .Informacoes{
+                display: block;
+                flex-direction: column;
+            }
+
+            .Informacoes label{
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="CABECALHO">
+        <div class="Corpo">
+            <nav class="Menu">
+                <ul>
+                    <li><a href="TelaPrincipal.html">Home</a></li>
+                    <li><a href="#">Configurações</a>
+                        <ul>
+                            <li><a href="CadastroUsuario.html">Gerenciamento de Usuários</a></li>
+                            <li><a href="GerenciamentoDeLinhas.html">Gerenciamento de Linhas</a></li>
+                            <li><a href="/TelaCaixas">Gerenciamento de Caixas</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Relatórios</a>
+                        <ul>
+                            <li><a href="/TelaLiberacao">Lista Op's</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="TituloPrograma">
+            <h2>Gerenciamento de Caixa</h2>
+        </div>
+
+        <div class="Selecoes" style="display: flex; justify-content: space-between;">
+            <div class="SelecaoEnderecos">
+                <label for="text" id="LabelQuantidade">Nº da Caixa</label>
+                <input type="text" id="InputNumero">
+                <button id="BotaoConsultarCaixa">Consultar Caixa</button>
+            </div>
+            <div class="SelecaoTag">
+                <label for="text" id="LabelTag">Cód. Tag</label>
+                <input type="text" id="InputTag">
+                <button id="BotaoConsultarTag">Consultar Tag</button>
+            </div>
+        </div>
+
+        <div class="Informacoes" style=" display: flex; text-align: center; margin: 20px auto; width: 60%; justify-content: space-around;">
+            <label for="text" id="LabelOp" style="margin-left: 10px; text-align: center; font-weight: bold; font-size: 20px;"></label>
+            <label for="text" id="LabelProduto" style="margin-left: 10px; text-align: center; font-weight: bold; font-size: 20px;"></label>
+            <label for="text" id="LabelDescricao" style="margin-left: 10px; text-align: center; font-weight: bold; font-size: 20px;"></label>
+        </div>
+
+
+        <div class="Tabela" id="Tabela" style="display: none;">
+            <table id="TabelaTags" class="display" style="width: 100%; min-width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Tag's Na Caixa</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="Conteudo"></p>
+            </div>
+        </div>
+
+
+</body>
+
+<script>
+    const NumeroCaixa = document.getElementById('InputNumero');
+    const ApiApagar = 'http://192.168.0.183:5000/api/LimparCaixa';
+    const ApiConsultar = 'http://192.168.0.183:5000/api/ConsultaCaixa';
+    const ApiConsultarTag = 'http://192.168.0.183:5000/api/PesquisarCodbarrastag';
+    const Token = 'a40016aabcx9';
+    const BotaoConsultarCaixa = document.getElementById('BotaoConsultarCaixa');
+    const DivTabela = document.getElementById('Tabela');
+    const seuBotao = document.getElementById('seuBotao'); 
+    const modal = document.getElementById('myModal');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const BotaoConsultarTag = document.getElementById('BotaoConsultarTag');
+    const Conteudo = document.getElementById('Conteudo');
+    const LabelOp = document.getElementById('LabelOp');
+    const LabelProduto = document.getElementById('LabelProduto');
+    const LabelDescricao = document.getElementById('LabelDescricao');
+
+    BotaoConsultarTag.addEventListener('click', async () => {
+        ConsultarTag(ApiConsultarTag, document.getElementById('InputTag').value);
+    });
+
+    NumeroCaixa.addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') {
+            ConsultarCaixa(ApiConsultar, NumeroCaixa.value);
+        }
+    });
+
+    document.getElementById('InputTag').addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') {
+            ConsultarTag(ApiConsultarTag, document.getElementById('InputTag').value);
+        }
+    });
+
+    BotaoConsultarCaixa.addEventListener('click', async () => {
+        ConsultarCaixa(ApiConsultar, NumeroCaixa.value);
+        console.log(parseInt(NumeroCaixa.value))
+    })
+
+    async function DeletarCaixa(Api, Caixa) {
+
+        try {
+            const response = await fetch(`${Api}?caixa=${Caixa}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': Token
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                alert(`Tag's da Caixa ${NumeroCaixa.value} apagados com Sucesso!`);
+                NumeroCaixa.value = ""
+            } else {
+                throw new Error('Erro No Retorno');
+                alert(`Não foi possível apagar os dados`);
+            }
+        } catch (error) {
+            console.error(error);
+            alert(`Não foi possível apagar os dados`);
+        }
+    }
+
+
+    async function ConsultarCaixa(Api, Caixa) {
+
+        try {
+            const response = await fetch(`${Api}?Ncaixa=${Caixa}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': Token
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                if (data[0].mensagem === "caixa vazia") {
+                    alert("Caixa está Vazia");
+
+                } else {
+                    console.log(data[0]['03- numeroOP'])
+                    LabelOp.innerHTML = `OP:<br>${data[0]['03- numeroOP']}`;
+                    LabelProduto.innerHTML = `Engenharia:<br>${data[0]['06- engenharia']}`;
+                    LabelDescricao.innerHTML = `Descrição:<br>${data[0]['08- descricao']}`;
+
+                    await criarTabelaTags(data[0]["13- Tags da Caixa "]);
+                    DivTabela.style.display = 'flex'
+                }
+            } else {
+                throw new Error('Erro No Retorno');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function ConsultarTag(Api, Tag) {
+
+        try {
+            const response = await fetch(`${Api}?codbarras=${Tag}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': Token
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                if (data[0].caixa === "Nao encontrado em nenhuma caixa") {
+                    Conteudo.textContent = `Tag Não Encontrada em nenhuma Caixa`
+                    modal.style.display = 'flex'
+                } else {
+
+                    Conteudo.textContent = `Tag Encontrada na Caixa: ${data[0].caixa}`
+                    modal.style.display = 'flex'
+                }
+            } else {
+                throw new Error('Erro No Retorno');
+                Conteudo.textContent = `Tag Não Encontrada em nenhuma Caixa`;
+                modal.style.display = 'flex';
+            }
+        } catch (error) {
+            console.error(error);
+            Conteudo.textContent = `Tag Não Encontrada em nenhuma Caixa`;
+            modal.style.display = 'flex';
+        }
+    }
+
+    function criarTabelaTags(listaTags) {
+
+        const tabelaExiste = $.fn.DataTable.isDataTable('#TabelaTags');
+
+        // Inicializa a DataTable ou destroi e recria se já existir
+        const tabela = tabelaExiste
+            ? $('#TabelaTags').DataTable()
+            : $('#TabelaTags').DataTable({
+                paging: false,
+                info: false,
+                searching: true,
+                colReorder: true,
+                colResize: true,
+                columns: [
+                    { data: "codbarrastag" },
+
+                ],
+                dom: 'RBlfrtip', // Adiciona os controles de redimensionamento e botões
+                responsive: true, // Torna a tabela responsiva
+                buttons: [
+
+                    {
+                        extend: 'excel', // Adiciona o botão de exportar para Excel
+                        text: 'Exportar para Excel'
+                    },
+                    {
+                        text: 'Apagar Dados', // Texto do botão
+                        className: 'ApagarCaixa',
+                        action: function () {
+                            DeletarCaixa(ApiApagar, NumeroCaixa.value);
+                            DivTabela.style.display = 'none'
+                        }
+                    }
+                ]
+            });
+
+        // Limpa a tabela existente (preservando o cabeçalho)
+        if (tabelaExiste) {
+            tabela.clear();
+        }
+
+        // Adiciona os novos dados
+        tabela.rows.add(listaTags).draw();
+
+    }
+
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Ocultar a modal quando o botão de fechar for clicado
+    closeModal.onclick = function () {
+        modal.style.display = 'none';
+    }
+
+
+
+</script>
+
+</html>
