@@ -2,7 +2,7 @@ import psycopg2
 from sqlalchemy import create_engine
 
 def conexao():
-    db_name = "Reposicao"
+    db_name = "railway"
     db_user = "postgres"
     db_password = "DG*34aE3DGd5aGAAb5524DebaGf43D-D"
     db_host = "roundhouse.proxy.rlwy.net"
