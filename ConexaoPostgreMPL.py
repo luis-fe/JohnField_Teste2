@@ -4,9 +4,9 @@ from sqlalchemy import create_engine
 def conexao():
     db_name = "Reposicao"
     db_user = "postgres"
-    db_password = "Master100"
-    db_host = "localhost"
-    portbanco = "5432"
+    db_password = "DG*34aE3DGd5aGAAb5524DebaGf43D-D"
+    db_host = "roundhouse.proxy.rlwy.net"
+    portbanco = "54374"
 
     return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)
 
