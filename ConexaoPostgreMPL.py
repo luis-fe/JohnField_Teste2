@@ -2,11 +2,11 @@ import psycopg2
 from sqlalchemy import create_engine
 
 def conexao():
-    db_name = "railway"
+    db_name = "Reposicao"
     db_user = "postgres"
-    db_password = "DG*34aE3DGd5aGAAb5524DebaGf43D-D"
-    db_host = "roundhouse.proxy.rlwy.net"
-    portbanco = "54374"
+    db_password = "EbfG16F4b*f6BFgfe5ge*CaG6b211eEF"
+    db_host = "viaduct.proxy.rlwy.net"
+    portbanco = "17866"
 
     return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)
 
