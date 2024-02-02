@@ -1,4 +1,3 @@
-import cups
 import os
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.units import cm
@@ -60,7 +59,7 @@ def criar_pdf(saida_pdf, titulo, cliente, pedido, transportadora, separador, agr
         c.save()
 
 def imprimir_pdf(pdf_file):
-    conn = cups.Connection()
+    #conn = cups.Connection()
     #printers = conn.getPrinters()
     #printer_name = list(printers.keys())[0]
     printer_name = "ZM400" # Aqui teremos que criar uma funcao para imprimir as etiquetas de cianorte
