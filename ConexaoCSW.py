@@ -71,30 +71,30 @@ def obter_notaCsw():
     return data
 
 def VerificarConexao():
-    try:
+    #try:
         connPrincipal = jaydebeapi.connect(
                                     'com.intersys.jdbc.CacheDriver',
-                                    'jdbc:Cache://192.168.0.25:1972/CONSISTEM?loginTimeout=10',
+                                    'jdbc:Cache://187.32.10.129:1972:1972/CONSISTEM?loginTimeout=10',
                                     {'user': '_SYSTEM', 'password': 'ccscache'},
                                     'CacheDB.jar'
                                     )
         teste = pd.read_sql(" select t.codigo ,t.descricao  from Fat.TipoDeNotaPadrao t ", connPrincipal)
         data = pd.DataFrame([{'Mensagem':'Conexao com CSW normal com o servidor 192.168.0.25:1972 _system ','teste':'csw'}])
-    except:
-        data = pd.DataFrame([{'Mensagem': 'falha na conexao com o servidor 192.168.0.25:1972 _system ','teste':'csw'}])
+   # except:
+   #     data = pd.DataFrame([{'Mensagem': 'falha na conexao com o servidor 192.168.0.25:1972 _system ','teste':'csw'}])
 
-    try:
-        connContigencia = Conexao2()
-        teste2 = pd.read_sql(" select t.codigo ,t.descricao  from Fat.TipoDeNotaPadrao t ", connContigencia)
-        data2 = pd.DataFrame([{'Mensagem2':'Conexao com CSW normal com o servidor 192.168.0.25:1972 root ','teste':'csw'}])
-    except:
-        data2 = pd.DataFrame([{'Mensagem2': 'falha na conexao com o servidor 192.168.0.25:1972 root','teste':'csw'}])
+#    try:
+ #       connContigencia = Conexao2()
+  #      teste2 = pd.read_sql(" select t.codigo ,t.descricao  from Fat.TipoDeNotaPadrao t ", connContigencia)
+  #      data2 = pd.DataFrame([{'Mensagem2':'Conexao com CSW normal com o servidor 192.168.0.25:1972 root ','teste':'csw'}])
+  #  except:
+   #     data2 = pd.DataFrame([{'Mensagem2': 'falha na conexao com o servidor 192.168.0.25:1972 root','teste':'csw'}])
 
 
+        connPrincipal.close()
+        #data = pd.merge(data,data2,on='teste')
 
-    data = pd.merge(data,data2,on='teste')
-
-    return data
+        return data
 
 def pesquisaTagCSW(codbarras):
     try:
