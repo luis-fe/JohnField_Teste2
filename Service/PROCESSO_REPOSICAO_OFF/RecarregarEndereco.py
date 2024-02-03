@@ -47,9 +47,9 @@ def EnderecoOculpado(endereco_Repor):
 ## Regra 3 - Validar se a OP foi encerrada no CSW
 
 def ValidarSituacaoOPCSW(numeroOP):
-    emp = empresaConfigurada.EmpresaEscolhida() # Aqui aponta-se de qual empresa está requerendo a informacao
-    conn = ConexaoCSW.Conexao()
-    consulta = pd.read_sql('Select numeroop, situacao from tco.ordemprod where codempresa = ' +emp+
+    emp = '1' # Aqui aponta-se de qual empresa está requerendo a informacao
+    conn = ConexaoPostgreMPL.conexao()
+    consulta = pd.read_sql('Select numeroop, situacao from "Reposicao".off.ordemprod where codempresa = ' +emp+
                            ' and numeroop = ' +"'"+numeroOP+"'",conn)
     ## avaliando a situacao da OP:
     if consulta['situacao'][0] == '2':
@@ -98,17 +98,17 @@ def EPC_CSW_OP(consulta):# Passamos como parametro o dataframe com as informacoe
 
 
     # Passo 4: Inciar uma conexao com o csw e buscar os EPC's tag a tag:
-    conn2 = ConexaoCSW.Conexao() # Abrindo a Conexao com o CSW
+    #conn2 = ConexaoCSW.Conexao() # Abrindo a Conexao com o CSW
 
-    epc = pd.read_sql(
-        'SELECT t.codBarrasTag AS codbarrastag, numeroOP as numeroop, (SELECT epc.id FROM Tcr_Rfid.NumeroSerieTagEPC epc WHERE epc.codTag = t.codBarrasTag) AS epc '
-        "FROM tcr.SeqLeituraFase t WHERE t.codempresa = " + emp + " and t.numeroOP IN " + resultado, conn2)
+    #epc = pd.read_sql(
+        #'SELECT t.codBarrasTag AS codbarrastag, numeroOP as numeroop, (SELECT epc.id FROM Tcr_Rfid.NumeroSerieTagEPC epc WHERE epc.codTag = t.codBarrasTag) AS epc '
+        #"FROM tcr.SeqLeituraFase t WHERE t.codempresa = " + emp + " and t.numeroOP IN " + resultado, conn2)
 
-    conn2.close() # Fechado a Conexao com o CSW
-    epc = epc.drop_duplicates(subset=['codbarrastag']) # removendo possiveis duplicatas
-    result = pd.merge(caixaNova, epc, on=('codbarrastag', 'numeroop'), how='left') # Aqui é feito um merge entre o codbarras do WMS x CSW
-
-
+    #conn2.close() # Fechado a Conexao com o CSW
+    #epc = epc.drop_duplicates(subset=['codbarrastag']) # removendo possiveis duplicatas
+    #result = pd.merge(caixaNova, epc, on=('codbarrastag', 'numeroop'), how='left') # Aqui é feito um merge entre o codbarras do WMS x CSW
+    result = caixaNova
+    result['epc'] = 'tttt'
     return result
 
 #### PROCESSO 3: Incementando a caixa e salvando dados na tabela **"Reposicao".tagsreposicao do WMS
