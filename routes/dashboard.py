@@ -82,7 +82,6 @@ def ConsultaEstoqueWMS():
     codreduzido = request.args.get('codreduzido','-')
     numeroOP = request.args.get('numeroOP','-')
 
-
     Endereco_det = ConsultaEstoque.ConsultaEnderecoReposto(natureza,codreduzido,codengenharia,numeroOP,endereco)
     # Obtém os nomes das colunas
     column_names = Endereco_det.columns
