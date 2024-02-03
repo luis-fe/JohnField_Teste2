@@ -71,7 +71,6 @@ def confrontoTags():
         end_data.append(end_dict)
     return jsonify(end_data)
 
-
 @dashboard_routes.route('/api/ConsultaEstoqueWMS', methods=['GET'])
 @token_required
 def ConsultaEstoqueWMS():
