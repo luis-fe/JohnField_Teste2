@@ -49,7 +49,7 @@ def EnderecoOculpado(endereco_Repor):
 def ValidarSituacaoOPCSW(numeroOP):
     emp = '1' # Aqui aponta-se de qual empresa está requerendo a informacao
     conn = ConexaoPostgreMPL.conexao()
-    consulta = pd.read_sql('Select numeroop, situacao from "Reposicao".ordemprod where numeroop = ' +"'"+numeroOP+"'",conn)
+    consulta = pd.read_sql('Select numeroop, situacao from "Reposicao".ordemprod where numeroop = %s ',conn, params=(numeroOP,))
     ## avaliando a situacao da OP:
     if consulta['situacao'][0] == '2':
         return pd.DataFrame([{'status': True}])
