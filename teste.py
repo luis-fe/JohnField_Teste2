@@ -1,17 +1,20 @@
-import psutil
-import socket
+import pandas as pd
 
-def obter_ip_rede():
-    # Obtém todas as interfaces de rede
-    interfaces = psutil.net_if_addrs()
+# Criar um DataFrame de exemplo
+data = {'Nome': ['João', 'Maria', 'Pedro'],
+        'Idade': [25, 30, 22],
+        'Cidade': ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte']}
 
-    # Itera sobre as interfaces para encontrar a primeira interface com um endereço IPv4
-    for interface, info in interfaces.items():
-        for addr in info:
-            if addr.family == socket.AF_INET:
-                return addr.address
+df = pd.DataFrame(data)
 
-# Chamando a função para obter o endereço IP da rede
-ip_rede = obter_ip_rede()
+# Definir uma variável global para armazenar o DataFrame
+global_dataframe = df
 
-print(f"O endereço IP da rede local é: {ip_rede}")
+# Agora você pode acessar 'global_dataframe' em qualquer parte do seu código
+# e manipular o DataFrame conforme necessário.
+# Por exemplo:
+def mostrar_dataframe():
+    print(global_dataframe)
+
+# Chamada da função para mostrar o DataFrame
+mostrar_dataframe()
