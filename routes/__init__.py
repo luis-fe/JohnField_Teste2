@@ -5,9 +5,9 @@ routes_blueprint = Blueprint('routes', __name__)
 
 # Importe as rotas dos arquivos individuais
 
-from .usuariosJonhField import UsuariosJohnFild
+from .usuariosJonhField import usuarios_routesJohn 
 
 # Registre as rotas nos blueprints
 
 
-routes_blueprint.register_blueprint(UsuariosJohnFild)
+routes_blueprint.register_blueprint(usuarios_routesJohn)
