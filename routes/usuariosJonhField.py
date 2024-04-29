@@ -16,9 +16,9 @@ def token_required(f):
     return decorated_function
 
 
-@usuarios_routes.route('api/Usuarios', methods=['GET'])
+@usuarios_routes.route('api/UsuariosJonhField', methods=['GET'])
 @token_required
-def get_Usuarios():
+def UsuariosJonhField():
     consulta = UsuariosJohnFild.ConsultaUsuarios()
     # Obtém os nomes das colunas
     column_names = consulta.columns
