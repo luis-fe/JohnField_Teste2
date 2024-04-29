@@ -28,3 +28,18 @@ def usuarios_jonh_field():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+@usuarios_routesJohn.route('/api/UsuarioJonhField/{id_usuario}', methods=['GET'])
+@token_required
+def UsuarioJonhField(id_usuario):
+    consulta = UsuariosJohnFild.ConsultaUsuarios()
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
