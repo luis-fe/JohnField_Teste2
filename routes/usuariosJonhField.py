@@ -16,7 +16,7 @@ def token_required(f):
     return decorated_function
 
 
-@usuarios_routes.route('api/UsuariosJonhField', methods=['GET'])
+@usuarios_routesJohn.route('api/UsuariosJonhField', methods=['GET'])
 @token_required
 def UsuariosJonhField():
     consulta = UsuariosJohnFild.ConsultaUsuarios()
