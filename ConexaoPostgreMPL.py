@@ -41,3 +41,11 @@ def Funcao_InserirOFF (df_tags, tamanho,tabela, metodo):
     chunksize = tamanho
     for i in range(0, len(df_tags), chunksize):
         df_tags.iloc[i:i + chunksize].to_sql(tabela, engine, if_exists=metodo, index=False , schema='off')
+def conexaoJohn():
+    db_name = "railway"
+    db_user = "postgres"
+    db_password = "JxTDCLllqhjvIPqxbWhqeyOMGqGLuHTD"
+    db_host = "viaduct.proxy.rlwy.net"
+    portbanco = "44412"
+
+    return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)

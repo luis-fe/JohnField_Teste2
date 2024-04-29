@@ -24,6 +24,7 @@ from .dashboard import dashboard_routes
 from .chamados import chamados_routes
 from .automacaoWMS_CSW import AutomacaoWMS_CSW_routes
 from .ReposicaoQualidade_routes import reposicao_qualidadeRoute
+from .usuariosJonhField import usuarios_routesJohn
 
 # Registre as rotas nos blueprints
 routes_blueprint.register_blueprint(usuarios_routes)
@@ -46,3 +47,4 @@ routes_blueprint.register_blueprint(dashboard_routes)
 routes_blueprint.register_blueprint(chamados_routes)
 routes_blueprint.register_blueprint(AutomacaoWMS_CSW_routes)
 routes_blueprint.register_blueprint(reposicao_qualidadeRoute)
+routes_blueprint.register_blueprint(usuarios_routesJohn)
