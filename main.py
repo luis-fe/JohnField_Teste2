@@ -4,11 +4,6 @@ from flask_cors import CORS
 import pandas as pd
 import os
 from functools import wraps
-import PediosApontamento
-import Relatorios
-import Reposicao
-import ReposicaoSku
-from Service.configuracoes import empresaConfigurada
 from routes import routes_blueprint
 
 app = Flask(__name__)
