@@ -4,7 +4,6 @@ from Service import UsuariosJohnFild
 
 usuarios_routesJohn = Blueprint('usuariosJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
-
 def token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -15,10 +14,9 @@ def token_required(f):
 
     return decorated_function
 
-
-@usuarios_routesJohn.route('api/UsuariosJonhField', methods=['GET'])
+@usuarios_routesJohn.route('/api/UsuariosJonhField', methods=['GET'])
 @token_required
-def UsuariosJonhField():
+def usuarios_jonh_field():
     consulta = UsuariosJohnFild.ConsultaUsuarios()
     # Obtém os nomes das colunas
     column_names = consulta.columns
