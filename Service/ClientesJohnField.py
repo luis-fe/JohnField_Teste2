@@ -27,7 +27,7 @@ def inserirCliente(idCliente, nomeCliente):
     if consulta.empety:
         conn = ConexaoPostgreMPL.conexaoJohn()
 
-        update = """
+        insert = """
         insert into "Easy"."Cliente" ("codcliente" ,"nomeCliente" ) values ( %s , %s )
         """
 
@@ -38,9 +38,6 @@ def inserirCliente(idCliente, nomeCliente):
 
         conn.close()
 
-
-
-        conn.close()
         return pd.DataFrame([{'Mensagem': "Cliente cadastrado com Sucesso!", "status": True}])
 
     else:

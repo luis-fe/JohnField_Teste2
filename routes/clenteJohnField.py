@@ -28,7 +28,7 @@ def Clientes_jonh_field():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
-@usuarios_routesJohn.route('/api/JonhField/NovoCliente', methods=['POST'])
+@cliente_routesJohn.route('/api/JonhField/NovoCliente', methods=['POST'])
 @token_required
 def NovoCliente():
     data = request.get_json()
@@ -49,7 +49,7 @@ def NovoCliente():
     return jsonify(consulta_data)
 
 
-@usuarios_routesJohn.route('/api/JonhField/AlterarCliente', methods=['PUT'])
+@cliente_routesJohn.route('/api/JonhField/AlterarCliente', methods=['PUT'])
 @token_required
 def AlterarCliente():
     data = request.get_json()
