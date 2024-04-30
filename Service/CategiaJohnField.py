@@ -36,7 +36,7 @@ def InserirCategoria(codcategoria, nomeCategoria):
         insert into "Easy"."Categoria" (codcategoria , "nomeCategoria") values ( %s, %s )
         """
         cursor = conn.cursor()
-        cursor.execute(insert,(codcategoria, nomeCategoria,))
+        cursor.execute(inserir,(codcategoria, nomeCategoria,))
         conn.commit()
         cursor.close()
 
