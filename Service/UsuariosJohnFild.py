@@ -6,7 +6,7 @@ def ConsultaUsuarios():
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
     select idusuario ,"nomeLogin" ,"nomeUsuario" , "Perfil"  from "Easy"."Usuario" u  
-    where u."situacaoUsuario"<>"INATIVO"  
+    where u."situacaoUsuario"<> 'INATIVO'  
     """,conn)
     conn.close()
 
