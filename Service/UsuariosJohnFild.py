@@ -11,30 +11,42 @@ def ConsultaUsuarios():
 
     return consulta
 
-def NovoUsuario(idUsuario, nomeUsuario, Perfil, Senha):
-    conn = ConexaoPostgreMPL.conexaoJohn()
+def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha):
 
-    insert = """
-    insert into "Easy"."Usuario" ( idusuario , "nomeUsuario" , "Perfil" ,"Senha") values (%s , %s ,%s, %s)
-    """
-    cursor = conn.cursor()
-    cursor.execute(insert,(idUsuario, nomeUsuario, Perfil, Senha))
-    conn.commit()
-    cursor.close()
+    consulta = ConsultaUsuariosID(idUsuario)
 
-    conn.close()
+    if not consulta.empty:
+
+        conn = ConexaoPostgreMPL.conexaoJohn()
+
+        insert = """
+        insert into "Easy"."Usuario" ( idusuario , "nomeUsuario" , "nomeLogin","Perfil" ,"Senha") values (%s , %s, %s ,%s, %s)
+        """
+        cursor = conn.cursor()
+        cursor.execute(insert,(idUsuario, nomeUsuario, login, Perfil, Senha))
+        conn.commit()
+        cursor.close()
+
+        conn.close()
+
+        return pd.DataFrame([{'Mensagem': "Usuario Inserido com sucesso!", "status": True}])
+
+    else:
+        return pd.DataFrame([{'Mensagem': "Usuario já´existe!", "status": False}])
+
+
 
 def ConsultaUsuariosID(idUsuario):
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
-    select idusuario , "nomeUsuario" , "Perfil", "Senha"  from "Easy"."Usuario" u    
+    select idusuario , "nomeUsuario" , "Perfil", "Senha" , "nomeLogin"  from "Easy"."Usuario" u    
     where idusuario = %s 
     """,conn,params=(idUsuario,))
     conn.close()
 
     return consulta
 
-def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha):
+def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login):
     consulta = ConsultaUsuariosID(idUsuario)
 
     if consulta.empty:
@@ -52,15 +64,19 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha):
         if SenhaAtual == Senha :
             Senha = SenhaAtual
 
+        loginAtual = consulta['nomeLogin'][0]
+        if loginAtual == login :
+            login = loginAtual
+
         conn = ConexaoPostgreMPL.conexaoJohn()
         update = """
         update "Easy"."Usuario"
-        set  "nomeUsuario" = %s , "Perfil" = %s ,"Senha" = %s
+        set  "nomeUsuario" = %s , "Perfil" = %s ,"Senha" = %s, "nomeLogin" = %s
         where idusuario = %s 
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeUsuario, Perfil, Senha, idUsuario))
+        cursor.execute(update,(nomeUsuario, Perfil, Senha, login, idUsuario))
         conn.commit()
         cursor.close()
 

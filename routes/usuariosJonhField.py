@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
 from Service import UsuariosJohnFild
-
+import pandas as pd
 usuarios_routesJohn = Blueprint('usuariosJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 def token_required(f):
@@ -14,7 +14,7 @@ def token_required(f):
 
     return decorated_function
 
-@usuarios_routesJohn.route('/api/UsuariosJonhField', methods=['GET'])
+@usuarios_routesJohn.route('/api/JonhField/Usuarios', methods=['GET'])
 @token_required
 def usuarios_jonh_field():
     consulta = UsuariosJohnFild.ConsultaUsuarios()
@@ -29,7 +29,7 @@ def usuarios_jonh_field():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
-@usuarios_routesJohn.route('/api/UsuarioJonhField/<int:id_usuario>', methods=['GET'])
+@usuarios_routesJohn.route('/api/JonhField/Usuario/<int:id_usuario>', methods=['GET'])
 @token_required
 def UsuarioJonhField(id_usuario):
     consulta = UsuariosJohnFild.ConsultaUsuariosID(id_usuario)
@@ -44,7 +44,7 @@ def UsuarioJonhField(id_usuario):
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
-@usuarios_routesJohn.route('/api/AutentificacaoJonhField', methods=['GET'])
+@usuarios_routesJohn.route('/api/JonhField/Autentificacao', methods=['GET'])
 @token_required
 def Autentificacao():
     # Obtém o código do usuário e a senha dos parâmetros da URL
@@ -52,6 +52,55 @@ def Autentificacao():
     senha = request.args.get('senha')
 
     consulta = UsuariosJohnFild.AutentificacaoUsuario(login, senha)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+@usuarios_routesJohn.route('/api/JonhField/NovoUsuario', methods=['POST'])
+@token_required
+def NovoUsuario():
+    data = request.get_json()
+    idUsuario = data.get('idUsuario')
+    nomeUsuario = data.get('nomeUsuario', '-')
+    login = data.get('login', '')
+    Perfil = data.get('Perfil', '')
+    senha = data.get('senha','informar')
+
+    if senha == 'informar':
+        consulta = pd.DataFrame([{'status':False, 'mensagem':'Por favor Informe uma senha'}])
+    else:
+        consulta = UsuariosJohnFild.NovoUsuario(idUsuario, nomeUsuario,login , Perfil, senha)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
+@usuarios_routesJohn.route('/api/JonhField/AlterarUsuario', methods=['PUT'])
+@token_required
+def AlterarUsuario():
+    data = request.get_json()
+    idUsuario = data.get('idUsuario')
+    nomeUsuario = data.get('nomeUsuario', '')
+    login = data.get('login', '')
+    Perfil = data.get('Perfil', '')
+    senha = data.get('senha', 'informar')
+
+
+    consulta = UsuariosJohnFild.AtualizarUsuario(idUsuario, nomeUsuario, Perfil, senha ,login)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
