@@ -3,7 +3,7 @@ import ConexaoPostgreMPL
 
 
 def BuscarCategorias():
-    conn = ConexaoPostgreMPL.conexao()
+    conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
     select c.codcategoria , c."nomeCategoria"  from "Easy"."Categoria" c  
@@ -15,7 +15,7 @@ def BuscarCategorias():
     return consulta
 
 def BuscarCategoriaEspecifica(codcategoria):
-    conn = ConexaoPostgreMPL.conexao()
+    conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
     select c.codcategoria , c."nomeCategoria"  from "Easy"."Categoria" c  
@@ -31,7 +31,7 @@ def InserirCategoria(codcategoria, nomeCategoria):
     consulta = BuscarCategoriaEspecifica(codcategoria)
 
     if consulta.empty:
-        conn = ConexaoPostgreMPL.conexao()
+        conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
         insert into "Easy"."Categoria" (codcategoria , "nomeCategoria") values ( %s, %s )
         """
