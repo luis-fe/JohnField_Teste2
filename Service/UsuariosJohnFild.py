@@ -6,7 +6,7 @@ def ConsultaUsuarios():
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
     select idusuario ,"nomeLogin" ,"nomeUsuario" , "Perfil"  from "Easy"."Usuario" u  
-    where u."situacaoUsuario"<> 'INATIVO'  
+    where u."situacaoUsuario" =  'ATIVO'  
     """,conn)
     conn.close()
 
@@ -21,7 +21,7 @@ def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha):
         conn = ConexaoPostgreMPL.conexaoJohn()
 
         insert = """
-        insert into "Easy"."Usuario" ( idusuario , "nomeUsuario" , "nomeLogin","Perfil" ,"Senha") values (%s , %s, %s ,%s, %s)
+        insert into "Easy"."Usuario" ( idusuario , "nomeUsuario" , "nomeLogin","Perfil" ,"Senha" ,"situacaoUsuario" ) values (%s , %s, %s ,%s, %s, 'ATIVO')
         """
         cursor = conn.cursor()
         cursor.execute(insert,(idUsuario, nomeUsuario, login, Perfil, Senha))
@@ -119,6 +119,9 @@ def InativarUsuario(idUsuario):
         cursor.close()
 
         conn.close()
+
+        return pd.DataFrame([{'Mensagem':"Usuario Deletado com Sucesso!","status":True}])
+
     else:
         return pd.DataFrame([{'Mensagem':"Usuario Nao encontrado!","status":False}])
 
