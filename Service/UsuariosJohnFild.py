@@ -72,13 +72,13 @@ def AutentificacaoUsuario(login, senha):
     consulta = """
     select "Senha" from "Easy"."Usuario" u where u."nomeLogin" = %s
     """
-    consulta = pd.read_sql(consulta,conn,params=(login, senha,))
+    consulta = pd.read_sql(consulta,conn,params=(login,))
 
     conn.close()
     if consulta.empty:
         return pd.DataFrame([{'status':False,'Mensagem':'Login nao Encontrado!'}])
 
-    elif senha == consulta['senha'][0]:
+    elif senha == consulta['Senha'][0]:
         return pd.DataFrame([{'status':True,'Mensagem':'Senha Encontrada!'}])
 
     else:
