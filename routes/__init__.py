@@ -8,6 +8,6 @@ from .usuariosJonhField import usuarios_routesJohn
 from .clenteJohnField import cliente_routesJohn
 
 # Registre as rotas nos blueprints
-routes_blueprint.register_blueprint(cliente_routesJohn)
 routes_blueprint.register_blueprint(usuarios_routesJohn)
+routes_blueprint.register_blueprint(cliente_routesJohn)
 
