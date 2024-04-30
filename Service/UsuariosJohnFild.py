@@ -15,7 +15,7 @@ def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha):
 
     consulta = ConsultaUsuariosID(idUsuario)
 
-    if not consulta.empty:
+    if consulta.empty:
 
         conn = ConexaoPostgreMPL.conexaoJohn()
 
