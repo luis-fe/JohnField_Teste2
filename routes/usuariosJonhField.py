@@ -111,3 +111,22 @@ def AlterarUsuario():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+@usuarios_routesJohn.route('/api/JonhField/DeletarUsuario', methods=['DELETE'])
+@token_required
+def DeletarUsuario():
+    data = request.get_json()
+    idUsuario = data.get('idUsuario')
+
+
+    consulta = UsuariosJohnFild.InativarUsuario(idUsuario)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
