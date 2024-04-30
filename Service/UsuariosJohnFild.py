@@ -109,7 +109,7 @@ def InativarUsuario(idUsuario):
 
         consulta = """
         update "Easy"."Usuario" 
-        set "situacaoUsuario" = "INATIVO"
+        set "situacaoUsuario" = 'INATIVO'
         where idusuario = %s  
         """
 
