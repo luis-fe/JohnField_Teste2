@@ -29,12 +29,12 @@ def usuarios_jonh_field():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
-@usuarios_routesJohn.route('/api/UsuarioJonhField/{id_usuario}', methods=['GET'])
+@usuarios_routesJohn.route('/api/UsuarioJonhField/<int:id_usuario>', methods=['GET'])
 @token_required
 def UsuarioJonhField(id_usuario):
-    consulta = UsuariosJohnFild.ConsultaUsuariosID(int(id_usuario))
+    consulta = UsuariosJohnFild.ConsultaUsuariosID(id_usuario)
     # Obtém os nomes das colunas
-    column_names = consulta.columns
+    column_names = consulta.columns.tolist()
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
     consulta_data = []
     for index, row in consulta.iterrows():

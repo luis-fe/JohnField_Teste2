@@ -71,7 +71,7 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha):
 def AutentificacaoUsuario(login, senha):
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = """
-    select senha from "Easy"."Usuario" u where u."nomeLogin" = %s
+    select "Senha" from "Easy"."Usuario" u where u."nomeLogin" = %s
     """
     consulta = pd.read_sql(consulta,conn,params=(login, senha,))
 
