@@ -67,7 +67,6 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha):
         conn.close()
         return pd.DataFrame([{'Mensagem': "Usuario Alterado com Sucesso!", "status": True}])
 
-
 def AutentificacaoUsuario(login, senha):
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = """
