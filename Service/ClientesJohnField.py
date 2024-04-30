@@ -24,7 +24,7 @@ def ConsultaClientesEspecifico(id_cliente):
 def inserirCliente(idCliente, nomeCliente):
     consulta = ConsultaClientesEspecifico(idCliente)
 
-    if consulta.empety:
+    if consulta.empty:
         conn = ConexaoPostgreMPL.conexaoJohn()
 
         insert = """
