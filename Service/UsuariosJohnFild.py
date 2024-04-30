@@ -114,7 +114,7 @@ def InativarUsuario(idUsuario):
         """
 
         cursor = conn.cursor()
-        cursor.execute(consulta, (idUsuario))
+        cursor.execute(consulta, (idUsuario,))
         conn.commit()
         cursor.close()
 
