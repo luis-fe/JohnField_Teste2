@@ -30,7 +30,7 @@ def BuscarCategoriaEspecifica(codcategoria):
 def InserirCategoria(codcategoria, nomeCategoria):
     consulta = BuscarCategoriaEspecifica(codcategoria)
 
-    if consulta.empety:
+    if consulta.empty:
         conn = ConexaoPostgreMPL.conexao()
         inserir = """
         insert into "Easy"."Categoria" (codcategoria , "nomeCategoria") values ( %s, %s )
