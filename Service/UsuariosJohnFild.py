@@ -5,7 +5,7 @@ import ConexaoPostgreMPL
 def ConsultaUsuarios():
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
-    select idusuario , "nomeUsuario" , "Perfil"  from "Easy"."Usuario" u    
+    select idusuario ,"nomeLogin" ,"nomeUsuario" , "Perfil"  from "Easy"."Usuario" u    
     """,conn)
     conn.close()
 
@@ -66,3 +66,24 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha):
 
         conn.close()
         return pd.DataFrame([{'Mensagem': "Usuario Alterado com Sucesso!", "status": True}])
+
+
+def AutentificacaoUsuario(login, senha):
+    conn = ConexaoPostgreMPL.conexaoJohn()
+    consulta = """
+    select senha from "Easy"."Usuario" u where u."nomeLogin" = %s
+    """
+    consulta = pd.read_sql(consulta,conn,params=(login, senha,))
+
+    conn.close()
+    if consulta.empty:
+        return pd.DataFrame([{'status':False,'Mensagem':'Login nao Encontrado!'}])
+
+    elif senha == consulta['senha'][0]:
+        return pd.DataFrame([{'status':True,'Mensagem':'Senha Encontrada!'}])
+
+    else:
+        return pd.DataFrame([{'status':False,'Mensagem':'Senha Nao Validada!'}])
+
+
+
