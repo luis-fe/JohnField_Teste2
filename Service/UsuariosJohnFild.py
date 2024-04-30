@@ -101,4 +101,24 @@ def AutentificacaoUsuario(login, senha):
         return pd.DataFrame([{'status':False,'Mensagem':'Senha Nao Validada!'}])
 
 
+def InativarUsuario(idUsuario):
+    consulta = ConsultaUsuariosID(idUsuario)
+    if not consulta.empty:
+        conn = ConexaoPostgreMPL.conexaoJohn()
+
+        consulta = """
+        update "Easy"."Usuario" 
+        set "situacaoUsuario" = "INATIVO"
+        where idusuario = %s  
+        """
+
+        cursor = conn.cursor()
+        cursor.execute(consulta, (idUsuario))
+        conn.commit()
+        cursor.close()
+
+        conn.close()
+    else:
+        return pd.DataFrame([{'Mensagem':"Usuario Nao encontrado!","status":False}])
+
 
