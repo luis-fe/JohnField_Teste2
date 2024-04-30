@@ -32,7 +32,7 @@ def usuarios_jonh_field():
 @usuarios_routesJohn.route('/api/UsuarioJonhField/{id_usuario}', methods=['GET'])
 @token_required
 def UsuarioJonhField(id_usuario):
-    consulta = UsuariosJohnFild.ConsultaUsuarios()
+    consulta = UsuariosJohnFild.ConsultaUsuariosID(id_usuario)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
