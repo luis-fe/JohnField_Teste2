@@ -28,3 +28,43 @@ def Clientes_jonh_field():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+@usuarios_routesJohn.route('/api/JonhField/NovoCliente', methods=['POST'])
+@token_required
+def NovoCliente():
+    data = request.get_json()
+    codCliente = data.get('codCliente')
+    nomeCliente = data.get('nomeCliente', '-')
+
+
+    consulta = ClientesJohnField.inserirCliente(codCliente, nomeCliente)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
+@usuarios_routesJohn.route('/api/JonhField/AlterarCliente', methods=['PUT'])
+@token_required
+def AlterarCliente():
+    data = request.get_json()
+    codCliente = data.get('codCliente')
+    nomeCliente = data.get('nomeCliente', '-')
+
+
+    consulta = ClientesJohnField.UpdateCliente(codCliente, nomeCliente)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
