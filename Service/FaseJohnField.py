@@ -6,7 +6,26 @@ def BuscarFases():
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
-    select f."codFase" , f."nomeFase"  from "Easy"."Fase" f
+select f."codFase" , 
+f."nomeFase", 
+f."FaseInicial" as "FaseInical? ",
+"FaseFinal" as "FaseInical?" 
+from "Easy"."Fase" f
+    """
+
+    consulta = pd.read_sql(consulta,conn)
+    conn.close()
+
+    return consulta
+
+def BuscarFasesTipoInicial():
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = """
+select f."codFase" , 
+f."nomeFase" 
+from "Easy"."Fase" f
+where "FaseInicial" = 'SIM'
     """
 
     consulta = pd.read_sql(consulta,conn)

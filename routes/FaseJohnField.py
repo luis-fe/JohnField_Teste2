@@ -28,6 +28,23 @@ def Fases_jonh_field():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+@fase_routesJohn.route('/api/JonhField/FasesInicial', methods=['GET'])
+@token_required
+def FasesInicial():
+    consulta = FaseJohnField.BuscarFasesTipoInicial()
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
 @fase_routesJohn.route('/api/JonhField/NovaFase', methods=['POST'])
 @token_required
 def NovaFase():
