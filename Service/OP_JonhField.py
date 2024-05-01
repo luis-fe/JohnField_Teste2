@@ -39,7 +39,7 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial):
 
     #Pesquisando se existe uma determinda OP
     buscar = BuscandoOPEspecifica(ChaveOP)
-    if buscar.empty:
+    if not buscar.empty:
         return pd.DataFrame([{'Mensagem': f'OP {codOP} ja existe para o cliente {codCliente}', 'Status': False}])
     else:
         verificarFaseInicial = BuscarFaseInicio(codFaseInicial)

@@ -20,3 +20,8 @@ def BuscarGradeEspecifica(codGrade):
 
 def NovaGrade(codGrade, nomeGrade, arrayTamanhos):
     VerificarGrade = BuscarGradeEspecifica(codGrade)
+    if not VerificarGrade.empty:
+        return pd.DataFrame([{'Mensagem':f'Grade {codGrade} ja existe !', 'status':False}])
+    else:
+        conn = ConexaoPostgreMPL.conexaoJohn()
+        conn.close()
