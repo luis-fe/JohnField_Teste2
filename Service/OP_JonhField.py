@@ -73,15 +73,6 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial):
 
             return pd.DataFrame([{'Mensagem':'OP Gerada com Sucesso!', 'Status':True}])
 
-def GradePadraoCriacaoOP():
-    consulta = """
-    select * from "Easy"."gradePadrao"
-    """
-    conn = ConexaoPostgreMPL.conexaoJohn()
-    consulta = pd.read_sql(consulta, conn)
-    conn.close()
-
-    return consulta
 
 
 

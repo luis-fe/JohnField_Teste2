@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import OP_JonhField
+from Service import Grades
 import pandas as pd
 gradePadrao_routesJohn = Blueprint('GradeJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
@@ -14,10 +14,10 @@ def token_required(f):
 
     return decorated_function
 
-@gradePadrao_routesJohn.route('/api/JonhField/GradePadraoCriacaoOP', methods=['GET'])
+@gradePadrao_routesJohn.route('/api/JonhField/BuscarGrades', methods=['GET'])
 @token_required
-def GradePadraoCriacaoOP():
-    consulta = OP_JonhField.GradePadraoCriacaoOP()
+def BuscarGrades():
+    consulta = Grades.BuscarGrade()
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
