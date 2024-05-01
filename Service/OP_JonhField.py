@@ -1,9 +1,12 @@
 import pandas as pd
 import ConexaoPostgreMPL
 import datetime
+import pytz
+
 
 def obterHoraAtual():
-    agora = datetime.datetime.now()
+    fuso_horario = pytz.timezone('America/Sao_Paulo')  # Define o fuso horário do Brasil
+    agora = datetime.datetime.now(fuso_horario)
     hora_str = agora.strftime('%Y-%m-%d %H:%M:%S')
     return hora_str
 
@@ -64,7 +67,7 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial):
             INSERT INTO "Easy"."Fase/OP" ("idOP", "DataMov", "codFase","Situacao") 
             VALUES (%s ,%s , %s ,%s );
             """
-            cursor.execute(InserirOPFase,(ChaveOP, DataCriacao, codCategoria, codFaseInicial, 'Em Processo'))
+            cursor.execute(InserirOPFase,(ChaveOP, DataCriacao, codFaseInicial, 'Em Processo'))
             conn.commit()
 
 
