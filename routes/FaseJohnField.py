@@ -51,9 +51,11 @@ def NovaFase():
     data = request.get_json()
     codFase = data.get('codFase')
     nomeFase = data.get('nomeFase', '-')
+    FaseInical = data.get('FaseInical?')
+    FaseFinal = data.get('FaseFinal?')
 
 
-    consulta = FaseJohnField.InserirFase(codFase, nomeFase)
+    consulta = FaseJohnField.InserirFase(codFase, nomeFase,FaseInical,FaseFinal)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -72,9 +74,11 @@ def AlterarFase():
     data = request.get_json()
     codFase = data.get('codFase')
     nomeFase = data.get('nomeFase', '-')
+    FaseInical = data.get('FaseInical?')
+    FaseFinal = data.get('FaseFinal?')
 
 
-    consulta = FaseJohnField.UpdateFase(codFase, nomeFase)
+    consulta = FaseJohnField.UpdateFase(codFase, nomeFase,FaseInical,FaseFinal)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
