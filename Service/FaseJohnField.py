@@ -8,8 +8,8 @@ def BuscarFases():
     consulta = """
 select f."codFase" , 
 f."nomeFase", 
-f."FaseInicial" as "FaseInical? ",
-"FaseFinal" as "FaseInical?" 
+f."FaseInicial" as "FaseInical?",
+"FaseFinal" as "FaseFinal?" 
 from "Easy"."Fase" f
     """
 
@@ -37,7 +37,7 @@ def BuscarFaseEspecifica(codFase):
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
-    select f."codFase" , f."nomeFase"  from "Easy"."Fase" f
+    select f."codFase" , f."nomeFase", f."FaseInicial" , f."FaseFinal"  from "Easy"."Fase" f
     where f."codFase" = %s
     """
 
@@ -46,16 +46,16 @@ def BuscarFaseEspecifica(codFase):
 
     return consulta
 
-def InserirFase(codFase, nomeFase):
+def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal):
     consulta = BuscarFaseEspecifica(codFase)
 
     if consulta.empty:
         conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
-        insert into "Easy"."Fase" ("codFase" , "nomeFase") values ( %s, %s )
+        insert into "Easy"."Fase" ("codFase" , "nomeFase", "FaseInicial","FaseFinal") values ( %s, %s, %s, %s )
         """
         cursor = conn.cursor()
-        cursor.execute(inserir,(codFase, nomeFase,))
+        cursor.execute(inserir,(codFase, nomeFase,FaseInicial, FaseFinal,))
         conn.commit()
         cursor.close()
 
@@ -66,7 +66,7 @@ def InserirFase(codFase, nomeFase):
     else:
         return pd.DataFrame([{'Mensagem': "Fase já´existe!", "status": False}])
 
-def UpdateFase(codFase, nomeFase):
+def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal):
 
     consulta = BuscarFaseEspecifica(codFase)
 
@@ -77,16 +77,24 @@ def UpdateFase(codFase, nomeFase):
         if FaseAtual == nomeFase :
             nomeFase = FaseAtual
 
+        FaseInicialAtual = consulta['FaseInicial'][0]
+        if FaseInicialAtual == FaseInicial :
+            FaseInicial = FaseInicialAtual
+
+        FaseFinallAtual = consulta['FaseInicial'][0]
+        if FaseFinallAtual == FaseFinal :
+            FaseFinal = FaseFinallAtual
+
 
         conn = ConexaoPostgreMPL.conexaoJohn()
         update = """
         update "Easy"."Fase"
-        set  "nomeFase" = %s 
+        set  "nomeFase" = %s , "FaseInicial" = %s , "FaseFinal" = %s
         where "codFase" = %s 
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeFase,codFase,))
+        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, codFase,))
         conn.commit()
         cursor.close()
 
