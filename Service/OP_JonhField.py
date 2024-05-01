@@ -35,7 +35,7 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
 def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial):
 
-    ChaveOP = codOP +'||'+codCliente
+    ChaveOP = codOP +'||'+str(codCliente)
 
     #Pesquisando se existe uma determinda OP
     buscar = BuscandoOPEspecifica(ChaveOP)

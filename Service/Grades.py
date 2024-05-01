@@ -11,3 +11,12 @@ def BuscarGrade():
     conn.close()
 
     return consulta
+
+def BuscarGradeEspecifica(codGrade):
+    buscar = BuscarGrade()
+    buscar = buscar[buscar['codGrade'] == codGrade]
+
+    return buscar
+
+def NovaGrade(codGrade, nomeGrade, arrayTamanhos):
+    VerificarGrade = BuscarGradeEspecifica(codGrade)
