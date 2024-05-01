@@ -19,7 +19,7 @@ def BuscarFaseEspecifica(codFase):
 
     consulta = """
     select f."codFase" , f."nomeFase"  from "Easy"."Fase" f
-    where f.codFase = %s
+    where f."codFase" = %s
     """
 
     consulta = pd.read_sql(consulta,conn,params=(codFase,))
