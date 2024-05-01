@@ -49,7 +49,7 @@ def InserirFase(codFase, nomeFase):
 
 def UpdateFase(codFase, nomeFase):
 
-    consulta = BuscarCategoriaEspecifica(codcategoria)
+    consulta = BuscarFaseEspecifica(codFase)
 
     if consulta.empty:
         return pd.DataFrame([{'Mensagem':"FASE Nao encontrado!","status":False}])
