@@ -50,7 +50,7 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial):
 
             InserirOP = """
             INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao")
-            VALUES (%s ,%s , %s ,%s );
+            VALUES (%s ,%s , %s ,%s , %s );
             """
             DataCriacao = obterHoraAtual()
 
