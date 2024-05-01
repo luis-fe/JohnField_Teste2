@@ -54,7 +54,7 @@ def UpdateCategoria(codcategoria, nomeCategoria):
     if consulta.empty:
         return pd.DataFrame([{'Mensagem':"Categoria Nao encontrado!","status":False}])
     else:
-        CategoriaAtual = consulta['codcategoria'][0]
+        CategoriaAtual = consulta['nomeCategoria'][0]
         if CategoriaAtual == nomeCategoria :
             nomeCategoria = CategoriaAtual
 
