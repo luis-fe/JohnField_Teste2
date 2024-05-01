@@ -22,6 +22,7 @@ def CriarOP():
     codCliente = data.get('codCliente')
     codCategoria = data.get('codCategoria')
     codFaseInicial = data.get('codFaseInicial')
+    idUsuarioCriacao = data.get('idUsuarioCriacao')
 
 
     consulta = OP_JonhField.CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial)
