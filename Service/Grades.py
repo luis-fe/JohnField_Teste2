@@ -21,7 +21,22 @@ def BuscarGradeEspecifica(codGrade):
 def NovaGrade(codGrade, nomeGrade, arrayTamanhos):
     VerificarGrade = BuscarGradeEspecifica(codGrade)
     if not VerificarGrade.empty:
-        return pd.DataFrame([{'Mensagem':f'Grade {codGrade} ja existe !', 'status':False}])
+        return pd.DataFrame([{'Mensagem': f'Grade {codGrade} já existe!', 'status': False}])
     else:
         conn = ConexaoPostgreMPL.conexaoJohn()
+
+        for tamanho in arrayTamanhos:  # Correção do loop
+
+            inserir = """
+            INSERT INTO "Easy"."Grade" ("codGrade", "nomeGrade", "Tamanhos")
+            VALUES (%s, %s, %s)  -- Correção na sintaxe do SQL
+            """
+            cursor = conn.cursor()
+            cursor.execute(inserir, (codGrade, nomeGrade, tamanho,))
+            conn.commit()
+
+            cursor.close()
+
         conn.close()
+        return pd.DataFrame([{'Mensagem': f'Grade {codGrade} cadastrada com sucesso!', 'status': True}])
+

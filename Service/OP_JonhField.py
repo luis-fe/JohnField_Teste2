@@ -76,7 +76,15 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial):
 
             return pd.DataFrame([{'Mensagem':'OP Gerada com Sucesso!', 'Status':True}])
 
+def ObterOP_EMAberto():
+    consulta = """
+    select * from "Easy"."DetalhaOP_Abertas"
+    """
+    conn = ConexaoPostgreMPL.conexaoJohn()
+    consulta = pd.read_sql(consulta,conn)
+    conn.close()
 
+    return consulta
 
 
 
