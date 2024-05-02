@@ -4,18 +4,17 @@ import ConexaoPostgreMPL
 
 def BuscarGrade():
     consulta = """
-    SELECT  "codGrade", "nomeGrade", "Tamanhos" FROM "Easy"."Grade"
+    SELECT "codGrade", "nomeGrade", "Tamanhos" FROM "Easy"."Grade"
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql(consulta, conn)
     conn.close()
-    consulta['codGrade'] = consulta['codGrade'].astype(str)
 
-    # Dividir a coluna 'Tamanhos' em listas de tuplas
-    consulta['Tamanhos'] = consulta['Tamanhos'].apply(eval)
+    # Convertendo a coluna 'Tamanhos' para lista de strings
+    consulta['Tamanhos'] = consulta['Tamanhos'].apply(lambda x: [x])
 
-   # Agrupar tamanhos em uma lista
-    df_summary = consulta.groupby(['codGrade', 'nomeGrade'])['Tamanhos'].apply(list).reset_index()
+    # Agrupar tamanhos em uma lista
+    df_summary = consulta.groupby(['codGrade', 'nomeGrade'])['Tamanhos'].sum().reset_index()
 
     return df_summary
 
