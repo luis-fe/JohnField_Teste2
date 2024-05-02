@@ -23,7 +23,7 @@ def BuscarFasesTipoInicial():
 
     consulta = """
 select f."codFase" , 
-f."nomeFase" 
+f."nomeFase" ,"ObrigaInformaTamCor" as "ObrigaInformaTamCor?"
 from "Easy"."Fase" f
 where "FaseInicial" = 'SIM'
     """
