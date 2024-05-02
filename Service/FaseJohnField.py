@@ -9,7 +9,7 @@ def BuscarFases():
 select f."codFase" , 
 f."nomeFase", 
 f."FaseInicial" as "FaseInical?",
-"FaseFinal" as "FaseFinal?" 
+"FaseFinal" as "FaseFinal?" , "ObrigaInformaTamCor" as "ObrigaInformaTamCor?"
 from "Easy"."Fase" f
     """
 
