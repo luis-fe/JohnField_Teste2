@@ -14,9 +14,8 @@ def BuscarGrade():
     # Dividir a coluna 'Tamanhos' em listas de tuplas
     consulta['Tamanhos'] = consulta['Tamanhos'].apply(eval)
 
-    # Distrinchar tamanhos e formatar como tuplas
-    df_summary = consulta.groupby(['codGrade', 'nomeGrade']).apply(
-        lambda x: ';'.join(f"({tamanho[0]}, {tamanho[1]})" for tamanho in x['Tamanhos'])).reset_index()
+   # Agrupar tamanhos em uma lista
+    df_summary = consulta.groupby(['codGrade', 'nomeGrade'])['Tamanhos'].apply(list).reset_index()
 
     return df_summary
 
