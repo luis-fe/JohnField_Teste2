@@ -10,8 +10,7 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCores, arrayTamanhos, arrayQuan
         return pd.DataFrame([{'mensagem':f'A OP {codOP}, cliente {codCliente} nao foi indentificada!', 'status':False}])
     else:
 
-        conn = ConexaoPostgreMPL
-        cursor = conn.cursor()
+        conn = ConexaoPostgreMPL.conexaoJohn()
 
         for t in arrayTamanhos:
             for cor in arrayCores:
@@ -21,10 +20,22 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCores, arrayTamanhos, arrayQuan
                     INSERT INTO "Easy"."OP_Cores_Tam" ("idOP", "descCor", "tamanho", "quantidade")
                     VALUES (%s, %s, %s, %s)
                     """
+                    cursor = conn.cursor()
                     cursor.execute(inserir, (idOP, cor, t,quant))
                     conn.commit()
-
-        cursor.close()
+                    cursor.close()
         conn.close()
         return pd.DataFrame([{'mensagem':f'Tamanhos e Cores inseridos com Sucesso!', 'status':True}])
+
+def ConsultaTamCor_OP(codOP, codCliente):
+    idOP = str(codOP)+'||'+str(codCliente)
+    consulta = """
+    select "idOP" , "descCor", "tamanho", "quantidade" from "Easy"."OP_Cores_Tam" 
+    where "idOP" = %s
+    """
+    conn = ConexaoPostgreMPL.conexaoJohn()
+    consulta = pd.read_sql(consulta,conn,params=(idOP,))
+    conn.close()
+    return consulta
+
 
