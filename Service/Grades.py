@@ -4,13 +4,16 @@ import ConexaoPostgreMPL
 
 def BuscarGrade():
     consulta = """
-    select DISTINCT "codGrade", "nomeGrade" from "Easy"."Grade"
+    select  "codGrade", "nomeGrade", "Tamanhos" from "Easy"."Grade"
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql(consulta, conn)
     conn.close()
 
-    return consulta
+    # Distrinchar tamanhos
+    df_summary = consulta.groupby(['codGrade', 'nomeGrade']).apply(
+        lambda x: ';'.join(f"{rest}({nec})" for rest, nec in zip(x['Tamanhos']))).reset_index()
+    return df_summary
 
 def BuscarGradeEspecifica(codGrade):
     buscar = BuscarGrade()
