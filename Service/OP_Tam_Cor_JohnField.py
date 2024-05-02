@@ -2,7 +2,7 @@ import pandas as pd
 import ConexaoPostgreMPL
 from Service import OP_JonhField
 
-def InserirCoresTamanhos(codOP, codCliente, arrayCores, arrayTamanhos, arrayQuantiades):
+def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
     idOP = str(codOP)+'||'+str(codCliente)
     VerificaOP = OP_JonhField.BuscandoOPEspecifica(idOP)
 
@@ -12,18 +12,20 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCores, arrayTamanhos, arrayQuan
 
         conn = ConexaoPostgreMPL.conexaoJohn()
 
-        for t in arrayTamanhos:
-            for cor in arrayCores:
-                for quant in arrayQuantiades:
+        for matriz in arrayCorTamQuantiades:
+            cor = matriz[0]
+            t = matriz[1]
+            quant = matriz[2]
 
-                    inserir = """
-                    INSERT INTO "Easy"."OP_Cores_Tam" ("idOP", "descCor", "tamanho", "quantidade")
-                    VALUES (%s, %s, %s, %s)
-                    """
-                    cursor = conn.cursor()
-                    cursor.execute(inserir, (idOP, cor, t,quant))
-                    conn.commit()
-                    cursor.close()
+            inserir = """
+                INSERT INTO "Easy"."OP_Cores_Tam" ("idOP", "descCor", "tamanho", "quantidade")
+                VALUES (%s, %s, %s, %s)
+                """
+            cursor = conn.cursor()
+            cursor.execute(inserir, (idOP, cor, t,quant))
+            conn.commit()
+            cursor.close()
+
         conn.close()
         return pd.DataFrame([{'mensagem':f'Tamanhos e Cores inseridos com Sucesso!', 'status':True}])
 
