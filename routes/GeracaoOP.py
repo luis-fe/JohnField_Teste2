@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import OP_JonhField
+from Service import OP_JonhField, OP_Tam_Cor_JohnField
 import pandas as pd
 GeraoOP_routesJohn = Blueprint('GeraOPJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
@@ -43,6 +43,29 @@ def CriarOP():
 @token_required
 def ObterOPsAberto():
     consulta = OP_JonhField.ObterOP_EMAberto()
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+@GeraoOP_routesJohn.route('/api/JonhField/InserirOPTamanhoCores', methods=['POST'])
+@token_required
+def InserirOPTamanhoCores():
+    data = request.get_json()
+    codOP = data.get('codOP')
+    codCliente = data.get('codCliente')
+    arrayCores = data.get('arrayCores')
+    arrayTamanhos = data.get('arrayTamanhos')
+    arrayQuantiades = data.get('arrayQuantiades')
+
+
+    consulta = OP_Tam_Cor_JohnField.InserirCoresTamanhos(codOP,codCliente,arrayCores,arrayTamanhos,arrayQuantiades)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
