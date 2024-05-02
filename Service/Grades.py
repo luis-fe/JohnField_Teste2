@@ -40,3 +40,35 @@ def NovaGrade(codGrade, nomeGrade, arrayTamanhos):
         conn.close()
         return pd.DataFrame([{'Mensagem': f'Grade {codGrade} cadastrada com sucesso!', 'status': True}])
 
+def UpdateGrade(codGrade, nomeGrade, arrayTamanhos):
+    VerificarGrade = BuscarGradeEspecifica(codGrade)
+    if VerificarGrade.empty:
+        return pd.DataFrame([{'Mensagem': f'Grade {codGrade} NAO já existe!', 'status': False}])
+    else:
+        conn = ConexaoPostgreMPL.conexaoJohn()
+
+        for tamanho in arrayTamanhos:  # Correção do loop
+
+            delete = """
+            delete from "Easy"."Grade"
+            where "codGrade" = %s
+            
+            """
+
+            inserir = """
+            INSERT INTO "Easy"."Grade" ("codGrade", "nomeGrade", "Tamanhos")
+            VALUES (%s, %s, %s)  -- Correção na sintaxe do SQL
+            """
+            cursor = conn.cursor()
+
+            cursor.execute(delete,(codGrade,))
+            conn.commit()
+
+            cursor.execute(inserir, (codGrade, nomeGrade, tamanho,))
+            conn.commit()
+
+            cursor.close()
+
+        conn.close()
+        return pd.DataFrame([{'Mensagem': f'Grade {codGrade} Atualizada com sucesso!', 'status': True}])
+

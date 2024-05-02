@@ -67,7 +67,6 @@ def NovaFase():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
-
 @fase_routesJohn.route('/api/JonhField/AlterarFase', methods=['PUT'])
 @token_required
 def AlterarFase():
