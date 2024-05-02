@@ -82,6 +82,14 @@ def ObterOP_EMAberto():
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql(consulta,conn)
+    consulta['idOP'] = consulta['codOP']  + "||"+consulta['codCliente'].astype(str)
+    quantidade ="""
+    select "idOP" , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam group by "idOP" 
+    """
+    quantidade = pd.read_sql(quantidade,conn)
+    consulta = pd.merge(consulta,quantidade, on ='idOP', how='left')
+    consulta['quantidade'].fillna("-",inplace= True)
+
     conn.close()
 
     return consulta
