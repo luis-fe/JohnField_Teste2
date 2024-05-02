@@ -46,16 +46,16 @@ def BuscarFaseEspecifica(codFase):
 
     return consulta
 
-def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal):
+def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal, ObrigaInformaTamCor):
     consulta = BuscarFaseEspecifica(codFase)
 
     if consulta.empty:
         conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
-        insert into "Easy"."Fase" ("codFase" , "nomeFase", "FaseInicial","FaseFinal") values ( %s, %s, %s, %s )
+        insert into "Easy"."Fase" ("codFase" , "nomeFase", "FaseInicial","FaseFinal", "ObrigaInformaTamCor") values ( %s, %s, %s, %s , %s )
         """
         cursor = conn.cursor()
-        cursor.execute(inserir,(codFase, nomeFase,FaseInicial, FaseFinal,))
+        cursor.execute(inserir,(codFase, nomeFase,FaseInicial, FaseFinal,ObrigaInformaTamCor))
         conn.commit()
         cursor.close()
 
@@ -66,7 +66,7 @@ def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal):
     else:
         return pd.DataFrame([{'Mensagem': "Fase já´existe!", "status": False}])
 
-def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal):
+def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal,ObrigaInformaTamCor):
 
     consulta = BuscarFaseEspecifica(codFase)
 
@@ -85,16 +85,20 @@ def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal):
         if FaseFinallAtual == FaseFinal :
             FaseFinal = FaseFinallAtual
 
+        ObrigaInformaTamCorAtual = consulta['ObrigaInformaTamCor'][0]
+        if ObrigaInformaTamCorAtual == ObrigaInformaTamCor :
+            ObrigaInformaTamCor = ObrigaInformaTamCorAtual
+
 
         conn = ConexaoPostgreMPL.conexaoJohn()
         update = """
         update "Easy"."Fase"
-        set  "nomeFase" = %s , "FaseInicial" = %s , "FaseFinal" = %s
+        set  "nomeFase" = %s , "FaseInicial" = %s , "FaseFinal" = %s, "ObrigaInformaTamCor" = %s
         where "codFase" = %s 
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, codFase,))
+        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, ObrigaInformaTamCor, codFase,))
         conn.commit()
         cursor.close()
 
