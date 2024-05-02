@@ -1,6 +1,6 @@
 import pandas as pd
 import ConexaoPostgreMPL
-import OP_JonhField
+from Service import OP_JonhField
 
 def InserirCoresTamanhos(codOP, codCliente, arrayCores, arrayTamanhos, arrayQuantiades):
     idOP = str(codOP)+'||'+str(codCliente)
