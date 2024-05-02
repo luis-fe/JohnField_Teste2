@@ -12,8 +12,9 @@ def BuscarGrade():
 
     # Distrinchar tamanhos
     df_summary = consulta.groupby(['codGrade', 'nomeGrade']).apply(
-        lambda x: ','.join(f"{rest}({nec})" for rest, nec in zip(x['Tamanhos']))).reset_index()
+        lambda x: ';'.join(f"{tamanho}" for tamanho in x['Tamanhos'].str.split(';'))).reset_index()
     return df_summary
+
 
 def BuscarGradeEspecifica(codGrade):
     buscar = BuscarGrade()
