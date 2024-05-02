@@ -32,6 +32,7 @@ def BuscarGrades():
 @gradePadrao_routesJohn.route('/api/JonhField/InserirGrade', methods=['POST'])
 @token_required
 def InserirGrade():
+    data = request.get_json()
     codGrade = data.get('codGrade')
     nomeGrade = data.get('nomeGrade')
     arrayTamanhos = data.get('arrayTamanhos')
@@ -54,6 +55,7 @@ def InserirGrade():
 @gradePadrao_routesJohn.route('/api/JonhField/AtualizarGrade', methods=['PUT'])
 @token_required
 def AtualizarGrade():
+    data = request.get_json()
     codGrade = data.get('codGrade')
     nomeGrade = data.get('nomeGrade')
     arrayTamanhos = data.get('arrayTamanhos')
