@@ -111,6 +111,9 @@ def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
     VerificarSequenciaContagem = VerificarSequenciaContagem['codsequencia'].count()
 
     if sequenciaTamanho == '':
+        sequenciaTamanho = 0
+
+    if sequenciaTamanho == 0 or sequenciaTamanho > int(VerificarSequenciaContagem + 1)  :
         sequenciaTamanho = int(VerificarSequenciaContagem + 1)
         print(sequenciaTamanho)
 
