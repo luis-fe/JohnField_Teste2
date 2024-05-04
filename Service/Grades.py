@@ -86,7 +86,7 @@ def ObterTamanhos():
     select codsequencia , "DescricaoTamanho"  from "Easy"."Tamanhos" t 
 order by t.codsequencia asc
     """
-    consulta = pd.DataFrame(consulta,conn)
+    consulta = pd.read_sql(consulta,conn)
     conn.close()
 
     return consulta
