@@ -9,6 +9,9 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
     verifica = OP_JonhField.BuscandoOPEspecifica(idOP)
     verificaFaseAtual = OPAberto(codOP, codCliente)
 
+    fasesDisponiveis = FasesDisponivelPMovimentarOP(codOP,codCliente)
+    fasesDisponiveis = fasesDisponiveis[fasesDisponiveis['codFase']==novaFase]
+
     if verifica.empty:
         return pd.DataFrame([{'Mensagem':f'A OP {codOP} nao existe para o cliente {codOP} !','status':False}])
 
@@ -17,6 +20,9 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
 
     elif verificaFaseAtual['FaseAtual'][0] == novaFase:
         return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codOP} já exta aberta nessa fase {novaFase}-{nomeFaseNova} !','status':False}])
+
+    elif fasesDisponiveis.empty:
+        return pd.DataFrame([{'Mensagem':f'A Fase {novaFase}-{nomeFaseNova} nao esta disponivel para movimentacao!','status':False}])
 
     else:
         conn = ConexaoPostgreMPL.conexaoJohn()
