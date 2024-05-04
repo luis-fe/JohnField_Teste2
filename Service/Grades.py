@@ -163,86 +163,33 @@ def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
         return pd.DataFrame([{'Mensagem':'Tamanho Inserido com Sucesso!','status':True, 'Mensagem2':'Sequencia de Tamanhos Reordenados!'}])
 
 
-def UpdateTamanho(sequenciaTamanho, DescricaoTamanho):
+def UpdateDescricaoTamanho(codsequencia, DescricaoTamanho):
+    VerificarSequencia= ObterSequencia(codsequencia)
     VerificarTamanho = ObterTamanhoEspecifico(DescricaoTamanho)
-    VerificarSequencia = ObterSequencia(sequenciaTamanho)
 
-    if VerificarTamanho.empty:
 
-        return pd.DataFrame([{'Mensagem':'Tamanho informado nao  EXISTE!','status':False}])
+    if VerificarSequencia.empty :
 
-    else:
+        return pd.DataFrame([{'Mensagem':f'Sequencia {codsequencia} nao exite!','status':False}])
+    elif not VerificarTamanho.empty :
+
+        return pd.DataFrame([{'Mensagem':f'Tamanho {DescricaoTamanho} ja exite!','status':False}])
+
     # Caso apenas a Descricao tamanho tenha sido alterado:
     #---------------------------------------------------------------------
-        sequenciaTamanhoAtual = VerificarTamanho['sequenciaTamanho'][0]
-        descricaoTamnhoAutal =  VerificarTamanho['DescricaoTamanho'][0]
+    else:
 
-        if sequenciaTamanhoAtual == sequenciaTamanho:
-            if descricaoTamnhoAutal == DescricaoTamanho:
-                DescricaoTamanho = descricaoTamnhoAutal
-
-            update = """
+        update = """
             update "Easy"."Tamanhos"
             set "DescricaoTamanho" = %s
-            where "DescricaoTamanho" = %s
-            """
-            conn = ConexaoPostgreMPL.conexaoJohn()
-            cursor = conn.cursor()
+            where "codsequencia" = %s
+        """
+        conn = ConexaoPostgreMPL.conexaoJohn()
+        cursor = conn.cursor()
 
-            cursor.execute(update, (DescricaoTamanho,descricaoTamnhoAutal,))
-            conn.commit()
-            cursor.close()
-            conn.close()
+        cursor.execute(update, (DescricaoTamanho, codsequencia,))
+        conn.commit()
+        cursor.close()
+        conn.close()
 
-            return pd.DataFrame([{'Mensagem':'Tamanho Alterado com sucesso','Status':True}])
-
-        else:
-           if descricaoTamnhoAutal == DescricaoTamanho:
-                DescricaoTamanho = descricaoTamnhoAutal
-
-           VerificarSequenciaContagem = ObterTamanhos()
-           VerificarSequenciaContagem = VerificarSequenciaContagem['codsequencia'].count()
-
-           if sequenciaTamanho > VerificarSequenciaContagem:
-               return pd.DataFrame([{'Mensagem': 'Por favor informar uma sequencia de ordenacao menor ou igual a quantidade de Tamanhos existente', 'status': False}])
-
-           else:
-
-               updateSequencias = """
-               update "Easy"."Tamanhos"
-               set codsequencia = codsequencia + 1
-               where codsequencia => %s
-               """
-
-               conn = ConexaoPostgreMPL.conexaoJohn()
-               cursor = conn.cursor()
-
-               cursor.execute(updateSequencias, (sequenciaTamanho,))
-               conn.commit()
-
-               update = """
-               update "Easy"."Tamanhos"
-               set "DescricaoTamanho" = %s , codsequencia = %s 
-               where "DescricaoTamanho" = %s
-               """
-               cursor.execute(update, (DescricaoTamanho,sequenciaTamanho,DescricaoTamanho,))
-               conn.commit()
-               cursor.close()
-               conn.close()
-               return pd.DataFrame([{'Mensagem': 'Tamanho Alterado com sucesso', 'Status': True}])
-
-    # ---------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return pd.DataFrame([{'Mensagem': 'Tamanho Alterado com sucesso', 'Status': True}])
