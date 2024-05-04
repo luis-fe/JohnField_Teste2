@@ -29,15 +29,25 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
         conn.close()
         return pd.DataFrame([{'mensagem':f'Tamanhos e Cores inseridos com Sucesso!', 'status':True}])
 
+
+
 def ConsultaTamCor_OP(codOP, codCliente):
     idOP = str(codOP)+'||'+str(codCliente)
     consulta = """
-    select "idOP" , "descCor", "tamanho", "quantidade" from "Easy"."OP_Cores_Tam" 
+    select "descCor", "tamanho", "quantidade" from "Easy"."OP_Cores_Tam" 
     where "idOP" = %s
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql(consulta,conn,params=(idOP,))
     conn.close()
-    return consulta
+    if consulta.empty:
+
+        return pd.DataFrame([{"Mensagem":"Nao foi encontrado grade para a OP informada!",'status':False}])
+    else:
+        consulta['codOP'] = codOP
+        consulta['codCliente'] = codCliente
+        consulta['arrayCorTamQuantiades'] = [consulta['descCor'],consulta['tamanho'],consulta['quantidade']]
+
+        return consulta
 
 
