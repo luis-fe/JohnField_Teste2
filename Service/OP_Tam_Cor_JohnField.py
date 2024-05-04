@@ -48,6 +48,7 @@ def ConsultaTamCor_OP(codOP, codCliente):
         consulta['codCliente'] = codCliente
         consulta['arrayCorTamQuantiades'] = list(zip(consulta['descCor'], consulta['tamanho'], consulta['quantidade']))
 
+        consulta.drop(["descCor", "tamanho", "quantidade"],axis=1 , inplace=True)
         return consulta
 
 

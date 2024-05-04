@@ -90,3 +90,37 @@ order by t.codsequencia asc
     conn.close()
 
     return consulta
+
+def ObterTamanhoEspecifico(DescricaoTamanho):
+    consulta = ObterTamanhos()
+    consulta = consulta[consulta['DescricaoTamanho'] == DescricaoTamanho]
+    return consulta
+
+def ObterSequencia(codsequencia):
+    consulta = ObterTamanhos()
+    consulta = consulta[consulta['codsequencia'] == codsequencia]
+    return consulta
+
+def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
+    VerificarTamanho = ObterTamanhoEspecifico(DescricaoTamanho)
+    VerificarSequencia = ObterSequencia(sequenciaTamanho)
+
+    if VerificarTamanho.empty and VerificarSequencia.empty:
+
+        inserir = """
+        insert into "Easy"."Tamanhos" (codsequencia , "DescricaoTamanho") values ( %s , %s )
+        """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
