@@ -69,5 +69,8 @@ def FasesDisponivelPMovimentarOP(codOP, codCliente):
     consulta.fillna('-',inplace=True)
     consulta = consulta[consulta['faseUsada'] == '-']
     conn.close()
+
+    consulta = consulta.loc[:,['codFase','nomeFase']]
+
     return consulta
 
