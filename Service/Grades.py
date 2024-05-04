@@ -79,3 +79,14 @@ def UpdateGrade(codGrade, nomeGrade, arrayTamanhos):
         conn.close()
         return pd.DataFrame([{'Mensagem': f'Grade {codGrade} Atualizada com sucesso!', 'status': True}])
 
+def ObterTamanhos():
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = """
+    select codsequencia , "DescricaoTamanho"  from "Easy"."Tamanhos" t 
+order by t.codsequencia asc
+    """
+    consulta = pd.DataFrame(consulta,conn)
+    conn.close()
+
+    return consulta

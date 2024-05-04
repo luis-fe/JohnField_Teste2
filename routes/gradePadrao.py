@@ -29,6 +29,21 @@ def BuscarGrades():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
+@gradePadrao_routesJohn.route('/api/JonhField/BuscarTamanhos', methods=['GET'])
+@token_required
+def BuscarTamanhos():
+    consulta = Grades.ObterTamanhos()
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
 @gradePadrao_routesJohn.route('/api/JonhField/InserirGrade', methods=['POST'])
 @token_required
 def InserirGrade():
