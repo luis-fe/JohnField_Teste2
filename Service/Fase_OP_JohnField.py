@@ -37,7 +37,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         cursor.close()
 
         insert = """
-        insert into "Easy"."Fase/OP" ("codFase","idOP","idUsuarioMov","DataMov", "Situacao") value (%s, %s %s, %s, %s)
+        insert into "Easy"."Fase/OP" ("codFase","idOP","idUsuarioMov","DataMov", "Situacao") values (%s, %s %s, %s, %s)
         """
 
         DataHora = OP_JonhField.obterHoraAtual()
@@ -45,6 +45,8 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         cursor.execute(insert,(novaFase,idOP,idUsuarioMovimentacao,DataHora,'Em Processo'))
         conn.commit()
         cursor.close()
+
+        conn.close()
         return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codOP} movimentada com sucesso!','status':True}])
 
 def OPAberto(codOP, codCliente):
@@ -79,3 +81,35 @@ def FasesDisponivelPMovimentarOP(codOP, codCliente):
 
     return consulta
 
+def EncerrarOP(idUsuarioMovimentacao, codOP, codCliente):
+    idOP = str(codOP)+'||'+str(codCliente)
+    verifica = OP_JonhField.BuscandoOPEspecifica(idOP)
+
+    if verifica.empty:
+        return pd.DataFrame([{'Mensagem':f'A OP {codOP} nao existe para o cliente {codOP} !','status':False}])
+    else:
+        conn = ConexaoPostgreMPL.conexaoJohn()
+        updateUsuarioBaixa = """
+               update "Easy"."Fase/OP"
+               set "idUsuarioMovimentacao" = %s
+               where "idOP" = %s and "Situacao" ='Em Processo'; 
+               """
+        cursor = conn.cursor()
+        cursor.execute(updateUsuarioBaixa, (idUsuarioMovimentacao, idOP,))
+        conn.commit()
+        cursor.close()
+
+        updateSituacao = """
+               update "Easy"."Fase/OP"
+               set "Situacao" = %s
+               where "idOP" = %s
+               """
+        cursor = conn.cursor()
+        cursor.execute(updateSituacao, ('Movimentada', idOP,))
+        conn.commit()
+        cursor.close()
+
+
+        conn.close()
+
+        return pd.DataFrame([{'Mensagem':'OP Encerrada com sucesso!','status':True}])
