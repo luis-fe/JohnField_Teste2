@@ -46,7 +46,7 @@ def ConsultaTamCor_OP(codOP, codCliente):
     else:
         consulta['codOP'] = codOP
         consulta['codCliente'] = codCliente
-        consulta['arrayCorTamQuantiades'] = [consulta['descCor'],consulta['tamanho'],consulta['quantidade']]
+        consulta['arrayCorTamQuantiades'] = list(zip(consulta['descCor'], consulta['tamanho'], consulta['quantidade']))
 
         return consulta
 
