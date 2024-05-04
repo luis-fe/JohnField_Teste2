@@ -28,7 +28,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         conn = ConexaoPostgreMPL.conexaoJohn()
         updateSituacao = """
         update "Easy"."Fase/OP"
-        set Situacao = %s
+        set "Situacao" = %s
         where "idOP" = %s
         """
         cursor = conn.cursor()
