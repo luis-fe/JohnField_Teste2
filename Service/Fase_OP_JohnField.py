@@ -29,7 +29,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         updateSituacao = """
         update "Easy"."Fase/OP"
         set Situacao = %s
-        where idOP = %s
+        where "idOP" = %s
         """
         cursor = conn.cursor()
         cursor.execute(updateSituacao,('Movimentada',idOP,))
