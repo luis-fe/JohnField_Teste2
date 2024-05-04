@@ -107,6 +107,10 @@ def ObterSequencia(codsequencia):
 def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
     VerificarTamanho = ObterTamanhoEspecifico(DescricaoTamanho)
     VerificarSequencia = ObterSequencia(sequenciaTamanho)
+    VerificarSequenciaContagem = ObterSequencia['sequenciaTamanho'].count()
+
+    if sequenciaTamanho == '':
+        sequenciaTamanho = VerificarSequenciaContagem + 1
 
     if VerificarTamanho.empty and VerificarSequencia.empty:
 

@@ -70,9 +70,8 @@ def InserirGrade():
 @token_required
 def InserirTamanhos():
     data = request.get_json()
-    sequenciaTamanho = data.get('sequenciaTamanho')
+    sequenciaTamanho = data.get('sequenciaTamanho','')
     DescricaoTamanho = data.get('DescricaoTamanho')
-
 
     consulta = Grades.InserirTamanho(sequenciaTamanho, DescricaoTamanho)
     # Obtém os nomes das colunas
