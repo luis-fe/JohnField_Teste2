@@ -37,7 +37,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         where "idOP" = %s and "Situacao" = 'Em Processo'
         """
         cursor = conn.cursor()
-        cursor.execute(updateSituacao,('Movimentada',idOP,idUsuarioMovimentacao,))
+        cursor.execute(updateSituacao,('Movimentada',idUsuarioMovimentacao,idOP,))
         conn.commit()
         cursor.close()
 
