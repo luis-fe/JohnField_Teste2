@@ -1,10 +1,12 @@
 import pandas as pd
 import ConexaoPostgreMPL
-from Service import OP_JonhField, FaseJohnField
+from Service import OP_JonhField, FaseJohnField, UsuariosJohnFild
 
 def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
     idOP = str(codOP)+'||'+str(codCliente)
     nomeFaseNova = ObterNomeFase(novaFase)
+
+    usuarioPesquisa = UsuariosJohnFild.ConsultaUsuariosID(idUsuarioMovimentacao)
 
     verifica = OP_JonhField.BuscandoOPEspecifica(idOP)
     verificaFaseAtual = OPAberto(codOP, codCliente)
@@ -12,7 +14,10 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
     fasesDisponiveis = FasesDisponivelPMovimentarOP(codOP,codCliente)
     fasesDisponiveis = fasesDisponiveis[fasesDisponiveis['codFase']==novaFase]
 
-    if verifica.empty:
+    if usuarioPesquisa.empty:
+        return pd.DataFrame([{'Mensagem':f'O usuario  {idUsuarioMovimentacao} nao foi encontrado !','status':False}])
+
+    elif verifica.empty:
         return pd.DataFrame([{'Mensagem':f'A OP {codOP} nao existe para o cliente {codOP} !','status':False}])
 
     elif verificaFaseAtual.empty:
@@ -28,21 +33,21 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         conn = ConexaoPostgreMPL.conexaoJohn()
         updateSituacao = """
         update "Easy"."Fase/OP"
-        set "Situacao" = %s
-        where "idOP" = %s
+        set "Situacao" = %s , "idUsuarioMovimentacao" = %s
+        where "idOP" = %s and "Situacao" = 'Em Processo'
         """
         cursor = conn.cursor()
-        cursor.execute(updateSituacao,('Movimentada',idOP,))
+        cursor.execute(updateSituacao,('Movimentada',idOP,idUsuarioMovimentacao,))
         conn.commit()
         cursor.close()
 
         insert = """
-        insert into "Easy"."Fase/OP" ("codFase","idOP","idUsuarioMov","DataMov", "Situacao") values (%s, %s,  %s, %s, %s)
+        insert into "Easy"."Fase/OP" ("codFase","idOP","DataMov", "Situacao") values (%s,  %s, %s, %s)
         """
 
         DataHora = OP_JonhField.obterHoraAtual()
         cursor = conn.cursor()
-        cursor.execute(insert,(novaFase,idOP,idUsuarioMovimentacao,DataHora,'Em Processo'))
+        cursor.execute(insert,(novaFase,idOP,DataHora,'Em Processo'))
         conn.commit()
         cursor.close()
 
