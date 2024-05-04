@@ -110,6 +110,48 @@ def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
         inserir = """
         insert into "Easy"."Tamanhos" (codsequencia , "DescricaoTamanho") values ( %s , %s )
         """
+        conn = ConexaoPostgreMPL.conexaoJohn()
+        cursor = conn.cursor()
+
+        cursor.execute(inserir,(sequenciaTamanho,DescricaoTamanho,))
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return pd.DataFrame([{'Mensagem':'Tamanho Inserido com Sucesso!','status':True}])
+
+    elif not VerificarTamanho.empty :
+
+        return pd.DataFrame([{'Mensagem':'Tamanho já EXISTE!','status':False}])
+
+    else:
+
+        updateSequencias = """
+        update "Easy"."Tamanhos"
+        set codsequencia = codsequencia + 1
+        where codsequencia > %s
+        """
+
+        inserir = """
+        insert into "Easy"."Tamanhos" (codsequencia , "DescricaoTamanho") values ( %s , %s )
+        """
+        conn = ConexaoPostgreMPL.conexaoJohn()
+        cursor = conn.cursor()
+
+        cursor.execute(updateSequencias,(sequenciaTamanho,))
+        conn.commit()
+
+        cursor.execute(inserir,(sequenciaTamanho,DescricaoTamanho,))
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return pd.DataFrame([{'Mensagem':'Tamanho Inserido com Sucesso!','status':True, 'Mensagem2':'Sequencia de Tamanhos Reordenados!'}])
+
+
+
 
 
 

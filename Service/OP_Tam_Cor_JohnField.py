@@ -47,8 +47,13 @@ def ConsultaTamCor_OP(codOP, codCliente):
         consulta['codOP'] = codOP
         consulta['codCliente'] = codCliente
         consulta['arrayCorTamQuantiades'] = list(zip(consulta['descCor'], consulta['tamanho'], consulta['quantidade']))
-
         consulta.drop(["descCor", "tamanho", "quantidade"],axis=1 , inplace=True)
-        return consulta
+        # Convertendo a coluna 'Tamanhos' para lista de strings
+        consulta['arrayCorTamQuantiades'] = consulta['arrayCorTamQuantiades'].apply(lambda x: [x])
+
+        # Agrupar tamanhos em uma lista
+        df_summary = consulta.groupby(['codOP', 'codCliente'])['arrayCorTamQuantiades'].sum().reset_index()
+
+        return df_summary
 
 
