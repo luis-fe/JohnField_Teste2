@@ -33,7 +33,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         conn = ConexaoPostgreMPL.conexaoJohn()
         updateSituacao = """
         update "Easy"."Fase/OP"
-        set "Situacao" = %s , "idUsuarioMovimentacao" = %s
+        set "Situacao" = %s , "idUsuarioMov" = %s
         where "idOP" = %s and "Situacao" = 'Em Processo'
         """
         cursor = conn.cursor()
@@ -96,7 +96,7 @@ def EncerrarOP(idUsuarioMovimentacao, codOP, codCliente):
         conn = ConexaoPostgreMPL.conexaoJohn()
         updateUsuarioBaixa = """
                update "Easy"."Fase/OP"
-               set "idUsuarioMovimentacao" = %s
+               set "idUsuarioMov" = %s
                where "idOP" = %s and "Situacao" ='Em Processo'; 
                """
         cursor = conn.cursor()
