@@ -16,10 +16,10 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         return pd.DataFrame([{'Mensagem':f'A OP {codOP} nao existe para o cliente {codOP} !','status':False}])
 
     elif verificaFaseAtual.empty:
-        return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codOP} nao exta em aberto !','status':False}])
+        return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codCliente} nao exta em aberto !','status':False}])
 
     elif verificaFaseAtual['FaseAtual'][0] == novaFase:
-        return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codOP} já exta aberta nessa fase {novaFase}-{nomeFaseNova} !','status':False}])
+        return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codCliente} já exta aberta nessa fase {novaFase}-{nomeFaseNova} !','status':False}])
 
     elif fasesDisponiveis.empty:
         return pd.DataFrame([{'Mensagem':f'A Fase {novaFase}-{nomeFaseNova} nao esta disponivel para movimentacao!','status':False}])
