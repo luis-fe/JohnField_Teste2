@@ -16,7 +16,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         return pd.DataFrame([{'Mensagem':f'A OP {codOP} nao existe para o cliente {codOP} !','status':False}])
 
     elif verificaFaseAtual.empty:
-        return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codCliente} nao exta em aberto !','status':False}])
+        return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codCliente} nao está em aberto !','status':False}])
 
     elif verificaFaseAtual['FaseAtual'][0] == novaFase:
         return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codCliente} já exta aberta nessa fase {novaFase}-{nomeFaseNova} !','status':False}])
@@ -48,9 +48,8 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codOP} movimentada com sucesso!','status':True}])
 
 def OPAberto(codOP, codCliente):
-    idOP = str(codOP)+'||'+str(codCliente)
     ObterOP_EMAberto = OP_JonhField.ObterOP_EMAberto()
-    ObterOP_EMAberto = ObterOP_EMAberto[ObterOP_EMAberto['idOP']==idOP]
+    ObterOP_EMAberto = ObterOP_EMAberto[(ObterOP_EMAberto['codOP']==codOP) &(ObterOP_EMAberto['codCliente']==codCliente)]
 
 
     return ObterOP_EMAberto
