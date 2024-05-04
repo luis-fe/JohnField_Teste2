@@ -49,7 +49,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
 
 def OPAberto(codOP, codCliente):
     ObterOP_EMAberto = OP_JonhField.ObterOP_EMAberto()
-    ObterOP_EMAberto = ObterOP_EMAberto[(ObterOP_EMAberto['codOP']==codOP) &(ObterOP_EMAberto['codCliente']==codCliente)]
+    ObterOP_EMAberto = ObterOP_EMAberto[(ObterOP_EMAberto['codOP']==codOP) &(ObterOP_EMAberto['codCliente']==codCliente)].reset_index()
 
 
     return ObterOP_EMAberto
