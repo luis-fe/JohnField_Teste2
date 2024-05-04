@@ -52,3 +52,25 @@ def MovimentarOP():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+
+@MovimentaoOP_routesJohn.route('/api/JonhField/EncerrarOP', methods=['POST'])
+@token_required
+def EncerrarOP():
+    data = request.get_json()
+    idUsuarioMovimentacao = data.get('idUsuarioMovimentacao')
+    codOP = data.get('codOP')
+    codCliente = data.get('codCliente')
+
+
+    consulta = Fase_OP_JohnField.EncerrarOP(idUsuarioMovimentacao, codOP, codCliente)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
