@@ -37,7 +37,7 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
         cursor.close()
 
         insert = """
-        insert into "Easy"."Fase/OP" ("codFase","idOP","idUsuarioMov","DataMov", "Situacao") values (%s, %s %s, %s, %s)
+        insert into "Easy"."Fase/OP" ("codFase","idOP","idUsuarioMov","DataMov", "Situacao") values (%s, %s,  %s, %s, %s)
         """
 
         DataHora = OP_JonhField.obterHoraAtual()
