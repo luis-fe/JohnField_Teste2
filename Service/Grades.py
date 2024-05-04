@@ -54,27 +54,30 @@ def UpdateGrade(codGrade, nomeGrade, arrayTamanhos):
     else:
         conn = ConexaoPostgreMPL.conexaoJohn()
 
+
+        delete = """
+            delete from "Easy"."Grade"
+            where "codGrade" = %s            
+            """
+
+        cursor = conn.cursor()
+
+        cursor.execute(delete,(codGrade,))
+        conn.commit()
+        cursor.close()
+
         for tamanho in arrayTamanhos:  # Correção do loop
 
-            delete = """
-            delete from "Easy"."Grade"
-            where "codGrade" = %s
-            
-            """
+                inserir = """
+                INSERT INTO "Easy"."Grade" ("codGrade", "nomeGrade", "Tamanhos")
+                VALUES (%s, %s, %s)  -- Correção na sintaxe do SQL
+                """
+                cursor = conn.cursor()
+                cursor.execute(inserir, (codGrade, nomeGrade, tamanho,))
+                conn.commit()
 
-            inserir = """
-            INSERT INTO "Easy"."Grade" ("codGrade", "nomeGrade", "Tamanhos")
-            VALUES (%s, %s, %s)  -- Correção na sintaxe do SQL
-            """
-            cursor = conn.cursor()
+                cursor.close()
 
-            cursor.execute(delete,(codGrade,))
-            conn.commit()
-
-            cursor.execute(inserir, (codGrade, nomeGrade, tamanho,))
-            conn.commit()
-
-            cursor.close()
 
         conn.close()
         return pd.DataFrame([{'Mensagem': f'Grade {codGrade} Atualizada com sucesso!', 'status': True}])
@@ -130,7 +133,7 @@ def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
         updateSequencias = """
         update "Easy"."Tamanhos"
         set codsequencia = codsequencia + 1
-        where codsequencia > %s
+        where codsequencia => %s
         """
 
         inserir = """
@@ -151,7 +154,65 @@ def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
         return pd.DataFrame([{'Mensagem':'Tamanho Inserido com Sucesso!','status':True, 'Mensagem2':'Sequencia de Tamanhos Reordenados!'}])
 
 
+def UpdateTamanho(sequenciaTamanho, DescricaoTamanho):
+    VerificarTamanho = ObterTamanhoEspecifico(DescricaoTamanho)
+    VerificarSequencia = ObterSequencia(sequenciaTamanho)
 
+    if VerificarTamanho.empty and VerificarSequencia.empty:
+
+        return pd.DataFrame([{'Mensagem':'Tamanho informado nao  EXISTE!','status':False}])
+
+    else:
+    # Caso apenas a Descricao tamanho tenha sido alterado:
+    #---------------------------------------------------------------------
+        sequenciaTamanhoAtual = VerificarTamanho['sequenciaTamanho'][0]
+        descricaoTamnhoAutal =  VerificarTamanho['DescricaoTamanho'][0]
+
+        if sequenciaTamanhoAtual == sequenciaTamanho:
+            if descricaoTamnhoAutal == DescricaoTamanho:
+                DescricaoTamanho = descricaoTamnhoAutal
+
+            update = """
+            update "Easy"."Tamanhos"
+            set "DescricaoTamanho" = %s
+            where "DescricaoTamanho" = %s
+            """
+            conn = ConexaoPostgreMPL.conexaoJohn()
+            cursor = conn.cursor()
+
+            cursor.execute(update, (DescricaoTamanho,descricaoTamnhoAutal,))
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            return pd.DataFrame([{'Mensagem':'Tamanho Alterado com sucesso','Status':True}])
+
+        else:
+           if descricaoTamnhoAutal == DescricaoTamanho:
+                DescricaoTamanho = descricaoTamnhoAutal
+
+           VerificarSequenciaContagem = ObterSequencia['sequenciaTamanho'].count()
+
+           updateSequencias = """
+           update "Easy"."Tamanhos"
+           set codsequencia = codsequencia + 1
+           where codsequencia => %s
+           """
+
+           conn = ConexaoPostgreMPL.conexaoJohn()
+           cursor = conn.cursor()
+
+           cursor.execute(updateSequencias, (sequenciaTamanho,))
+           conn.commit()
+
+           update = """
+           update "Easy"."Tamanhos"
+           set "DescricaoTamanho" = %s
+           where "DescricaoTamanho" = %s
+           """
+
+
+    # ---------------------------------------------------------------------
 
 
 
