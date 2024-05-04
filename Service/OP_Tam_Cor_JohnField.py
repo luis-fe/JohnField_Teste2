@@ -5,9 +5,14 @@ from Service import OP_JonhField
 def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
     idOP = str(codOP)+'||'+str(codCliente)
     VerificaOP = OP_JonhField.BuscandoOPEspecifica(idOP)
-
+    consulta = ConsultaTamCor_OP(codOP,codCliente)
     if VerificaOP.empty:
         return pd.DataFrame([{'mensagem':f'A OP {codOP}, cliente {codCliente} nao foi indentificada!', 'status':False}])
+
+    elif not consulta.empty:
+        return pd.DataFrame([{'mensagem':f'JA existe tamanho e cor cadastrado para  OP {codOP}, cliente {codCliente}  !', 'status':False}])
+
+
     else:
 
         conn = ConexaoPostgreMPL.conexaoJohn()
