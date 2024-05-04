@@ -57,3 +57,39 @@ def ConsultaTamCor_OP(codOP, codCliente):
         return df_summary
 
 
+def AtualizarCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
+    idOP = str(codOP)+'||'+str(codCliente)
+    VerificaOP = OP_JonhField.BuscandoOPEspecifica(idOP)
+
+    if VerificaOP.empty:
+        return pd.DataFrame([{'mensagem':f'A OP {codOP}, cliente {codCliente} nao foi indentificada!', 'status':False}])
+    else:
+
+        conn = ConexaoPostgreMPL.conexaoJohn()
+
+        Deletar = """
+        delete from "Easy"."OP_Cores_Tam" 
+        where "idOP" = %s
+        """
+
+        cursor = conn.cursor()
+        cursor.execute(Deletar, (idOP,))
+        conn.commit()
+        cursor.close()
+
+        for matriz in arrayCorTamQuantiades:
+            cor = matriz[0]
+            t = matriz[1]
+            quant = matriz[2]
+
+            inserir = """
+                INSERT INTO "Easy"."OP_Cores_Tam" ("idOP", "descCor", "tamanho", "quantidade")
+                VALUES (%s, %s, %s, %s)
+                """
+            cursor = conn.cursor()
+            cursor.execute(inserir, (idOP, cor, t,quant))
+            conn.commit()
+            cursor.close()
+
+        conn.close()
+        return pd.DataFrame([{'mensagem':f'Tamanhos e Cores inseridos com Sucesso!', 'status':True}])
