@@ -158,7 +158,7 @@ def UpdateTamanho(sequenciaTamanho, DescricaoTamanho):
     VerificarTamanho = ObterTamanhoEspecifico(DescricaoTamanho)
     VerificarSequencia = ObterSequencia(sequenciaTamanho)
 
-    if VerificarTamanho.empty and VerificarSequencia.empty:
+    if VerificarTamanho.empty:
 
         return pd.DataFrame([{'Mensagem':'Tamanho informado nao  EXISTE!','status':False}])
 
