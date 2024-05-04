@@ -107,7 +107,8 @@ def ObterSequencia(codsequencia):
 def InserirTamanho(sequenciaTamanho, DescricaoTamanho):
     VerificarTamanho = ObterTamanhoEspecifico(DescricaoTamanho)
     VerificarSequencia = ObterSequencia(sequenciaTamanho)
-    VerificarSequenciaContagem = ObterSequencia['sequenciaTamanho'].count()
+    VerificarSequenciaContagem = ObterTamanhos()
+    VerificarSequenciaContagem = VerificarSequenciaContagem['sequenciaTamanho'].count()
 
     if sequenciaTamanho == '':
         sequenciaTamanho = VerificarSequenciaContagem + 1
@@ -195,7 +196,8 @@ def UpdateTamanho(sequenciaTamanho, DescricaoTamanho):
            if descricaoTamnhoAutal == DescricaoTamanho:
                 DescricaoTamanho = descricaoTamnhoAutal
 
-           VerificarSequenciaContagem = ObterSequencia['sequenciaTamanho'].count()
+           VerificarSequenciaContagem = ObterTamanhos()
+           VerificarSequenciaContagem = VerificarSequenciaContagem['sequenciaTamanho'].count()
 
            if sequenciaTamanho > VerificarSequenciaContagem:
                return pd.DataFrame([{'Mensagem': 'Por favor informar uma sequencia de ordenacao menor ou igual a quantidade de Tamanhos existente', 'status': False}])
