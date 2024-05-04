@@ -86,6 +86,26 @@ def InserirTamanhos():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
+@gradePadrao_routesJohn.route('/api/JonhField/AlterarTamanho', methods=['PUT'])
+@token_required
+def AlterarTamanho():
+    data = request.get_json()
+    sequenciaTamanho = data.get('sequenciaTamanho')
+    DescricaoTamanho = data.get('DescricaoTamanho')
+
+
+    consulta = Grades.UpdateTamanho(sequenciaTamanho, DescricaoTamanho)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
 @gradePadrao_routesJohn.route('/api/JonhField/AtualizarGrade', methods=['PUT'])
 @token_required
 def AtualizarGrade():

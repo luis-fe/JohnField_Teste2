@@ -193,24 +193,33 @@ def UpdateTamanho(sequenciaTamanho, DescricaoTamanho):
 
            VerificarSequenciaContagem = ObterSequencia['sequenciaTamanho'].count()
 
-           updateSequencias = """
-           update "Easy"."Tamanhos"
-           set codsequencia = codsequencia + 1
-           where codsequencia => %s
-           """
+           if sequenciaTamanho > VerificarSequenciaContagem:
+               return pd.DataFrame([{'Mensagem': 'Por favor informar uma sequencia de ordenacao menor ou igual a quantidade de Tamanhos existente', 'status': False}])
 
-           conn = ConexaoPostgreMPL.conexaoJohn()
-           cursor = conn.cursor()
+           else:
 
-           cursor.execute(updateSequencias, (sequenciaTamanho,))
-           conn.commit()
+               updateSequencias = """
+               update "Easy"."Tamanhos"
+               set codsequencia = codsequencia + 1
+               where codsequencia => %s
+               """
 
-           update = """
-           update "Easy"."Tamanhos"
-           set "DescricaoTamanho" = %s
-           where "DescricaoTamanho" = %s
-           """
+               conn = ConexaoPostgreMPL.conexaoJohn()
+               cursor = conn.cursor()
 
+               cursor.execute(updateSequencias, (sequenciaTamanho,))
+               conn.commit()
+
+               update = """
+               update "Easy"."Tamanhos"
+               set "DescricaoTamanho" = %s , codsequencia = %s 
+               where "DescricaoTamanho" = %s
+               """
+               cursor.execute(update, (DescricaoTamanho,sequenciaTamanho,DescricaoTamanho,))
+               conn.commit()
+               cursor.close()
+               conn.close()
+               return pd.DataFrame([{'Mensagem': 'Tamanho Alterado com sucesso', 'Status': True}])
 
     # ---------------------------------------------------------------------
 
