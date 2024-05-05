@@ -22,5 +22,6 @@ def GerarPDF():
     codCliente = request.args.get('codCliente')
     codOP = request.args.get('codOP')
 
-    consulta = FormularioOP.criar_pdf('formulario.pdf',codCliente,codOP)
-    return send_from_directory(f'routes/formulario.pdf')
+    caminho_pdf = FormularioOP.criar_pdf('formulario.pdf',codCliente,str(codOP))
+    # Retorna o arquivo PDF
+    return send_from_directory('.','formulario.pdf')
