@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_from_directory
 from functools import wraps
 from Service import FormularioOP
 import pandas as pd
@@ -23,13 +23,4 @@ def GerarPDF():
     codCliente = request.args.get('codCliente')
 
     consulta = FormularioOP.criar_pdf('formulario.pdf',codCliente)
-    # Obtém os nomes das colunas
-    column_names = consulta.columns
-    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
-    consulta_data = []
-    for index, row in consulta.iterrows():
-        consulta_dict = {}
-        for column_name in column_names:
-            consulta_dict[column_name] = row[column_name]
-        consulta_data.append(consulta_dict)
-    return jsonify(consulta_data)
+    return send_from_directory(f'formulario.pdf')
