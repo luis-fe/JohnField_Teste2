@@ -58,7 +58,7 @@ def ConsultaTamCor_OP(codOP, codCliente):
 
         # Agrupar tamanhos em uma lista
         df_summary = consulta.groupby(['codOP', 'codCliente','descCor']).agg(
-            {'Tamanho': list, 'quantidade': list}).reset_index()
+            {'tamanho': list, 'quantidade': list}).reset_index()
 
         return df_summary
 
