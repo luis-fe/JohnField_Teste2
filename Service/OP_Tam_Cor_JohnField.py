@@ -53,8 +53,8 @@ def ConsultaTamCor_OP(codOP, codCliente):
         consulta['codCliente'] = codCliente
 
         # Convertendo a coluna 'Tamanhos' para lista de strings
-        consulta['Tamanho'] = consulta['Tamanho'].apply(lambda x: [x])
-        consulta['descCor'] = consulta['descCor'].apply(lambda x: [x])
+        #consulta['Tamanho'] = consulta['Tamanho'].apply(lambda x: [x])
+        #consulta['descCor'] = consulta['descCor'].apply(lambda x: [x])
 
         # Agrupar tamanhos em uma lista
         df_summary = consulta.groupby(['codOP', 'codCliente'])['Tamanho','descCor'].sum().reset_index()
