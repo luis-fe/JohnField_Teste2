@@ -85,5 +85,3 @@ def criar_pdf(saida_pdf, codCliente):
 def BuscarCliente(codCliente):
     consulta = ClientesJohnField.ConsultaClientesEspecifico(codCliente)
     return consulta
-
-criar_pdf('teste.pdf',1)
