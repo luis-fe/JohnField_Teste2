@@ -51,18 +51,10 @@ def ConsultaTamCor_OP(codOP, codCliente):
     else:
         consulta['codOP'] = codOP
         consulta['codCliente'] = codCliente
-        consulta['arrayCorTamQuantiades'] = list(zip(consulta['descCor'], consulta['tamanho']+':'+consulta['quantidade']))
-        consulta. drop(["descCor", "tamanho", "quantidade"],axis=1 , inplace=True)
+        resumoConsulta = consulta.groupby(['codOP', 'codCliente','descCor']).agg(
+            {'Tamanho': list, 'quantidade': list}).reset_index()
 
-        # Convertendo a coluna 'Tamanhos' para lista de strings
-        consulta['arrayCorTamQuantiades'] = consulta['arrayCorTamQuantiades']. aplicar(lambda x: [x])
-        #consulta['descCor'] = consulta['descCor'].apply(lambda x: [x])
-
-        # Agrupar tamanhos em uma lista
-        df_summary = consulta. groupby(['codOP', 'codCliente'])['arrayCorTamQuantiades']. soma(). reset_index()
-
-
-        return df_summary
+        return resumoConsulta
 
 
 def AtualizarCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
