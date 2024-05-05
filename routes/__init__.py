@@ -11,6 +11,7 @@ from .FaseJohnField import fase_routesJohn
 from .gradePadrao import gradePadrao_routesJohn
 from .GeracaoOP import GeraoOP_routesJohn
 from .MovimentacaoOP import MovimentaoOP_routesJohn
+from .Formulario import formulario_routesJohn
 
 # Registre as rotas nos blueprints
 routes_blueprint.register_blueprint(usuarios_routesJohn)
@@ -20,4 +21,5 @@ routes_blueprint.register_blueprint(fase_routesJohn)
 routes_blueprint.register_blueprint(gradePadrao_routesJohn)
 routes_blueprint.register_blueprint(GeraoOP_routesJohn)
 routes_blueprint.register_blueprint(MovimentaoOP_routesJohn)
+routes_blueprint.register_blueprint(formulario_routesJohn)
 
