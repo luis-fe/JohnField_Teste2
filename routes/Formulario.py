@@ -22,6 +22,28 @@ def GerarPDF():
     codCliente = request.args.get('codCliente')
     codOP = request.args.get('codOP')
 
-    caminho_pdf = FormularioOP.criar_pdf('formulario.pdf',codCliente,str(codOP))
-    # Retorna o arquivo PDF
-    return send_from_directory('.','formulario.pdf')
+    idOP = codOP + '||' + str(codCliente)
+
+    #Verificar se OP existe:
+
+    verificar = FormularioOP.BucarOP(idOP)
+
+    if verificar.empty:
+
+        consulta = pd.DataFrame([{'Mensagem':f'A OP {codOP} nao foi encontrada','status':False}])
+        # Obtém os nomes das colunas
+        column_names = consulta.columns
+        # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+        consulta_data = []
+        for index, row in consulta.iterrows():
+            consulta_dict = {}
+            for column_name in column_names:
+                consulta_dict[column_name] = row[column_name]
+            consulta_data.append(consulta_dict)
+        return jsonify(consulta_data)
+
+    else:
+
+        caminho_pdf = FormularioOP.criar_pdf('formulario.pdf',codCliente,str(codOP))
+        # Retorna o arquivo PDF
+        return send_from_directory('.','formulario.pdf')

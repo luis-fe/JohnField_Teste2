@@ -5,9 +5,13 @@ from reportlab.pdfgen import canvas
 import tempfile
 from reportlab.graphics import barcode
 import qrcode
-from Service import ClientesJohnField, OP_JonhField
+from Service import ClientesJohnField, OP_JonhField, OP_Tam_Cor_JohnField
 def criar_pdf(saida_pdf, codCliente, codOP):
 
+    informacoes = OP_JonhField.ObterOP_EMAberto()
+    informacoes = informacoes[(informacoes['codCliente'] == int(codCliente)) & (informacoes['codOP'] == codOP)].reset_index()
+    informacoes.fillna('-',inplace=True)
+    print(informacoes)
     consulta = BuscarCliente(codCliente)
     nomeCliente = consulta['nomeCliente'][0]
 
@@ -30,7 +34,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Título centralizado
         c.setFont("Helvetica", 14)
         title = codOP
-        c.drawString(6.8 * cm, 28.8 * cm, title)
+        c.drawString(6.7 * cm, 27.7 * cm, title)
 
 
         # Título centralizado
@@ -39,9 +43,14 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         c.drawString(5.8 * cm, 27.7 * cm, title)
 
         # Título centralizado
-        c.setFont("Helvetica-Bold", 14)
+        c.setFont("Helvetica-Bold", 13)
         title = 'CATEGORIA:'
-        c.drawString(10.2 * cm, 27.7 * cm, title)
+        c.drawString(9.4 * cm, 27.7 * cm, title)
+
+        # Título centralizado
+        c.setFont("Helvetica", 12)
+        title = informacoes['nomeCategoria'][0]
+        c.drawString(12.3 * cm, 27.7 * cm, title)
 
         # Título centralizado
         c.setFont("Helvetica-Bold", 14)
@@ -58,20 +67,69 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         title = 'Descrição OP:'
         c.drawString(3.4 * cm, 26.3 * cm, title)
 
+        # Título centralizado
+        c.setFont("Helvetica", 12)
+        title = informacoes['descricaoOP'][0]
+        c.drawString(6.9 * cm, 26.3 * cm, title)
+
 
         # Adicionando cabecalho de cores
         c.setFont("Helvetica-Bold", 14)
         title = 'CORES'
         c.drawString(1.2 * cm, 23.8 * cm, title)
 
-        # Inserir uma linha
-        c.setLineWidth(1.3)  # Definir a largura da linha em 1 ponto
-        c.line(0 * cm, 26.1 * cm, 27.8 * cm, 26.1 * cm)  # Desenhar uma linha
+
+        # Adicionando cabecalho de SUBTOTAIS
+        c.setFont("Helvetica-Bold", 14)
+        title = 'TOTAL'
+        c.drawString(18.0 * cm, 23.8 * cm, title)
+
+
+
+        # Título centralizado
+        c.setFont("Helvetica-Bold", 10)
+        title = 'DataCriacao OP:'
+        c.drawString(14.8 * cm, 25.6 * cm, title)
+
+        # Título centralizado
+        c.setFont("Helvetica", 10)
+        title = str(informacoes['dataCriacaoOP'][0])
+        title = title[8:10]+'/'+title[5:7]+'/'+title[:4]+' '+title[11:16]
+        c.drawString(17.6 * cm, 25.6 * cm, title)
+
+
         c.line(1 * cm, 24.5 * cm, 20 * cm, 24.5 * cm)  # Desenhar uma linha
         c.line(1 * cm, 23.5 * cm, 20 * cm, 23.5 * cm)  # Desenhar uma linha
 
+
+        # DELIMITACAO DA TABELA DE GRADES
+        #_______________________________________________________________________________________________________
         # Inserir uma linha vertical
-        c.line(3.5 * cm, 10 * cm, 3.5 * cm, 24.5 * cm)  # Desenhar uma linha vertical
+        c.setLineWidth(1.5)  # Definir a largura da linha em 1 ponto
+        c.line(3.5 * cm, 10 * cm, 3.5 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
+        c.setLineWidth(1.5)  # Definir a largura da linha em 1 ponto
+        c.line(1.0 * cm, 10 * cm, 1.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
+        c.setLineWidth(1.0)  # Definir a largura da linha em 1 ponto
+        c.line(20 * cm, 10 * cm, 20 * cm, 24.5 * cm)  #Desenhar a segunda linha vertical da grade
+        c.line(17.8 * cm, 10 * cm, 17.8 * cm, 24.5 * cm)  #Desenhar a terceira linha vertical da grade
+
+        #Linha Horizontal
+        c.line(1 * cm, 11.1 * cm, 20 * cm, 11.1 * cm)  # Desenhar a antipenultima linha de delimitacao
+        c.setFont("Helvetica-Bold", 14)
+        title = 'TOTAL'
+        c.drawString(1.2 * cm, 10.4 * cm, title)
+        c.line(1 * cm, 10 * cm, 20 * cm, 10 * cm)  # Desenhar a ultima linha de delimitacao
+
+
+
+        # Inserir uma linha
+        c.setLineWidth(1.3)  # Definir a largura da linha em 1 ponto
+        c.line(0 * cm, 26.1 * cm, 27.8 * cm, 26.1 * cm)  # Desenhar uma linha
+
+
+
+
+
 
         # Inserir uma imagem
         imagem_path = "Logo.png"  # Substitua pelo caminho da sua imagem
@@ -94,3 +152,8 @@ def BuscarCliente(codCliente):
 def BucarOP(idOP):
     consulta = OP_JonhField.BuscandoOPEspecifica(idOP)
     return consulta
+
+def OP_Tam_Cores(codOP, codCliente):
+    consulta = OP_Tam_Cor_JohnField.ConsultaTamCor_OP(codOP, codCliente)
+    return consulta
+
