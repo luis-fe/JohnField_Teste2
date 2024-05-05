@@ -80,7 +80,7 @@ def criar_pdf(saida_pdf, codCliente):
         c.drawImage(qr_filename, 18.4 * cm, 27.0 * cm, width=2.2 * cm, height= 2.20 * cm)
 
         c.save()
-    return pd.DataFrame([{'Mensagem': True}])
+    return pd.DataFrame([{'Mensagem': 'Gerado com sucessp','status':True}])
 
 def BuscarCliente(codCliente):
     consulta = ClientesJohnField.ConsultaClientesEspecifico(codCliente)

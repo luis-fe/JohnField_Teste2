@@ -22,7 +22,7 @@ def GerarPDF():
     #login = request.args.get('login')
     codCliente = request.args.get('codCliente')
 
-    consulta = pd.DataFrame([{'Teste':'Aprovado'}])
+    consulta = FormularioOP.criar_pdf('formulario.pdf',codCliente)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
