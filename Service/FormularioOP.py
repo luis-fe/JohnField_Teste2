@@ -5,8 +5,8 @@ from reportlab.pdfgen import canvas
 import tempfile
 from reportlab.graphics import barcode
 import qrcode
-from Service import ClientesJohnField
-def criar_pdf(saida_pdf, codCliente):
+from Service import ClientesJohnField, OP_JonhField
+def criar_pdf(saida_pdf, codCliente, codOP):
 
     consulta = BuscarCliente(codCliente)
     nomeCliente = consulta['nomeCliente'][0]
@@ -26,6 +26,12 @@ def criar_pdf(saida_pdf, codCliente):
         c.setFont("Helvetica-Bold", 21)
         title = 'ORDEM DE PRODUCAO'
         c.drawString(7.0 * cm, 28.8 * cm, title)
+
+        # Título centralizado
+        c.setFont("Helvetica", 14)
+        title = codOP
+        c.drawString(6.8 * cm, 28.8 * cm, title)
+
 
         # Título centralizado
         c.setFont("Helvetica-Bold", 14)
@@ -84,4 +90,8 @@ def criar_pdf(saida_pdf, codCliente):
 
 def BuscarCliente(codCliente):
     consulta = ClientesJohnField.ConsultaClientesEspecifico(codCliente)
+    return consulta
+
+def BucarOP(idOP):
+    consulta = OP_JonhField.BuscandoOPEspecifica(idOP)
     return consulta

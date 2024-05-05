@@ -19,8 +19,8 @@ def token_required(f):
 @token_required
 def GerarPDF():
     # Obtém o código do usuário e a senha dos parâmetros da URL
-    #login = request.args.get('login')
     codCliente = request.args.get('codCliente')
+    codOP = request.args.get('codOP')
 
-    consulta = FormularioOP.criar_pdf('formulario.pdf',codCliente)
-    return send_from_directory(f'formulario.pdf')
+    consulta = FormularioOP.criar_pdf('formulario.pdf',codCliente,codOP)
+    return send_from_directory(f'routes/formulario.pdf')
