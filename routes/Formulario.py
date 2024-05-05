@@ -18,7 +18,11 @@ def token_required(f):
 @formulario_routesJohn.route('/api/JonhField/GerarPDF', methods=['GET'])
 @token_required
 def GerarPDF():
-    consulta = FormularioOP.criar_pdf(f'impressao.pdf')
+    # Obtém o código do usuário e a senha dos parâmetros da URL
+    #login = request.args.get('login')
+    codCliente = request.args.get('codCliente')
+
+    consulta = pd.DataFrame([{'Teste':'Aprovado'}])
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
