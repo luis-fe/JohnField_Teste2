@@ -19,3 +19,4 @@ def criar_pdf(saida_pdf):
         c = canvas.Canvas(saida_pdf, pagesize=custom_page_size)
 
         c.save()
+    return pd.DataFrame([{'Mensagem':True}])
