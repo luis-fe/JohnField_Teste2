@@ -3,6 +3,7 @@ import ConexaoPostgreMPL
 from reportlab.lib.pagesizes import landscape
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
+import tempfile
 
 
 
