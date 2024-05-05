@@ -68,7 +68,7 @@ def criar_pdf(saida_pdf, codCliente):
         c.line(3.5 * cm, 10 * cm, 3.5 * cm, 24.5 * cm)  # Desenhar uma linha vertical
 
         # Inserir uma imagem
-        imagem_path = "Logo.png"  # Substitua pelo caminho da sua imagem
+        imagem_path = "../Logo.png"  # Substitua pelo caminho da sua imagem
         c.drawImage(imagem_path, 0.2 * cm, 26.5 * cm, width=3 * cm, height=3 * cm)  # Posição e dimensões da imagem
 
 
