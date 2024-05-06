@@ -89,7 +89,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Título centralizado
         c.setFont("Helvetica-Bold", 11)
         title = 'Data Criação OP:'
-        c.drawString(14.5 * cm, 25.6 * cm, title)
+        c.drawString(14.3 * cm, 25.6 * cm, title)
 
         # Título centralizado
         c.setFont("Helvetica", 11)
@@ -127,12 +127,12 @@ def criar_pdf(saida_pdf, codCliente, codOP):
             for i in range(quantidadeCores):
                 #iNSERIDO OS TAMANHOS
                 tamanhos = verificaGrade['tamanho'][i]
-                posicaoTamanho = 3.2
+                posicaoTamanho = 4.2
                 for tamanho in tamanhos:
                     c.setFont("Helvetica", 12)
                     title = tamanho
                     c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
-                    posicaoTamanho = posicaoTamanho + 1.5
+                    posicaoTamanho = posicaoTamanho + 1.3
 
                 #Inserindo a descricao das cores
                 c.setFont("Helvetica", 12)
