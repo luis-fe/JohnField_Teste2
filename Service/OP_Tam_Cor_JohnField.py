@@ -51,8 +51,10 @@ def ConsultaTamCor_OP(codOP, codCliente):
     else:
         consulta['codOP'] = codOP
         consulta['codCliente'] = codCliente
+
         resumoConsulta = consulta.groupby(['codOP', 'codCliente','descCor']).agg(
             {'tamanho': list, 'quantidade': list}).reset_index()
+        resumoConsulta['status'] = True
 
         return resumoConsulta
 

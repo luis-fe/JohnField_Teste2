@@ -87,17 +87,17 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
 
         # Título centralizado
-        c.setFont("Helvetica-Bold", 10)
+        c.setFont("Helvetica-Bold", 11)
         title = 'DataCriacao OP:'
         c.drawString(14.8 * cm, 25.6 * cm, title)
 
         # Título centralizado
-        c.setFont("Helvetica", 10)
+        c.setFont("Helvetica", 11)
         title = str(informacoes['dataCriacaoOP'][0])
         title = title[8:10]+'/'+title[5:7]+'/'+title[:4]+' '+title[11:16]
         c.drawString(17.6 * cm, 25.6 * cm, title)
 
-
+        c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
         c.line(1 * cm, 24.5 * cm, 20 * cm, 24.5 * cm)  # Desenhar uma linha
         c.line(1 * cm, 23.5 * cm, 20 * cm, 23.5 * cm)  # Desenhar uma linha
 
@@ -105,26 +105,51 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # DELIMITACAO DA TABELA DE GRADES
         #_______________________________________________________________________________________________________
         # Inserir uma linha vertical
-        c.setLineWidth(1.5)  # Definir a largura da linha em 1 ponto
-        c.line(3.5 * cm, 10 * cm, 3.5 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
-        c.setLineWidth(1.5)  # Definir a largura da linha em 1 ponto
-        c.line(1.0 * cm, 10 * cm, 1.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
         c.setLineWidth(1.0)  # Definir a largura da linha em 1 ponto
-        c.line(20 * cm, 10 * cm, 20 * cm, 24.5 * cm)  #Desenhar a segunda linha vertical da grade
-        c.line(17.8 * cm, 10 * cm, 17.8 * cm, 24.5 * cm)  #Desenhar a terceira linha vertical da grade
 
-        #Linha Horizontal
-        c.line(1 * cm, 11.1 * cm, 20 * cm, 11.1 * cm)  # Desenhar a antipenultima linha de delimitacao
-        c.setFont("Helvetica-Bold", 14)
-        title = 'TOTAL'
-        c.drawString(1.2 * cm, 10.4 * cm, title)
-        c.line(1 * cm, 10 * cm, 20 * cm, 10 * cm)  # Desenhar a ultima linha de delimitacao
+        verificaGrade = OP_Tam_Cores(codOP,codCliente)
+        print(verificaGrade)
+
+        if verificaGrade['status'][0] == True:
+
+            quantidadeCores = verificaGrade['descCor'].count()
+
+            # Etapa: Avaliando a quantidade de cores para construir os limites
+            #######################################################################
+            if quantidadeCores <= 10:
+                LimiteDaGrade(c, 10)
+            else:
+                LimiteDaGrade(c, 5.2)
+            # Fim Etapa
+            #########################################################################
+
+            inicioCores = 0
+            for i in range(quantidadeCores):
+                c.setFont("Helvetica", 12)
+                title = verificaGrade['descCor'][i]
+                title = title[:9]
+
+                # Posição vertical para cada linha
+                y_position = (22.4 - 1.2 * i) * cm
+
+                c.drawString(1.2 * cm, y_position, title)
+                c.setLineWidth(1)
+                c.line(1 * cm, y_position - 0.2 * cm, 20 * cm, y_position - 0.2 * cm)
+
+                # Atualização do valor de inicioCores
+                inicioCores = y_position
+        else:
+            quantidadeCores =0
+            LimiteDaGrade(c, 10)
 
 
 
         # Inserir uma linha
         c.setLineWidth(1.3)  # Definir a largura da linha em 1 ponto
         c.line(0 * cm, 26.1 * cm, 27.8 * cm, 26.1 * cm)  # Desenhar uma linha
+
+
+
 
 
 
@@ -157,3 +182,21 @@ def OP_Tam_Cores(codOP, codCliente):
     consulta = OP_Tam_Cor_JohnField.ConsultaTamCor_OP(codOP, codCliente)
     return consulta
 
+def LimiteDaGrade(c,limite):
+    # Linha Horizontal
+    c.setLineWidth(3)  # Definir a largura da linha em 1 ponto
+    c.line(1 * cm, (limite+1.35) * cm, 20 * cm, (limite+1.35)  * cm)  # Desenhar a antipenultima linha de delimitacao
+    # Definir os cabeçalhos
+    c.setFont("Helvetica-Bold", 14)
+    title = 'TOTAL'
+    c.drawString(1.2 * cm, (limite+0.4) * cm, title)
+
+    c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
+    c.line(1 * cm, limite * cm, 20 * cm, limite * cm)  # Desenhar a ultima linha de delimitacao
+
+    # Linhas Vericais
+    c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
+    c.line(1.0 * cm, limite * cm, 1.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
+    c.line(4.0 * cm, limite * cm, 4.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
+    c.line(20 * cm, limite * cm, 20 * cm, 24.5 * cm)  # Desenhar a segunda linha vertical da grade
+    c.line(17.8 * cm, limite * cm, 17.8 * cm, 24.5 * cm)  # Desenhar a terceira linha vertical da grade
