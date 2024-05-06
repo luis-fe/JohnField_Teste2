@@ -28,7 +28,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
         # Título centralizado
         c.setFont("Helvetica-Bold", 21)
-        title = 'ORDEM DE PRODUCAO'
+        title = 'ORDEM DE PRODUÇÃO'
         c.drawString(7.0 * cm, 28.8 * cm, title)
 
         # Título centralizado
@@ -88,7 +88,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
         # Título centralizado
         c.setFont("Helvetica-Bold", 11)
-        title = 'DataCriacao OP:'
+        title = 'Data Criação OP:'
         c.drawString(14.5 * cm, 25.6 * cm, title)
 
         # Título centralizado
@@ -125,9 +125,21 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
             inicioCores = 0
             for i in range(quantidadeCores):
+                #iNSERIDO OS TAMANHOS
+                tamanhos = verificaGrade['tamanho'][i]
+                posicaoTamanho = 3.2
+                for tamanho in tamanhos:
+                    c.setFont("Helvetica", 12)
+                    title = tamanho
+                    c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
+                    posicaoTamanho = posicaoTamanho + 1.5
+
+                #Inserindo a descricao das cores
                 c.setFont("Helvetica", 12)
                 title = verificaGrade['descCor'][i]
                 title = title[:9]
+
+
 
                 # Posição vertical para cada linha
                 y_position = (22.4 - 1.2 * i) * cm
