@@ -89,7 +89,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Título centralizado
         c.setFont("Helvetica-Bold", 11)
         title = 'DataCriacao OP:'
-        c.drawString(14.8 * cm, 25.6 * cm, title)
+        c.drawString(14.5 * cm, 25.6 * cm, title)
 
         # Título centralizado
         c.setFont("Helvetica", 11)
