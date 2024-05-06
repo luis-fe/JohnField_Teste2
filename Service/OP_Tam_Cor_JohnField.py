@@ -9,7 +9,7 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
     if VerificaOP.empty:
         return pd.DataFrame([{'mensagem':f'A OP {codOP}, cliente {codCliente} nao foi indentificada!', 'status':False}])
 
-    elif not consulta.empty:
+    elif consulta['status'][0] == True:
         return pd.DataFrame([{'mensagem':f'JA existe tamanho e cor cadastrado para  OP {codOP}, cliente {codCliente}  !', 'status':False}])
 
 
