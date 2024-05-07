@@ -46,10 +46,24 @@ def BuscarFaseEspecifica(codFase):
 
     return consulta
 
+def BuscarFaseEspecificaPeloNome(nome):
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = """
+    select f."codFase" , f."nomeFase", f."FaseInicial" , f."FaseFinal"  from "Easy"."Fase" f
+    where f."nomeFase" = %s
+    """
+
+    consulta = pd.read_sql(consulta,conn,params=(nome,))
+    conn.close()
+
+    return consulta
+
 def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal, ObrigaInformaTamCor):
     consulta = BuscarFaseEspecifica(codFase)
+    consultaNome = BuscarFaseEspecificaPeloNome(nomeFase)
 
-    if consulta.empty:
+    if consulta.empty and consultaNome.empty:
         conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
         insert into "Easy"."Fase" ("codFase" , "nomeFase", "FaseInicial","FaseFinal", "ObrigaInformaTamCor") values ( %s, %s, %s, %s , %s )
@@ -63,8 +77,11 @@ def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal, ObrigaInformaTamCor):
 
         return pd.DataFrame([{'Mensagem': "Fase cadastrada com Sucesso!", "status": True}])
 
+    elif not consulta.empty:
+        return pd.DataFrame([{'Mensagem': f"O codigo Fase {codFase} já´existe!", "status": False}])
     else:
-        return pd.DataFrame([{'Mensagem': "Fase já´existe!", "status": False}])
+        return pd.DataFrame([{'Mensagem': f"A Fase {nomeFase} já´existe!", "status": False}])
+
 
 def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal,ObrigaInformaTamCor):
 
