@@ -19,7 +19,7 @@ def BuscarRoteiros():
       return group.iloc[0]['ObrigaInformaTamCor?']
 
 # Aplicando a função ao agrupar por 'roteiro'
-  consulta['ObrigaInformaTamCor?'] = df.groupby('codRoteiro').apply(primeira_ocorrencia).reset_index(drop=True)
+  consulta['ObrigaInformaTamCor?'] = consulta.groupby('codRoteiro').apply(primeira_ocorrencia).reset_index(drop=True)
 
   consulta.drop(['codFase','FaseInical?',"FaseFinal?" ],axis=1,inplace=True)
 
