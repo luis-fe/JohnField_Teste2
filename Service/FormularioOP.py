@@ -15,6 +15,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
     consulta = BuscarCliente(codCliente)
     nomeCliente = consulta['nomeCliente'][0]
 
+
     # Configurações das etiquetas e colunas
     label_width = 21.0 * cm
     label_height = 29.7 * cm
@@ -92,6 +93,16 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         c.drawString(14.3 * cm, 25.6 * cm, title)
 
         # Título centralizado
+        c.setFont("Helvetica-Bold", 10)
+        title = 'Data e Hora Impressão:'
+        c.drawString(12.3 * cm, 1.2 * cm, title)
+
+        # Título centralizado
+        c.setFont("Helvetica", 10)
+        title = str(OP_JonhField.obterHoraAtual())
+        c.drawString(16.5 * cm, 1.2 * cm, title)
+
+        # Título centralizado
         c.setFont("Helvetica", 11)
         title = str(informacoes['dataCriacaoOP'][0])
         title = title[8:10]+'/'+title[5:7]+'/'+title[:4]+' '+title[11:16]
@@ -111,28 +122,25 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         print(verificaGrade)
 
         if verificaGrade['status'][0] == True:
+            totalQ = informacoes['quantidade'][0]
+            totalQ = round(float(totalQ))
+
 
             quantidadeCores = verificaGrade['descCor'].count()
 
             # Etapa: Avaliando a quantidade de cores para construir os limites
             #######################################################################
             if quantidadeCores <= 10:
-                LimiteDaGrade(c, 10)
+                LimiteDaGrade(c, 10,str(totalQ))
             else:
-                LimiteDaGrade(c, 5.2)
+                LimiteDaGrade(c, 5.2,str(totalQ))
             # Fim Etapa
             #########################################################################
 
             inicioCores = 0
             for i in range(quantidadeCores):
                 #iNSERIDO OS TAMANHOS
-                tamanhos = verificaGrade['tamanho'][i]
-                posicaoTamanho = 4.2
-                for tamanho in tamanhos:
-                    c.setFont("Helvetica", 12)
-                    title = tamanho
-                    c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
-                    posicaoTamanho = posicaoTamanho + 1.3
+                posicaoTamanho = CabecalhosTamanhos(c, verificaGrade, i, quantidadeCores)
 
                 #Inserindo a descricao das cores
                 c.setFont("Helvetica", 12)
@@ -148,11 +156,19 @@ def criar_pdf(saida_pdf, codCliente, codOP):
                 c.setLineWidth(1)
                 c.line(1 * cm, y_position - 0.2 * cm, 20 * cm, y_position - 0.2 * cm)
 
+                qTotal, posicaoQuantidade = InserindoQuantidades(c,verificaGrade,y_position,i)
+
+                title = str(qTotal)
+                c.drawString(18 * cm, y_position, title)
+
                 # Atualização do valor de inicioCores
                 inicioCores = y_position
+
+
         else:
             quantidadeCores =0
-            LimiteDaGrade(c, 10)
+
+            LimiteDaGrade(c, 10,'')
 
 
 
@@ -170,7 +186,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
         # Inserir uma imagem
         imagem_path = "Logo.png"  # Substitua pelo caminho da sua imagem
-        c.drawImage(imagem_path, 0.2 * cm, 26.5 * cm, width=3 * cm, height=3 * cm)  # Posição e dimensões da imagem
+        c.drawImage(imagem_path, 0.2 * cm, 26.8 * cm, width=3 * cm, height=2.2 * cm)  # Posição e dimensões da imagem
 
 
         qr = qrcode.QRCode(version=1, box_size=int(1.72 * cm), border=0)
@@ -194,7 +210,7 @@ def OP_Tam_Cores(codOP, codCliente):
     consulta = OP_Tam_Cor_JohnField.ConsultaTamCor_OP(codOP, codCliente)
     return consulta
 
-def LimiteDaGrade(c,limite):
+def LimiteDaGrade(c,limite,total):
     # Linha Horizontal
     c.setLineWidth(3)  # Definir a largura da linha em 1 ponto
     c.line(1 * cm, (limite+1.35) * cm, 20 * cm, (limite+1.35)  * cm)  # Desenhar a antipenultima linha de delimitacao
@@ -202,6 +218,8 @@ def LimiteDaGrade(c,limite):
     c.setFont("Helvetica-Bold", 14)
     title = 'TOTAL'
     c.drawString(1.2 * cm, (limite+0.4) * cm, title)
+    title = total
+    c.drawString(18 * cm, (limite+0.4) * cm, title)
 
     c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
     c.line(1 * cm, limite * cm, 20 * cm, limite * cm)  # Desenhar a ultima linha de delimitacao
@@ -212,3 +230,63 @@ def LimiteDaGrade(c,limite):
     c.line(4.0 * cm, limite * cm, 4.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
     c.line(20 * cm, limite * cm, 20 * cm, 24.5 * cm)  # Desenhar a segunda linha vertical da grade
     c.line(17.8 * cm, limite * cm, 17.8 * cm, 24.5 * cm)  # Desenhar a terceira linha vertical da grade
+
+
+def CabecalhosTamanhos(c, dataframe, i, quantidadeCores):
+    tamanhos = dataframe['tamanho'][i]
+
+    AvaliarTam = len(tamanhos)
+
+    if AvaliarTam <= 9:
+        posicaoTamanho = 4.4
+
+        for tamanho in tamanhos:
+            c.setFont("Helvetica", 12)
+            title = tamanho
+            c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
+            posicaoTamanho = posicaoTamanho + 1.5
+
+            if quantidadeCores <= 10:
+                c.setLineWidth(1.0)  # Definir a largura da linha em 1 ponto
+                c.line((posicaoTamanho - 0.15) * cm, (23.8 + 0.7) * cm, (posicaoTamanho - 0.15) * cm, (11.4) * cm)
+    else:
+        posicaoTamanho = 4.2
+        for tamanho in tamanhos:
+            c.setFont("Helvetica", 10)
+            title = tamanho
+            c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
+            posicaoTamanho = posicaoTamanho + 0.92
+
+            if quantidadeCores <= 10:
+                c.setLineWidth(1.0)  # Definir a largura da linha em 1 ponto
+                c.line((posicaoTamanho - 0.2) * cm, (23.8 + 0.7) * cm, (posicaoTamanho - 0.2) * cm, (11.4) * cm)
+
+    return posicaoTamanho
+
+
+def InserindoQuantidades(c,verificaGrade,y_position,i):
+    quantidades = verificaGrade['quantidade'][i]
+    qTotal = 0
+    AvaliarTam = len(quantidades)
+
+    if AvaliarTam <= 9:
+        posicaoQuantidade = 4.4
+
+        for q in quantidades:
+            c.setFont("Helvetica", 12)
+            title = str(q)
+            c.drawString(posicaoQuantidade * cm, y_position, title)
+            posicaoQuantidade = posicaoQuantidade + 1.5
+
+            qTotal = qTotal + q
+    else:
+        posicaoQuantidade = 4.33
+        for q in quantidades:
+            c.setFont("Helvetica", 10)
+            title = str(q)
+            c.drawString(posicaoQuantidade * cm, y_position, title)
+            posicaoQuantidade = posicaoQuantidade + 0.897
+
+            qTotal = qTotal + q
+
+    return qTotal, posicaoQuantidade
