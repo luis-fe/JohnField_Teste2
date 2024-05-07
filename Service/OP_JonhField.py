@@ -145,3 +145,39 @@ def BuscarGradeOP(codOP, codCliente):
 
     return df_summary
 
+def ConsultaFaseAtualOP(codOP, codCliente):
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = """"""
+    conn.close()
+
+    return consulta
+
+
+def ConsultaRoteiroOP(codOP, codCliente):
+
+    ChaveOP = codOP +'||'+str(codCliente)
+
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = """
+select fo."idOP" , op."codroteiro", fo."codFase" , "Situacao", f."FaseInicial" as "FaseInicial?" , 
+f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor? "from "Easy"."Fase/OP" fo 
+inner join "Easy"."Fase" f on f."codFase" = fo."codFase" 
+inner join "Easy"."OrdemProducao" op on op."idOP" = fo."idOP" 
+where fo."idOP"  = %s
+        """
+
+    consulta2 = """
+    select * from "Easy"."Roteiro" r 
+    where r."codRoteiro" = %s
+    """
+
+    consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
+    roteiro = consulta['codroteiro'][0]
+    consulta2 = pd.read_sql(consulta2,conn,params=(roteiro,))
+    consulta['Sequencia'] = consulta.groupby(['codroteiro'])['codFase'].cumcount()
+
+    conn.close()
+
+    return consulta2
