@@ -96,3 +96,27 @@ def ObterOP_EMAberto():
 
 
 
+def BuscarGradeOP(codOP, codCliente):
+    ChaveOP = codOP +'||'+str(codCliente)
+
+    consulta = """
+    select distinct "idOP" , tamanho as "Tamanhos" from "Easy"."OP_Cores_Tam" oct 
+    where "idOP" = %s
+    """
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
+    consulta['codOP'] = codOP
+    consulta['codCliente'] = codCliente
+
+    # Convertendo a coluna 'Tamanhos' para lista de strings
+    consulta['Tamanhos'] = consulta['Tamanhos'].apply(lambda x: [x])
+
+    # Agrupar tamanhos em uma lista
+    df_summary = consulta.groupby(['codOP', 'codCliente'])['Tamanhos'].sum().reset_index()
+
+
+    conn.close()
+
+    return df_summary
+

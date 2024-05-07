@@ -36,7 +36,7 @@ def InserirRoteiroPadrao(codRoteiro, nomeRoteiro, arrayFases ):
       consulta = pd.DataFrame({"nomeFase": arrayFases})
       Fases = FaseJohnField.BuscarFases()
       consulta = pd.merge(consulta, Fases, on='nomeFase')
-      consulta = consulta.drop(['nomeFase', 'FaseInical?', "ObrigaInformaTamCor?", "FaseFinal?"], axis=1, inplace=True)
+      consulta.drop(['nomeFase', 'FaseInical?', "ObrigaInformaTamCor?", "FaseFinal?"], axis=1, inplace=True)
       arraycodFases = consulta['codFase'].values
 
       inserir = """
@@ -45,7 +45,7 @@ def InserirRoteiroPadrao(codRoteiro, nomeRoteiro, arrayFases ):
       for fase in arraycodFases:
 
         cursor = conn.cursor()
-        cursor.execute(inserir,(codRoteiro, nomeRoteiro, fase))
+        cursor.execute(inserir,(codRoteiro, nomeRoteiro, int(fase)))
         conn.commit()
         cursor.close()
 

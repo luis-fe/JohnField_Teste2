@@ -54,6 +54,24 @@ def ObterOPsAberto():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
+@GeraoOP_routesJohn.route('/api/JonhField/ObterGradeOP', methods=['GET'])
+@token_required
+def ObterGradeOP():
+    codOP = request.args.get('codOP','')
+    codCliente = request.args.get('codCliente','')
+
+    consulta = OP_JonhField.BuscarGradeOP(codOP, codCliente)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
 @GeraoOP_routesJohn.route('/api/JonhField/InserirOPTamanhoCores', methods=['POST'])
 @token_required
 def InserirOPTamanhoCores():
