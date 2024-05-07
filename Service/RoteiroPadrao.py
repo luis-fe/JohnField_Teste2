@@ -4,7 +4,7 @@ from Service import FaseJohnField
 
 def BuscarRoteiros():
   consulta = """
-  SELECT "codRoteiro", "nomeRoteiro", "codFase" FROM "Easy"."Grade"
+  SELECT "codRoteiro", "nomeRoteiro", "codFase" FROM "Easy"."Roteiro"
   """
   conn = ConexaoPostgreMPL.conexaoJohn()
   consulta = pd.read_sql(consulta, conn)
@@ -13,8 +13,7 @@ def BuscarRoteiros():
   Fases = FaseJohnField.BuscarFases()
   consulta = pd.merge(consulta,Fases,on='codFase')
 
-  consulta = consulta.drop(['codFase','FaseInical?',"ObrigaInformaTamCor?","FaseFinal?" ],axis=1,inplace=True)
-
+  consulta.drop(['codFase','FaseInical?',"ObrigaInformaTamCor?","FaseFinal?" ],axis=1,inplace=True)
 
   # Convertendo a coluna 'Tamanhos' para lista de strings
   consulta['nomeFase'] = consulta['nomeFase'].apply(lambda x: [x])
