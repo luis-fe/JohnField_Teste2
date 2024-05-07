@@ -36,7 +36,7 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
     return consulta
 
-def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descricaoOP):
+def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descricaoOP, codGrade):
 
     ChaveOP = codOP +'||'+str(codCliente)
 
@@ -52,14 +52,14 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descr
         else:
 
             InserirOP = """
-            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP")
-            VALUES (%s ,%s , %s ,%s , %s , %s );
+            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade")
+            VALUES (%s ,%s , %s ,%s , %s , %s , %s );
             """
             DataCriacao = obterHoraAtual()
 
             conn = ConexaoPostgreMPL.conexaoJohn()
             cursor = conn.cursor()
-            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, codCliente, DataCriacao, descricaoOP))
+            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, codCliente, DataCriacao, descricaoOP, codGrade))
             conn.commit()
 
 
