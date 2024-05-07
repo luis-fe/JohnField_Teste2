@@ -102,7 +102,7 @@ def BuscarGradeOP(codOP, codCliente):
 
 
     consulta = """
-    select distinct "idOP" , tamanho as "Tamanhos" from "Easy"."OP_Cores_Tam" oct 
+    select  "idOP" , tamanho as "Tamanhos" from "Easy"."OP_Cores_Tam" oct 
     where "idOP" = %s
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
@@ -129,7 +129,11 @@ def BuscarGradeOP(codOP, codCliente):
     else:
         consulta['codOP'] = codOP
         consulta['codCliente'] = codCliente
-
+        consulta['contagem'] = 1
+        consulta['contagem'] = consulta.groupby(['codOP','Tamanhos'])['Tamanhos'].cumcount()
+        consulta = consulta.sort_values(by=['contagem'], ascending=True)  # escolher como deseja classificar
+        consulta = consulta[consulta['contagem']==0]
+        print(consulta)
         # Convertendo a coluna 'Tamanhos' para lista de strings
         consulta['Tamanhos'] = consulta['Tamanhos'].apply(lambda x: [x])
 
