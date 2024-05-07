@@ -14,9 +14,9 @@ def BuscarRoteiros():
   Fases = FaseJohnField.BuscarFases()
   consulta = pd.merge(consulta,Fases,on='codFase')
 
-# Função para obter a primeira ocorrência de cada grupo
-def primeira_ocorrencia(group):
-    return group.iloc[0]['ObrigaInformaTamCor?']
+  # Função para obter a primeira ocorrência de cada grupo
+  def primeira_ocorrencia(group):
+      return group.iloc[0]['ObrigaInformaTamCor?']
 
 # Aplicando a função ao agrupar por 'roteiro'
   consulta['ObrigaInformaTamCor?'] = df.groupby('codRoteiro').apply(primeira_ocorrencia).reset_index(drop=True)
