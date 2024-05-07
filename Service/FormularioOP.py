@@ -190,7 +190,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
 
         qr = qrcode.QRCode(version=1, box_size=int(1.72 * cm), border=0)
-        qr.add_data("cliente")  # Substitua pelo link desejado
+        qr.add_data(str(codOP)+'||'+str(codCliente))  # Substitua pelo link desejado
         qr.make(fit=True)
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(qr_filename)  # Salvar a imagem do QR code no arquivo temporário

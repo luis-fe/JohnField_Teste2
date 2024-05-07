@@ -1,5 +1,28 @@
 import pandas as pd 
 import ConexaoPostgreMPL
+from Service import FaseJohnField
+
+def BuscarRoteiros():
+  consulta = """
+  SELECT "codRoteiro", "nomeRoteiro", "codFase" FROM "Easy"."Grade"
+  """
+  conn = ConexaoPostgreMPL.conexaoJohn()
+  consulta = pd.read_sql(consulta, conn)
+  conn.close()
+
+  Fases = FaseJohnField.BuscarFases()
+  consulta = pd.merge(consulta,Fases,on='codFase')
+
+  consulta = consulta.drop(['codFase','FaseInical?',"ObrigaInformaTamCor?","FaseFinal?" ],axis=1,inplace=True)
+
+
+  # Convertendo a coluna 'Tamanhos' para lista de strings
+  consulta['nomeFase'] = consulta['nomeFase'].apply(lambda x: [x])
+
+  # Agrupar tamanhos em uma lista
+  df_summary = consulta.groupby(['codRoteiro', 'nomeRoteiro'])['nomeFase'].sum().reset_index()
+
+  return df_summary
 
 
 def InserirRoteiroPadrao(codRoteiro, nomeRoteiro, arrayFases ):
@@ -7,10 +30,19 @@ def InserirRoteiroPadrao(codRoteiro, nomeRoteiro, arrayFases ):
   verificar = BuscarRoteiroEspecifico(codRoteiro)
 
   if verificar.empty:
+
+      # 1: Buscando os codFases
+
+      consulta = pd.DataFrame({"nomeFase": arrayFases})
+      Fases = FaseJohnField.BuscarFases()
+      consulta = pd.merge(consulta, Fases, on='nomeFase')
+      consulta = consulta.drop(['nomeFase', 'FaseInical?', "ObrigaInformaTamCor?", "FaseFinal?"], axis=1, inplace=True)
+      arraycodFases = consulta['codFase'].values
+
       inserir = """
       insert into "Easy"."Roteiro" ("codRoteiro", "nomeRoteiro", "codFase") values ( %s , %s , %s )
       """
-      for fase in arrayFases:
+      for fase in arraycodFases:
 
         cursor = conn.cursor()
         cursor.execute(inserir,(codRoteiro, nomeRoteiro, fase))
