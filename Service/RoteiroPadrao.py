@@ -10,16 +10,18 @@ def BuscarRoteiros():
   consulta = pd.read_sql(consulta, conn)
   conn.close()
 
+
   Fases = FaseJohnField.BuscarFases()
   consulta = pd.merge(consulta,Fases,on='codFase')
+  consulta['ObrigaInformaTamCor?'] = consulta['ObrigaInformaTamCor?'][0]
 
-  consulta.drop(['codFase','FaseInical?',"ObrigaInformaTamCor?","FaseFinal?" ],axis=1,inplace=True)
+  consulta.drop(['codFase','FaseInical?',"FaseFinal?" ],axis=1,inplace=True)
 
   # Convertendo a coluna 'Tamanhos' para lista de strings
   consulta['nomeFase'] = consulta['nomeFase'].apply(lambda x: [x])
 
   # Agrupar tamanhos em uma lista
-  df_summary = consulta.groupby(['codRoteiro', 'nomeRoteiro'])['nomeFase'].sum().reset_index()
+  df_summary = consulta.groupby(['codRoteiro', 'nomeRoteiro','ObrigaInformaTamCor?'])['nomeFase'].sum().reset_index()
 
   return df_summary
 

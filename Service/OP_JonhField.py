@@ -161,7 +161,7 @@ def ConsultaRoteiroOP(codOP, codCliente):
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
-select fo."idOP" , op."codroteiro", fo."codFase" , "Situacao", f."FaseInicial" as "FaseInicial?" , 
+select fo."idOP" , op."codRoteiro", fo."codFase" , "Situacao", f."FaseInicial" as "FaseInicial?" , 
 f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor? "from "Easy"."Fase/OP" fo 
 inner join "Easy"."Fase" f on f."codFase" = fo."codFase" 
 inner join "Easy"."OrdemProducao" op on op."idOP" = fo."idOP" 
@@ -169,15 +169,37 @@ where fo."idOP"  = %s
         """
 
     consulta2 = """
-    select * from "Easy"."Roteiro" r 
+    select r.* , f."nomeFase" as "nomefaseRoteiro" from "Easy"."Roteiro" r 
+    inner join "Easy"."Fase" f on f."codFase" = r."codFase" 
     where r."codRoteiro" = %s
     """
 
     consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
-    roteiro = consulta['codroteiro'][0]
-    consulta2 = pd.read_sql(consulta2,conn,params=(roteiro,))
-    consulta['Sequencia'] = consulta.groupby(['codroteiro'])['codFase'].cumcount()
+    roteiro = consulta['codRoteiro'][0]
+    consulta2 = pd.read_sql(consulta2,conn,params=(int(roteiro),))
+    consulta2['Sequencia'] = consulta2.groupby(['codRoteiro'])['codFase'].cumcount()+1
+
+    consulta = pd.merge(consulta,consulta2,on='codFase')
+
+    sequenciaAtual = consulta['Sequencia'][0]
+    sequenciaNova = sequenciaAtual + 1
+
+    consulta2 = consulta2[consulta2['Sequencia']==sequenciaNova].reset_index()
+
+    if consulta2.empty:
+        consulta['ProximaFase'] = 'fim Roteiro'
+        consulta['codProximaFase'] = 'fim Roteiro'
+
+    else:
+        consulta['002-ProximaFase'] = consulta2['nomefaseRoteiro'][0]
+        consulta['003-codProximaFase'] = consulta2['codFase'][0]
 
     conn.close()
 
-    return consulta2
+    consulta.rename(
+        columns={'codigo': '01- Codigo Plano', 'descricao do Plano': '02- Descricao do Plano', 'inicioVenda': '03- Inicio Venda',
+                 'FimVenda':'04- Final Venda',"inicoFat":"05- Inicio Faturamento","finalFat":"06- Final Faturamento",
+                 'usuarioGerador':'07- Usuario Gerador','dataGeracao':'08- Data Geracao'},
+        inplace=True)
+
+    return consulta
