@@ -83,6 +83,7 @@ def UpdateRoteiro(codRoteiro, nomeRoteiro, arrayFases):
 
     cursor = conn.cursor()
     cursor.execute(consulta,(codRoteiro,))
+    conn.commit()
 
     InserirRoteiroPadrao(codRoteiro, nomeRoteiro, arrayFases)
 

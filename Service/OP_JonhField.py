@@ -37,7 +37,7 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
     return consulta
 
-def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descricaoOP, codGrade):
+def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descricaoOP, codGrade, codRoteiro):
 
     ChaveOP = codOP +'||'+str(codCliente)
 
