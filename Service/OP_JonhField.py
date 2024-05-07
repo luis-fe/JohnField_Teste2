@@ -2,6 +2,7 @@ import pandas as pd
 import ConexaoPostgreMPL
 import datetime
 import pytz
+from Service import Grades
 
 
 def obterHoraAtual():
@@ -99,6 +100,7 @@ def ObterOP_EMAberto():
 def BuscarGradeOP(codOP, codCliente):
     ChaveOP = codOP +'||'+str(codCliente)
 
+
     consulta = """
     select distinct "idOP" , tamanho as "Tamanhos" from "Easy"."OP_Cores_Tam" oct 
     where "idOP" = %s
@@ -106,14 +108,33 @@ def BuscarGradeOP(codOP, codCliente):
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
-    consulta['codOP'] = codOP
-    consulta['codCliente'] = codCliente
 
-    # Convertendo a coluna 'Tamanhos' para lista de strings
-    consulta['Tamanhos'] = consulta['Tamanhos'].apply(lambda x: [x])
+    if consulta.empty:
 
-    # Agrupar tamanhos em uma lista
-    df_summary = consulta.groupby(['codOP', 'codCliente'])['Tamanhos'].sum().reset_index()
+        consulta2 = """
+        select  "idOP" , "codGrade"  from "Easy"."OrdemProducao" op
+        where "idOP" = %s
+        """
+
+        consulta2 = pd.read_sql(consulta2, conn, params=(ChaveOP,))
+        consulta2['codOP'] = codOP
+        consulta2['codCliente'] = codCliente
+
+        grade = consulta2['codGrade'][0]
+        dataFrame = Grades.BuscarGradeEspecifica(grade)
+        df_summary = pd.merge(consulta2, dataFrame ,on='codGrade')
+        df_summary.drop(['nomeGrade','idOP','codGrade'],axis=1,inplace=True)
+
+
+    else:
+        consulta['codOP'] = codOP
+        consulta['codCliente'] = codCliente
+
+        # Convertendo a coluna 'Tamanhos' para lista de strings
+        consulta['Tamanhos'] = consulta['Tamanhos'].apply(lambda x: [x])
+
+        # Agrupar tamanhos em uma lista
+        df_summary = consulta.groupby(['codOP', 'codCliente'])['Tamanhos'].sum().reset_index()
 
 
     conn.close()
