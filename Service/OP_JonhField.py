@@ -161,45 +161,50 @@ def ConsultaRoteiroOP(codOP, codCliente):
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
-select fo."idOP" , op."codRoteiro", fo."codFase" , "Situacao", f."FaseInicial" as "FaseInicial?" , 
-f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor? "from "Easy"."Fase/OP" fo 
+select fo."idOP" , op."codRoteiro", fo."codFase" , "Situacao" from "Easy"."Fase/OP" fo 
 inner join "Easy"."Fase" f on f."codFase" = fo."codFase" 
 inner join "Easy"."OrdemProducao" op on op."idOP" = fo."idOP" 
 where fo."idOP"  = %s
         """
 
     consulta2 = """
-    select r.* , f."nomeFase" as "nomefaseRoteiro" from "Easy"."Roteiro" r 
+    select r.* , f."nomeFase" as "nomefaseRoteiro",
+     f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor?"
+     from "Easy"."Roteiro" r 
     inner join "Easy"."Fase" f on f."codFase" = r."codFase" 
     where r."codRoteiro" = %s
     """
 
     consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
+
     roteiro = consulta['codRoteiro'][0]
     consulta2 = pd.read_sql(consulta2,conn,params=(int(roteiro),))
+
     consulta2['Sequencia'] = consulta2.groupby(['codRoteiro'])['codFase'].cumcount()+1
-
-    consulta = pd.merge(consulta,consulta2,on='codFase')
-
+    print(consulta)
+    print(consulta2)
+    consulta = pd.merge(consulta,consulta2,on='codFase').reset_index()
+    print(consulta)
     sequenciaAtual = consulta['Sequencia'][0]
     sequenciaNova = sequenciaAtual + 1
 
     consulta2 = consulta2[consulta2['Sequencia']==sequenciaNova].reset_index()
 
     if consulta2.empty:
-        consulta['ProximaFase'] = 'fim Roteiro'
-        consulta['codProximaFase'] = 'fim Roteiro'
+        consulta['102-ProximaFase'] = 'Encerramento'
+        consulta['101-codProximaFase'] = 'Encerramento'
+        consulta["ObrigaInformaTamCor?"] = 'NAO'
 
     else:
-        consulta['002-ProximaFase'] = consulta2['nomefaseRoteiro'][0]
-        consulta['003-codProximaFase'] = consulta2['codFase'][0]
+        consulta['102-ProximaFase'] = consulta2['nomefaseRoteiro'][0]
+        consulta['101-codProximaFase'] = consulta2['codFase'][0]
 
     conn.close()
 
     consulta.rename(
-        columns={'codigo': '01- Codigo Plano', 'descricao do Plano': '02- Descricao do Plano', 'inicioVenda': '03- Inicio Venda',
-                 'FimVenda':'04- Final Venda',"inicoFat":"05- Inicio Faturamento","finalFat":"06- Final Faturamento",
-                 'usuarioGerador':'07- Usuario Gerador','dataGeracao':'08- Data Geracao'},
+        columns={'codFase': '001-codFaseAtual',"Situacao":"000-SituacaoOP","ObrigaInformaTamCor?":"103-ObrigaInformaTamCor?"},
         inplace=True)
+
+    consulta = consulta.loc[:,["000-SituacaoOP",'001-codFaseAtual',"102-ProximaFase","101-codProximaFase","103-ObrigaInformaTamCor?"]]
 
     return consulta
