@@ -21,14 +21,13 @@ def CriarOP():
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
     codCategoria = data.get('codCategoria')
-    codFaseInicial = data.get('codFaseInicial')
     idUsuarioCriacao = data.get('idUsuarioCriacao')
     descricaoOP = data.get('descricaoOP','')
     codGrade = data.get('codGrade','')
     codRoteiro = data.get('codRoteiro','')
 
 
-    consulta = OP_JonhField.CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descricaoOP, codGrade, codRoteiro)
+    consulta = OP_JonhField.CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

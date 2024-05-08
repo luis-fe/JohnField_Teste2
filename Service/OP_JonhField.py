@@ -37,30 +37,35 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
     return consulta
 
-def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descricaoOP, codGrade, codRoteiro):
+def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro):
 
     ChaveOP = codOP +'||'+str(codCliente)
+
+
 
     #Pesquisando se existe uma determinda OP
     buscar = BuscandoOPEspecifica(ChaveOP)
     if not buscar.empty:
         return pd.DataFrame([{'Mensagem': f'OP {codOP} ja existe para o cliente {codCliente}', 'Status': False}])
     else:
-        verificarFaseInicial = BuscarFaseInicio(codFaseInicial)
-        if verificarFaseInicial.empty:
-            return pd.DataFrame([{'Mensagem': f'A Fase {codFaseInicial}  não é fase de Inicio!', 'Status': False}])
-
-        else:
+            consultaPrimeiraFase = """
+              select r."codRoteiro" ,r."codFase"  from "Easy"."Roteiro" r 
+                where r."codRoteiro" = %s limit 1;
+            """
 
             InserirOP = """
-            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade")
-            VALUES (%s ,%s , %s ,%s , %s , %s , %s );
+            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade","codRoteiro")
+            VALUES (%s ,%s , %s ,%s , %s , %s , %s , %s );
             """
             DataCriacao = obterHoraAtual()
 
             conn = ConexaoPostgreMPL.conexaoJohn()
+
+            consultaPrimeiraFase = pd.read_sql(consultaPrimeiraFase,conn,params=(int(codRoteiro),))
+            codFaseInicial = consultaPrimeiraFase['codFase'][0]
+
             cursor = conn.cursor()
-            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, codCliente, DataCriacao, descricaoOP, codGrade))
+            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, codCliente, DataCriacao, descricaoOP, codGrade,codRoteiro))
             conn.commit()
 
 
@@ -68,7 +73,7 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,codFaseInicial,descr
             INSERT INTO "Easy"."Fase/OP" ("idOP", "DataMov", "codFase","Situacao") 
             VALUES (%s ,%s , %s ,%s );
             """
-            cursor.execute(InserirOPFase,(ChaveOP, DataCriacao, codFaseInicial, 'Em Processo'))
+            cursor.execute(InserirOPFase,(ChaveOP, DataCriacao, int(codFaseInicial), 'Em Processo'))
             conn.commit()
 
 
