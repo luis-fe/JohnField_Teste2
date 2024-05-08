@@ -166,12 +166,16 @@ def ConsultaRoteiroOP(codOP, codCliente):
 
     conn = ConexaoPostgreMPL.conexaoJohn()
 
+
+######          Passo 1 : Consulta SQL da Ordem de Producao e das Fases:
+######
     consulta = """
 select fo."idOP" , op."codRoteiro", fo."codFase" , "Situacao" from "Easy"."Fase/OP" fo 
 inner join "Easy"."Fase" f on f."codFase" = fo."codFase" 
 inner join "Easy"."OrdemProducao" op on op."idOP" = fo."idOP" 
-where fo."idOP"  = %s
+where fo."idOP"  = %s and "Situacao" = 'Em Processo'
         """
+    consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
 
     consulta2 = """
     select r.* , f."nomeFase" as "nomefaseRoteiro",
@@ -180,17 +184,15 @@ where fo."idOP"  = %s
     inner join "Easy"."Fase" f on f."codFase" = r."codFase" 
     where r."codRoteiro" = %s
     """
-
-    consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
-
     roteiro = consulta['codRoteiro'][0]
     consulta2 = pd.read_sql(consulta2,conn,params=(int(roteiro),))
 
+
     consulta2['Sequencia'] = consulta2.groupby(['codRoteiro'])['codFase'].cumcount()+1
-    print(consulta)
-    print(consulta2)
     consulta = pd.merge(consulta,consulta2,on='codFase').reset_index()
-    print(consulta)
+
+
+
     sequenciaAtual = consulta['Sequencia'][0]
     sequenciaNova = sequenciaAtual + 1
 
