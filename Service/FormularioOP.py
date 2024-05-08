@@ -3,7 +3,7 @@ from reportlab.lib.pagesizes import portrait  # Alteração aqui
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 import tempfile
-from reportlab.graphics import barcode
+from reportlab.graphics.barcode import code128
 import qrcode
 from Service import ClientesJohnField, OP_JonhField, OP_Tam_Cor_JohnField
 def criar_pdf(saida_pdf, codCliente, codOP):
@@ -90,7 +90,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Título centralizado
         c.setFont("Helvetica-Bold", 11)
         title = 'Data Criação OP:'
-        c.drawString(14.3 * cm, 25.6 * cm, title)
+        c.drawString(14.3 * cm, 25.0 * cm, title)
 
         # Título centralizado
         c.setFont("Helvetica-Bold", 10)
@@ -106,7 +106,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         c.setFont("Helvetica", 11)
         title = str(informacoes['dataCriacaoOP'][0])
         title = title[8:10]+'/'+title[5:7]+'/'+title[:4]+' '+title[11:16]
-        c.drawString(17.6 * cm, 25.6 * cm, title)
+        c.drawString(17.6 * cm, 25.0 * cm, title)
 
         c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
         c.line(1 * cm, 24.5 * cm, 20 * cm, 24.5 * cm)  # Desenhar uma linha
@@ -174,7 +174,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
 
         # Inserir uma linha
         c.setLineWidth(1.3)  # Definir a largura da linha em 1 ponto
-        c.line(0 * cm, 26.1 * cm, 27.8 * cm, 26.1 * cm)  # Desenhar uma linha
+        c.line(0 * cm, 25.6 * cm, 27.8 * cm, 25.6 * cm)  # Desenhar uma linha
 
 
 
@@ -192,9 +192,15 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         qr = qrcode.QRCode(version=1, box_size=int(1.72 * cm), border=0)
         qr.add_data(str(codOP)+'||'+str(codCliente))  # Substitua pelo link desejado
         qr.make(fit=True)
+
+        barcode = code128.Code128(str(str(codOP)+'||'+str(codCliente)), barWidth=1.0, barHeight=23.9)  # Criar código de barras
+        barcode.drawOn(c, 15. * cm, 25.8 * cm)  # Desenhar código de barras na posição desejada
+
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(qr_filename)  # Salvar a imagem do QR code no arquivo temporário
-        c.drawImage(qr_filename, 18.4 * cm, 27.0 * cm, width=2.2 * cm, height= 2.20 * cm)
+        c.drawImage(qr_filename, 18.4 * cm, 27.2 * cm, width=2.2 * cm, height= 2.20 * cm)
+
+
 
         c.save()
 
