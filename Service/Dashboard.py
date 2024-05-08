@@ -22,7 +22,8 @@ def OPsAbertoPorCliente():
 
 
     consulta = pd.merge(consulta,quantidade,on='idOP',how='left')
-    consulta['quantidade'].fillna(0,inplace=True)
+    consulta['quantidade'].fillna(0, inplace=True)
+    consulta = consulta
 
     pcsAberto = consulta['quantidade'].sum()
     pcsAberto = round(pcsAberto)
@@ -39,10 +40,17 @@ def OPsAbertoPorCliente():
     ClienteAberto = '{:,.0f}'.format(ClienteAberto)
     ClienteAberto = ClienteAberto.replace(',', '.')
 
+    DistribuicaoClientes = consulta.groupby(['codCliente', 'nomeCliente']).agg(
+        quantidadeOP=('codCliente', 'size'),quantidadePc=('quantidade', 'sum')).reset_index()
+
+    DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP']/int(OPAberto))*100)
+    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc']/int(pcsAberto))*100)
+
     dados = {
         '0-Total De pçs em Aberto': f'{pcsAberto} Pçs ',
         '1- Total De OPs em Abero': f'{OPAberto} OPs ',
         '2- Total de Clientes em Aberto':f'{ClienteAberto} Clientes ',
-        '3 -Detalhamento': consulta.to_dict(orient='records')}
+        '3- DistribuicaoClientes':DistribuicaoClientes.to_dict(orient='records'),
+        '4 -DetalhamentoEmAberto': consulta.to_dict(orient='records')}
 
     return pd.DataFrame([dados])
