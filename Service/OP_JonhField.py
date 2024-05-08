@@ -99,6 +99,9 @@ def ObterOP_EMAberto():
     conn.close()
     consulta['idOP'] = consulta['idOP'].str.replace('||','&')
 
+    consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
+    consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
+
     return consulta
 
 
