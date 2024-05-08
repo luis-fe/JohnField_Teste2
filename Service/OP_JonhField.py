@@ -97,6 +97,7 @@ def ObterOP_EMAberto():
     consulta['quantidade'].fillna("-",inplace= True)
 
     conn.close()
+    consulta['idOP'] = consulta['idOP'].str.replace('||','&')
 
     return consulta
 

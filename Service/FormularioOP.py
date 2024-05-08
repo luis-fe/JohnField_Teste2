@@ -30,7 +30,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Título centralizado
         c.setFont("Helvetica-Bold", 21)
         title = 'ORDEM DE PRODUÇÃO'
-        c.drawString(7.0 * cm, 28.8 * cm, title)
+        c.drawString(7.0 * cm, 28.7 * cm, title)
 
         # Título centralizado
         c.setFont("Helvetica", 14)
@@ -193,12 +193,12 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         qr.add_data(str(codOP)+'||'+str(codCliente))  # Substitua pelo link desejado
         qr.make(fit=True)
 
-        barcode = code128.Code128(str(str(codOP)+'||'+str(codCliente)), barWidth=1.0, barHeight=23.9)  # Criar código de barras
+        barcode = code128.Code128(str(str(codOP)+'&'+str(codCliente)), barWidth=1.0, barHeight=23.9)  # Criar código de barras
         barcode.drawOn(c, 15. * cm, 25.8 * cm)  # Desenhar código de barras na posição desejada
 
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(qr_filename)  # Salvar a imagem do QR code no arquivo temporário
-        c.drawImage(qr_filename, 18.4 * cm, 27.2 * cm, width=2.2 * cm, height= 2.20 * cm)
+        c.drawImage(qr_filename, 18.0 * cm, 27.0 * cm, width=2.2 * cm, height= 2.20 * cm)
 
 
 
