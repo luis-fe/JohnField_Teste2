@@ -190,9 +190,10 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
 
     consulta2['Sequencia'] = consulta2.groupby(['codRoteiro'])['codFase'].cumcount()+1
     consulta = pd.merge(consulta,consulta2,on='codFase').reset_index()
+    consulta.drop('ObrigaInformaTamCor?',axis=1).reset_index()
 
 
-
+    print(consulta2.loc[:,['codFase','ObrigaInformaTamCor?']])
     sequenciaAtual = consulta['Sequencia'][0]
     sequenciaNova = sequenciaAtual + 1
 
@@ -206,6 +207,8 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
     else:
         consulta['102-ProximaFase'] = consulta2['nomefaseRoteiro'][0]
         consulta['101-codProximaFase'] = consulta2['codFase'][0]
+        consulta["ObrigaInformaTamCor?"] = consulta2['ObrigaInformaTamCor?'][0]
+
 
     conn.close()
 
