@@ -87,7 +87,7 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login):
 def AutentificacaoUsuario(login, senha):
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = """
-    select "Senha" from "Easy"."Usuario" u where u."nomeLogin" = %s
+    select "Senha", "idusuario" from "Easy"."Usuario" u where u."nomeLogin" = %s
     """
     consulta = pd.read_sql(consulta,conn,params=(login,))
 
@@ -96,7 +96,7 @@ def AutentificacaoUsuario(login, senha):
         return pd.DataFrame([{'status':False,'Mensagem':'Login nao Encontrado!'}])
 
     elif senha == consulta['Senha'][0]:
-        return pd.DataFrame([{'status':True,'Mensagem':'Senha Encontrada!'}])
+        return pd.DataFrame([{'status':True,'Mensagem':'Senha Encontrada!','idUsuario':consulta['idusuario'][0]}])
 
     else:
         return pd.DataFrame([{'status':False,'Mensagem':'Senha Nao Validada!'}])

@@ -59,7 +59,7 @@ def OPsAbertoPorCliente():
     return pd.DataFrame([dados])
 
 
-def OpsAbertoPorFase():
+def OpsAbertoPorFase(arrayFases = ''):
     consulta = """
       select * from "Easy"."DetalhaOP_Abertas" doa 
       """
@@ -103,6 +103,11 @@ def OpsAbertoPorFase():
 
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
     consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
+
+    if arrayFases !='':
+        for fase in arrayFases:
+            arrayFases = ''
+
 
     dados = {
         '0-Total De pçs em Aberto': f'{pcsAberto} Pçs ',

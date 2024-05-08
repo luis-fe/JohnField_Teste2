@@ -33,7 +33,11 @@ def OPsAbertoPorCliente():
 @Dashboard_routesJohn.route('/api/JonhField/OpsAbertoPorFase', methods=['GET'])
 @token_required
 def OpsAbertoPorFase():
-    consulta = Dashboard.OpsAbertoPorFase()
+
+    arrayFases = request.args.get('arrayFases', '')
+
+
+    consulta = Dashboard.OpsAbertoPorFase(arrayFases)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
