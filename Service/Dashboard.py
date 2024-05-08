@@ -56,10 +56,10 @@ def OPsAbertoPorCliente(nomeCliente = ''):
         OPAberto = '{:,.0f}'.format(OPAberto)
         OPAberto = OPAberto.replace(',', '.')
 
-        OPAberto = consulta['codOP'].count()
-        OPAberto = round(OPAberto)
-        OPAberto = '{:,.0f}'.format(OPAberto)
-        OPAberto = OPAberto.replace(',', '.')
+        pcsAberto = consulta['quantidade'].sum()
+        pcsAberto = round(pcsAberto)
+        pcsAberto = '{:,.0f}'.format(pcsAberto)
+        pcsAberto = pcsAberto.replace(',', '.')
 
     dados = {
         '0-Total De pçs em Aberto': f'{pcsAberto} Pçs ',
@@ -118,6 +118,15 @@ def OpsAbertoPorFase(nomeFase = ''):
 
     if nomeFase !='':
         consulta = consulta[consulta['FaseAtual']==nomeFase]
+        OPAberto = consulta['codOP'].count()
+        OPAberto = round(OPAberto)
+        OPAberto = '{:,.0f}'.format(OPAberto)
+        OPAberto = OPAberto.replace(',', '.')
+
+        pcsAberto = consulta['quantidade'].sum()
+        pcsAberto = round(pcsAberto)
+        pcsAberto = '{:,.0f}'.format(pcsAberto)
+        pcsAberto = pcsAberto.replace(',', '.')
 
 
     dados = {
