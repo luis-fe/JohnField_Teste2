@@ -54,3 +54,16 @@ def OPsAbertoPorCliente():
         '4 -DetalhamentoEmAberto': consulta.to_dict(orient='records')}
 
     return pd.DataFrame([dados])
+
+
+def OpsAbertoPorFase():
+    consulta = """
+    select * from "Easy"."DetalhaOP_Abertas" doa 
+    """
+    conn = ConexaoPostgreMPL.conexaoJohn()
+
+    consulta = pd.read_sql(consulta,conn)
+
+    conn.close()
+
+    return consulta

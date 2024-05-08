@@ -37,7 +37,7 @@ def BuscarFaseEspecifica(codFase):
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
-    select f."codFase" , f."nomeFase", f."FaseInicial" , f."FaseFinal"  from "Easy"."Fase" f
+    select f."codFase" , f."nomeFase", f."FaseInicial" , f."FaseFinal", "ObrigaInformaTamCor"  from "Easy"."Fase" f
     where f."codFase" = %s
     """
 
