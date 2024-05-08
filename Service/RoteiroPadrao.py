@@ -14,20 +14,21 @@ def BuscarRoteiros():
   Fases = FaseJohnField.BuscarFases()
   consulta = pd.merge(consulta,Fases,on='codFase')
 
-  # Função para obter a primeira ocorrência de cada grupo
-  def primeira_ocorrencia(group):
-      return group.iloc[0]['ObrigaInformaTamCor?']
+
 
 # Aplicando a função ao agrupar por 'roteiro'
-  consulta['ObrigaInformaTamCor?'] = consulta.groupby('codRoteiro').apply(primeira_ocorrencia).reset_index(drop=True)
+  consulta['Sequencia'] = consulta.groupby(['codRoteiro'])['codFase'].cumcount() + 1
+  consulta2 = consulta[consulta['Sequencia'] == 1]
+  consulta2 = consulta2.loc[:, ["ObrigaInformaTamCor?","codRoteiro"]]
 
-  consulta.drop(['codFase','FaseInical?',"FaseFinal?" ],axis=1,inplace=True)
+  consulta.drop(['codFase','FaseInical?',"FaseFinal?","ObrigaInformaTamCor?" ],axis=1,inplace=True)
 
   # Convertendo a coluna 'Tamanhos' para lista de strings
   consulta['nomeFase'] = consulta['nomeFase'].apply(lambda x: [x])
 
   # Agrupar tamanhos em uma lista
-  df_summary = consulta.groupby(['codRoteiro', 'nomeRoteiro','ObrigaInformaTamCor?'])['nomeFase'].sum().reset_index()
+  df_summary = consulta.groupby(['codRoteiro', 'nomeRoteiro'])['nomeFase'].sum().reset_index()
+  df_summary = pd.merge(df_summary,consulta2,on='codRoteiro')
 
   return df_summary
 
