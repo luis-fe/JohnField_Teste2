@@ -18,7 +18,11 @@ def token_required(f):
 @Dashboard_routesJohn.route('/api/JonhField/OPsAbertoPorCliente', methods=['GET'])
 @token_required
 def OPsAbertoPorCliente():
-    consulta = Dashboard.OPsAbertoPorCliente()
+
+    nomeCliente = request.args.get('nomeCliente', '')
+
+
+    consulta = Dashboard.OPsAbertoPorCliente(nomeCliente)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -34,10 +38,10 @@ def OPsAbertoPorCliente():
 @token_required
 def OpsAbertoPorFase():
 
-    arrayFases = request.args.get('arrayFases', '')
+    nomeFase = request.args.get('nomeFase', '')
 
 
-    consulta = Dashboard.OpsAbertoPorFase(arrayFases)
+    consulta = Dashboard.OpsAbertoPorFase(nomeFase)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

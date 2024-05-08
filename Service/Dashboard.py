@@ -2,7 +2,7 @@ import pandas as pd
 import ConexaoPostgreMPL
 
 
-def OPsAbertoPorCliente():
+def OPsAbertoPorCliente(nomeCliente = ''):
 
     consulta = """
     select * from "Easy"."DetalhaOP_Abertas" doa 
@@ -49,6 +49,9 @@ def OPsAbertoPorCliente():
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
     consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
 
+    if nomeCliente != '':
+        consulta = consulta[consulta['nomeCliente'] == nomeCliente]
+
     dados = {
         '0-Total De pçs em Aberto': f'{pcsAberto} Pçs ',
         '1- Total De OPs em Abero': f'{OPAberto} OPs ',
@@ -59,7 +62,7 @@ def OPsAbertoPorCliente():
     return pd.DataFrame([dados])
 
 
-def OpsAbertoPorFase(arrayFases = ''):
+def OpsAbertoPorFase(nomeFase = ''):
     consulta = """
       select * from "Easy"."DetalhaOP_Abertas" doa 
       """
@@ -104,9 +107,8 @@ def OpsAbertoPorFase(arrayFases = ''):
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
     consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
 
-    if arrayFases !='':
-        for fase in arrayFases:
-            arrayFases = ''
+    if nomeFase !='':
+        consulta = consulta[consulta['FaseAtual']==nomeFase]
 
 
     dados = {
