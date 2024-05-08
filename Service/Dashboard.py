@@ -51,6 +51,15 @@ def OPsAbertoPorCliente(nomeCliente = ''):
 
     if nomeCliente != '':
         consulta = consulta[consulta['nomeCliente'] == nomeCliente]
+        OPAberto = consulta['codOP'].count()
+        OPAberto = round(OPAberto)
+        OPAberto = '{:,.0f}'.format(OPAberto)
+        OPAberto = OPAberto.replace(',', '.')
+
+        OPAberto = consulta['codOP'].count()
+        OPAberto = round(OPAberto)
+        OPAberto = '{:,.0f}'.format(OPAberto)
+        OPAberto = OPAberto.replace(',', '.')
 
     dados = {
         '0-Total De pçs em Aberto': f'{pcsAberto} Pçs ',
