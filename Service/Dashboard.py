@@ -25,8 +25,8 @@ def OPsAbertoPorCliente(nomeCliente = ''):
     consulta['quantidade'].fillna(0, inplace=True)
     consulta = consulta
 
-    pcsAberto = consulta['quantidade'].sum()
-    pcsAberto = round(pcsAberto)
+    pcsAberto1 = consulta['quantidade'].sum()
+    pcsAberto = round(pcsAberto1)
     pcsAberto = '{:,.0f}'.format(pcsAberto)
     pcsAberto = pcsAberto.replace(',', '.')
 
@@ -42,9 +42,10 @@ def OPsAbertoPorCliente(nomeCliente = ''):
 
     DistribuicaoClientes = consulta.groupby(['codCliente', 'nomeCliente']).agg(
         quantidadeOP=('codCliente', 'size'),quantidadePc=('quantidade', 'sum')).reset_index()
+    print(DistribuicaoClientes)
 
     DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP']/int(OPAberto))*100)
-    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc']/int(pcsAberto))*100)
+    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc']/float(pcsAberto1))*100)
 
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
     consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
@@ -92,8 +93,8 @@ def OpsAbertoPorFase(nomeFase = ''):
     consulta['quantidade'].fillna(0, inplace=True)
     consulta = consulta
 
-    pcsAberto = consulta['quantidade'].sum()
-    pcsAberto = round(pcsAberto)
+    pcsAberto1 = consulta['quantidade'].sum()
+    pcsAberto = round(pcsAberto1)
     pcsAberto = '{:,.0f}'.format(pcsAberto)
     pcsAberto = pcsAberto.replace(',', '.')
 
@@ -111,7 +112,7 @@ def OpsAbertoPorFase(nomeFase = ''):
         quantidadeOP=('codCliente', 'size'), quantidadePc=('quantidade', 'sum')).reset_index()
 
     DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP'] / int(OPAberto)) * 100)
-    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc'] / int(pcsAberto)) * 100)
+    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc']/float(pcsAberto1))*100)
 
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
     consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
