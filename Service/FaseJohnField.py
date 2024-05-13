@@ -9,7 +9,7 @@ def BuscarFases():
 select f."codFase" , 
 f."nomeFase", 
 f."FaseInicial" as "FaseInical?",
-"FaseFinal" as "FaseFinal?" , "ObrigaInformaTamCor" as "ObrigaInformaTamCor?"
+"FaseFinal" as "FaseFinal?" , "ObrigaInformaTamCor" as "ObrigaInformaTamCor?", "LeadTime"
 from "Easy"."Fase" f
     """
 
@@ -59,17 +59,17 @@ def BuscarFaseEspecificaPeloNome(nome):
 
     return consulta
 
-def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal, ObrigaInformaTamCor):
+def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal, ObrigaInformaTamCor, LeadTime):
     consulta = BuscarFaseEspecifica(codFase)
     consultaNome = BuscarFaseEspecificaPeloNome(nomeFase)
 
     if consulta.empty and consultaNome.empty:
         conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
-        insert into "Easy"."Fase" ("codFase" , "nomeFase", "FaseInicial","FaseFinal", "ObrigaInformaTamCor") values ( %s, %s, %s, %s , %s )
+        insert into "Easy"."Fase" ("codFase" , "nomeFase", "FaseInicial","FaseFinal", "ObrigaInformaTamCor", "LeadTime") values ( %s, %s, %s, %s , %s,  %s )
         """
         cursor = conn.cursor()
-        cursor.execute(inserir,(codFase, nomeFase,FaseInicial, FaseFinal,ObrigaInformaTamCor))
+        cursor.execute(inserir,(codFase, nomeFase,FaseInicial, FaseFinal,ObrigaInformaTamCor, LeadTime))
         conn.commit()
         cursor.close()
 
