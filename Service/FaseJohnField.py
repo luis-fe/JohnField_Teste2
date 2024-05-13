@@ -83,7 +83,7 @@ def InserirFase(codFase, nomeFase, FaseInicial, FaseFinal, ObrigaInformaTamCor, 
         return pd.DataFrame([{'Mensagem': f"A Fase {nomeFase} já´existe!", "status": False}])
 
 
-def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal,ObrigaInformaTamCor):
+def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal,ObrigaInformaTamCor,LeadTime):
 
     consulta = BuscarFaseEspecifica(codFase)
 
@@ -106,16 +106,20 @@ def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal,ObrigaInformaTamCor):
         if ObrigaInformaTamCorAtual == ObrigaInformaTamCor :
             ObrigaInformaTamCor = ObrigaInformaTamCorAtual
 
+        LeadTimeAtual = consulta['LeadTime'][0]
+        if LeadTimeAtual == LeadTime :
+            LeadTime = LeadTimeAtual
+
 
         conn = ConexaoPostgreMPL.conexaoJohn()
         update = """
         update "Easy"."Fase"
-        set  "nomeFase" = %s , "FaseInicial" = %s , "FaseFinal" = %s, "ObrigaInformaTamCor" = %s
+        set  "nomeFase" = %s , "FaseInicial" = %s , "FaseFinal" = %s, "ObrigaInformaTamCor" = %s, "LeadTime" = %s
         where "codFase" = %s 
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, ObrigaInformaTamCor, codFase,))
+        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, ObrigaInformaTamCor, codFase, LeadTime))
         conn.commit()
         cursor.close()
 

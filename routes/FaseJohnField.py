@@ -77,8 +77,10 @@ def AlterarFase():
     FaseInical = data.get('FaseInical?')
     FaseFinal = data.get('FaseFinal?')
     ObrigaInformaTamCor = data.get("ObrigaInformaTamCor?")
+    LeadTime = data.get("LeadTime",0)
 
-    consulta = FaseJohnField.UpdateFase(codFase, nomeFase,FaseInical,FaseFinal,ObrigaInformaTamCor)
+
+    consulta = FaseJohnField.UpdateFase(codFase, nomeFase,FaseInical,FaseFinal,ObrigaInformaTamCor,LeadTime)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
