@@ -15,26 +15,26 @@ def BuscarOperacoes():
 
     return consulta
 
-def BuscarCategoriaEspecifica(codcategoria):
+def BuscarOperacaoEspecifica(codOperacao):
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     consulta = """
-    select c.codcategoria , c."nomeCategoria"  from "Easy"."Categoria" c  
-    where c.codcategoria = %s
+    select c."codOperacao"  from "Easy"."Operacao" c  
+    where c."codOperacao" = %s
     """
 
-    consulta = pd.read_sql(consulta,conn,params=(codcategoria,))
+    consulta = pd.read_sql(consulta,conn,params=(codOperacao,))
     conn.close()
 
     return consulta
 
-def InserirCategoria(codcategoria, nomeCategoria):
-    consulta = BuscarCategoriaEspecifica(codcategoria)
+def InserirOperacao(codOperacao, nomeOperacao, nomeFase, Maq_Equipamento):
+    consulta = BuscarOperacaoEspecifica(codOperacao)
 
     if consulta.empty:
         conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
-        insert into "Easy"."Categoria" (codcategoria , "nomeCategoria") values ( %s, %s )
+        insert into "Easy"."Operacao" ("codOperacao" , "codFase", "Maq/Equipamento","nomeOperacao") values ( %s, %s,  %s, %s )
         """
         cursor = conn.cursor()
         cursor.execute(inserir,(codcategoria, nomeCategoria,))
@@ -43,10 +43,10 @@ def InserirCategoria(codcategoria, nomeCategoria):
 
         conn.close()
 
-        return pd.DataFrame([{'Mensagem': "Categoria cadastrado com Sucesso!", "status": True}])
+        return pd.DataFrame([{'Mensagem': "Operacão cadastrada com Sucesso!", "status": True}])
 
     else:
-        return pd.DataFrame([{'Mensagem': "Categoria já´existe!", "status": False}])
+        return pd.DataFrame([{'Mensagem': "Operacão já´existe!", "status": False}])
 
 def UpdateCategoria(codcategoria, nomeCategoria):
 
