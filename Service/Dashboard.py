@@ -114,12 +114,15 @@ def OpsAbertoPorFase(nomeFase = ''):
 
 
 
+
+
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
     consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
 
     consulta['situacaoLeadTime'] = consulta.apply(lambda r : 'Atrasado'if r['LeadTimeMeta'] < r['diasEmAberto'] else 'No Prazo', axis=1 )
 
     atrasados = consulta[consulta['situacaoLeadTime'] == 'Atrasado']
+
     # Agregação para contar OPs atrasadas por fase
     DistribuicaoAtrasados = atrasados.groupby(['FaseAtual']).agg(
         qtdOPAtrasada=('codCliente', 'size')
@@ -135,6 +138,11 @@ def OpsAbertoPorFase(nomeFase = ''):
     DistribuicaoClientes = DistribuicaoClientes.merge(DistribuicaoAtrasados, on='FaseAtual', how='left')
     DistribuicaoClientes['qtdOPAtrasada'] = DistribuicaoClientes['qtdOPAtrasada'].fillna(0)
 
+
+    OPAbertoAtr = atrasados['codOP'].count()
+    OPAbertoAtr = round(OPAbertoAtr)
+    OPAbertoAtr = '{:,.0f}'.format(OPAbertoAtr)
+    OPAbertoAtr = OPAbertoAtr.replace(',', '.')
     if nomeFase !='':
         consulta = consulta[consulta['FaseAtual']==nomeFase]
         OPAberto = consulta['codOP'].count()
@@ -147,11 +155,19 @@ def OpsAbertoPorFase(nomeFase = ''):
         pcsAberto = '{:,.0f}'.format(pcsAberto)
         pcsAberto = pcsAberto.replace(',', '.')
 
+        OPAbertoAtr = atrasados['codOP'].count()
+        OPAbertoAtr = round(OPAbertoAtr)
+        OPAbertoAtr = '{:,.0f}'.format(OPAbertoAtr)
+        OPAbertoAtr = OPAbertoAtr.replace(',', '.')
+
+
+
 
     dados = {
         '0-Total De pçs em Aberto': f'{pcsAberto} Pçs ',
         '1- Total De OPs em Abero': f'{OPAberto} OPs ',
         '2- Total de Fases em Aberto': f'{FasesAberto} Fases ',
+        '2.1- Total de OPs em Atraso': f'{OPAbertoAtr} OPs ',
         '3- DistribuicaoFases': DistribuicaoClientes.to_dict(orient='records'),
         '4 -DetalhamentoEmAberto': consulta.to_dict(orient='records')}
 
