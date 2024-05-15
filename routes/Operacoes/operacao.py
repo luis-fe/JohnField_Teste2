@@ -28,3 +28,25 @@ def BuscarOperacoes():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+@operacao_routesJohn.route('/api/JonhField/InserirOperacao', methods=['POST'])
+@token_required
+def InserirOperacao():
+    data = request.get_json()
+    codOperacao = data.get('codOperacao')
+    nomeOperacao = data.get('nomeOperacao')
+    nomeFase = data.get('nomeFase')
+    Maq_Equipamento = data.get('Maq_Equipamento')
+
+
+    consulta = Opercao.InserirOperacao(codOperacao, nomeOperacao, nomeFase, Maq_Equipamento )
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)

@@ -32,12 +32,17 @@ def InserirOperacao(codOperacao, nomeOperacao, nomeFase, Maq_Equipamento):
     consulta = BuscarOperacaoEspecifica(codOperacao)
 
     if consulta.empty:
+        codFase = BuscarOperacoes()
+        codFase = codFase[codFase['nomeFase']==nomeFase]
+        codFase = codFase['codFase'][0]
+
+
         conn = ConexaoPostgreMPL.conexaoJohn()
         inserir = """
         insert into "Easy"."Operacao" ("codOperacao" , "codFase", "Maq/Equipamento","nomeOperacao") values ( %s, %s,  %s, %s )
         """
         cursor = conn.cursor()
-        cursor.execute(inserir,(codcategoria, nomeCategoria,))
+        cursor.execute(inserir,(codOperacao,codFase ,Maq_Equipamento,nomeOperacao,))
         conn.commit()
         cursor.close()
 

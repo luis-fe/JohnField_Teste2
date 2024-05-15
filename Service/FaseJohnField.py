@@ -119,7 +119,7 @@ def UpdateFase(codFase, nomeFase, FaseInicial, FaseFinal,ObrigaInformaTamCor,Lea
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, ObrigaInformaTamCor, codFase, LeadTime))
+        cursor.execute(update,(nomeFase,FaseInicial, FaseFinal, ObrigaInformaTamCor, LeadTime, codFase ))
         conn.commit()
         cursor.close()
 
