@@ -40,6 +40,12 @@ def OPsAbertoPorCliente(nomeCliente = ''):
     ClienteAberto = '{:,.0f}'.format(ClienteAberto)
     ClienteAberto = ClienteAberto.replace(',', '.')
 
+
+    consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
+    consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
+
+    consulta['situacaoLeadTime'] = consulta.apply(lambda r : 'Atrasado'if r['LeadTimeMeta'] < r['diasEmAberto'] else 'No Prazo', axis=1 )
+
     DistribuicaoClientes = consulta.groupby(['codCliente', 'nomeCliente']).agg(
         quantidadeOP=('codCliente', 'size'),quantidadePc=('quantidade', 'sum')).reset_index()
     print(DistribuicaoClientes)
@@ -47,8 +53,6 @@ def OPsAbertoPorCliente(nomeCliente = ''):
     DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP']/int(OPAberto))*100)
     DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc']/float(pcsAberto1))*100)
 
-    consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
-    consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
 
     if nomeCliente != '':
         consulta = consulta[consulta['nomeCliente'] == nomeCliente]
@@ -108,14 +112,28 @@ def OpsAbertoPorFase(nomeFase = ''):
     FasesAberto = '{:,.0f}'.format(FasesAberto)
     FasesAberto = FasesAberto.replace(',', '.')
 
+
+
+    consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
+    consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
+
+    consulta['situacaoLeadTime'] = consulta.apply(lambda r : 'Atrasado'if r['LeadTimeMeta'] < r['diasEmAberto'] else 'No Prazo', axis=1 )
+
+    atrasados = consulta[consulta['situacaoLeadTime'] == 'Atrasado']
+    # Agregação para contar OPs atrasadas por fase
+    DistribuicaoAtrasados = atrasados.groupby(['FaseAtual']).agg(
+        qtdOPAtrasada=('codCliente', 'size')
+    ).reset_index()
+
+
     DistribuicaoClientes = consulta.groupby(['FaseAtual']).agg(
         quantidadeOP=('codCliente', 'size'), quantidadePc=('quantidade', 'sum')).reset_index()
 
     DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP'] / int(OPAberto)) * 100)
-    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc']/float(pcsAberto1))*100)
+    DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc'] / float(pcsAberto1)) * 100)
 
-    consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
-    consulta['dataCriacaoOP'] = consulta['dataCriacaoOP'].dt.strftime('%d/%m/%Y')
+    DistribuicaoClientes = DistribuicaoClientes.merge(DistribuicaoAtrasados, on='FaseAtual', how='left')
+    DistribuicaoClientes['qtdOPAtrasada'] = DistribuicaoClientes['qtdOPAtrasada'].fillna(0)
 
     if nomeFase !='':
         consulta = consulta[consulta['FaseAtual']==nomeFase]
