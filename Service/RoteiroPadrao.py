@@ -5,6 +5,7 @@ from Service import FaseJohnField
 def BuscarRoteiros():
   consulta = """
   SELECT "codRoteiro", "nomeRoteiro", "codFase" FROM "Easy"."Roteiro"
+  order by "codRoteiro", "codFase" asc
   """
   conn = ConexaoPostgreMPL.conexaoJohn()
   consulta = pd.read_sql(consulta, conn)
