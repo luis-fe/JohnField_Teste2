@@ -30,7 +30,7 @@ def BuscarOperacaoEspecifica(codOperacao):
 
     return consulta
 
-def InserirOperacao(codOperacao, nomeOperacao, nomeFase, Maq_Equipamento):
+def InserirOperacao(codOperacao, nomeOperacao, nomeFase, Maq_Equipamento, nomeCategoria, tempoPadrao):
     consulta = BuscarOperacaoEspecifica(codOperacao)
 
     if consulta.empty:
