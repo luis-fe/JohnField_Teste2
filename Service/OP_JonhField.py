@@ -77,6 +77,22 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrad
             conn.commit()
 
 
+            inserirRoteiro = """
+            INSERT INTO "Easy"."RoteiroOP" ("codRoteiro", "nomeRoteiro", "codFase", "id", "chave")
+            SELECT "codRoteiro", "nomeRoteiro", "codFase", "id", "chave" FROM "Easy"."Roteiro" where "codRoteiro" = %s ;"""
+            cursor.execute(inserirRoteiro,(codRoteiro,))
+            conn.commit()
+
+            update = """
+            update "Easy"."RoteiroOP"
+            set "idOP" = %s
+            where "idOP" is null
+            """
+            cursor.execute(update,(ChaveOP,))
+            conn.commit()
+
+
+
             cursor.close()
             conn.close()
 
@@ -178,12 +194,14 @@ inner join "Easy"."Fase" f on f."codFase" = fo."codFase"
 inner join "Easy"."OrdemProducao" op on op."idOP" = fo."idOP" 
 where fo."idOP"  = %s and "Situacao" = 'Em Processo'
         """
+    print(f'chave{ChaveOP}')
     consulta = pd.read_sql(consulta,conn,params=(ChaveOP,))
+    print(consulta)
 
     consulta2 = """
     select r.* , f."nomeFase" as "nomefaseRoteiro",
      f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor?"
-     from "Easy"."Roteiro" r 
+     from "Easy"."RoteiroOP" r 
     inner join "Easy"."Fase" f on f."codFase" = r."codFase" 
     where r."codRoteiro" = %s order by r."id" asc 
     """
@@ -194,10 +212,14 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
     consulta2['Sequencia'] = consulta2.groupby(['codRoteiro'])['codFase'].cumcount()+1
     consulta = pd.merge(consulta,consulta2,on='codFase').reset_index()
     consulta.drop('ObrigaInformaTamCor?',axis=1).reset_index()
-
+    print(consulta)
 
     print(consulta2.loc[:,['codFase','ObrigaInformaTamCor?']])
-    sequenciaAtual = consulta['Sequencia'][0]
+
+    try:
+        sequenciaAtual = consulta['Sequencia'][0]
+    except:
+        sequenciaAtual = 1
     sequenciaNova = sequenciaAtual + 1
 
     consulta2 = consulta2[consulta2['Sequencia']==sequenciaNova].reset_index()
