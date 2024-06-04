@@ -185,7 +185,7 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
      f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor?"
      from "Easy"."Roteiro" r 
     inner join "Easy"."Fase" f on f."codFase" = r."codFase" 
-    where r."codRoteiro" = %s order by r."codFase" asc 
+    where r."codRoteiro" = %s order by r."id" asc 
     """
     roteiro = consulta['codRoteiro'][0]
     consulta2 = pd.read_sql(consulta2,conn,params=(int(roteiro),))
