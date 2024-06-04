@@ -242,5 +242,6 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
         inplace=True)
 
     consulta = consulta.loc[:,["000-SituacaoOP",'001-codFaseAtual',"102-ProximaFase","101-codProximaFase","103-ObrigaInformaTamCor?"]]
+    consulta = consulta.drop_duplicates()
 
     return consulta
