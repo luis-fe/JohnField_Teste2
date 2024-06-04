@@ -49,12 +49,14 @@ def InserirRoteiroPadrao(codRoteiro, nomeRoteiro, arrayFases ):
       arraycodFases = consulta['codFase'].values
 
       inserir = """
-      insert into "Easy"."Roteiro" ("codRoteiro", "nomeRoteiro", "codFase") values ( %s , %s , %s )
+      insert into "Easy"."Roteiro" ("codRoteiro", "nomeRoteiro", "codFase", "id") values ( %s , %s , %s , %s )
       """
-      for fase in arraycodFases:
 
+      id = 0
+      for fase in arraycodFases:
+        id = 1 + id
         cursor = conn.cursor()
-        cursor.execute(inserir,(codRoteiro, nomeRoteiro, int(fase)))
+        cursor.execute(inserir,(codRoteiro, nomeRoteiro, int(fase), id ))
         conn.commit()
         cursor.close()
 
