@@ -132,4 +132,10 @@ def AlterarSenha(nomeLogin, senhaAtual, novaSenha):
 
     with ConexaoPostgreMPL.conexaoJohn() as conn:
         with conn.cursor() as cursor:
-            update = """update """
+            update = """
+            update "Easy"."Usuario"  
+            set  "Senha" = %s 
+            where idusuario = %s 
+            """
+            cursor.execute(update,(novaSenha, consulta['idusuario'][0]))
+            conn.commit()                           
