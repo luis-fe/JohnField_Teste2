@@ -130,3 +130,26 @@ def DeletarUsuario():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+
+@usuarios_routesJohn.route('/api/JonhField/AlterarSenha', methods=['PUT'])
+@token_required
+def AlterarSenha():
+    data = request.get_json()
+
+    login = data.get('login', '')
+    senhaAtual = data.get('senhaAtual', '')
+    senhaNova = data.get('senhaNova', 'informar')
+
+
+    consulta = UsuariosJohnFild.AlterarSenha(login, senhaAtual, senhaNova, senhaNova)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
