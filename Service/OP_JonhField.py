@@ -206,10 +206,10 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
     where r."codRoteiro" = %s order by r."id" asc 
     """
     roteiro = consulta['codRoteiro'][0]
+
     consulta2 = pd.read_sql(consulta2,conn,params=(int(roteiro),))
-
-
     consulta2['Sequencia'] = consulta2.groupby(['codRoteiro'])['codFase'].cumcount()+1
+
     consulta = pd.merge(consulta,consulta2,on='codFase').reset_index()
     consulta.drop('ObrigaInformaTamCor?',axis=1).reset_index()
     print(consulta)
