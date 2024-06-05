@@ -1,4 +1,3 @@
-from turtle import update
 import pandas as pd
 import ConexaoPostgreMPL
 
@@ -130,12 +129,20 @@ def AlterarSenha(nomeLogin, senhaAtual, novaSenha):
     consulta = ConsultaUsuarios()
     consulta = consulta[consulta['nomeLogin'] == nomeLogin]
 
-    with ConexaoPostgreMPL.conexaoJohn() as conn:
-        with conn.cursor() as cursor:
-            update = """
-            update "Easy"."Usuario"  
-            set  "Senha" = %s 
-            where idusuario = %s 
-            """
-            cursor.execute(update,(novaSenha, consulta['idusuario'][0]))
-            conn.commit()                           
+    #Avaliando a senha 
+    avaliar = ConsultaUsuariosID(consulta['idusuario'][0])
+    senhaAtualAvaliar = avaliar['Senha'][0]
+
+    if senhaAtualAvaliar == senhaAtual:
+        with ConexaoPostgreMPL.conexaoJohn() as conn:
+            with conn.cursor() as cursor:
+                update = """
+                update "Easy"."Usuario"  
+                set  "Senha" = %s 
+                where idusuario = %s 
+                """
+                cursor.execute(update,(novaSenha, consulta['idusuario'][0]))
+                conn.commit()    
+        return pd.DataFrame([{'status':True, 'mensagem':"senha alterada com sucesso"}])                       
+    else:
+        return pd.DataFrame([{'status':False, 'mensagem':"senha atual nao corresponde"}])
