@@ -1,3 +1,4 @@
+from turtle import update
 import pandas as pd
 import ConexaoPostgreMPL
 
@@ -125,4 +126,10 @@ def InativarUsuario(idUsuario):
     else:
         return pd.DataFrame([{'Mensagem':"Usuario Nao encontrado!","status":False}])
 
+def AlterarSenha(nomeLogin, senhaAtual, novaSenha):
+    consulta = ConsultaUsuarios()
+    consulta = consulta[consulta['nomeLogin'] == nomeLogin]
 
+    with ConexaoPostgreMPL.conexaoJohn() as conn:
+        with conn.cursor() as cursor:
+            update = """update """
