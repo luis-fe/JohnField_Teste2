@@ -15,6 +15,7 @@ from .Ops.Formulario import formulario_routesJohn
 from .Fases.RoteiroPadrao import roteiroPadrao_routesJohn
 from .Dashboard.Dashboard import Dashboard_routesJohn
 from .Operacoes.operacao import operacao_routesJohn
+from .Ops.EstornarMovimentacao import EstornoOP_routesJohn
 
 # Registre as rotas nos blueprints
 routes_blueprint.register_blueprint(usuarios_routesJohn)
@@ -28,3 +29,4 @@ routes_blueprint.register_blueprint(formulario_routesJohn)
 routes_blueprint.register_blueprint(roteiroPadrao_routesJohn)
 routes_blueprint.register_blueprint(Dashboard_routesJohn)
 routes_blueprint.register_blueprint(operacao_routesJohn)
+routes_blueprint.register_blueprint(EstornoOP_routesJohn)
