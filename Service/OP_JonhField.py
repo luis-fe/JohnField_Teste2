@@ -201,7 +201,7 @@ where fo."idOP"  = %s and "Situacao" = 'Em Processo'
     consulta2 = """
     select r.* , f."nomeFase" as "nomefaseRoteiro",
      f."ObrigaInformaTamCor" as  "ObrigaInformaTamCor?"
-     from "Easy"."RoteiroOP" r 
+     from "Easy"."Roteiro" r 
     inner join "Easy"."Fase" f on f."codFase" = r."codFase" 
     where r."codRoteiro" = %s order by r."id" asc 
     """
