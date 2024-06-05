@@ -141,7 +141,6 @@ def AlterarSenha():
     senhaAtual = data.get('senhaAtual', '')
     senhaNova = data.get('senhaNova', 'informar')
 
-
     consulta = UsuariosJohnFild.AlterarSenha(login, senhaAtual, senhaNova, senhaNova)
     # Obtém os nomes das colunas
     column_names = consulta.columns
