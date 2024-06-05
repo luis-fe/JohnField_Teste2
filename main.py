@@ -5,10 +5,8 @@ import pandas as pd
 import os
 from functools import wraps
 from routes import routes_blueprint
-
 app = Flask(__name__)
 port = int(os.environ.get('PORT', 5000))
-
 
 app.register_blueprint(routes_blueprint)
 #Aqui registo todas as rotas , url's DO PROJETO, para acessar bastar ir na pasta "routes",
