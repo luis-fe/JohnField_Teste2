@@ -42,7 +42,7 @@ def ConsultaUsuariosID(idUsuario):
     consulta = pd.read_sql("""
     select idusuario , "nomeUsuario" , "Perfil", "Senha" , "nomeLogin"  from "Easy"."Usuario" u    
     where idusuario = %s 
-    """,conn,params=(idUsuario,))
+    """,conn,params=(int(idUsuario),))
     conn.close()
 
     return consulta
@@ -127,10 +127,10 @@ def InativarUsuario(idUsuario):
 
 def AlterarSenha(nomeLogin, senhaAtual, novaSenha):
     consulta = ConsultaUsuarios()
-    consulta = consulta[consulta['nomeLogin'] == nomeLogin]
+    consulta = consulta[consulta['nomeLogin'] == nomeLogin].reset_index()
 
     #Avaliando a senha 
-    avaliar = ConsultaUsuariosID(consulta['idusuario'][0])
+    avaliar = ConsultaUsuariosID(consulta['idusuario'][0]).reset_index()
     senhaAtualAvaliar = avaliar['Senha'][0]
 
     if senhaAtualAvaliar == senhaAtual:
@@ -141,7 +141,7 @@ def AlterarSenha(nomeLogin, senhaAtual, novaSenha):
                 set  "Senha" = %s 
                 where idusuario = %s 
                 """
-                cursor.execute(update,(novaSenha, consulta['idusuario'][0]))
+                cursor.execute(update,(novaSenha, int(consulta['idusuario'][0])))
                 conn.commit()    
         return pd.DataFrame([{'status':True, 'mensagem':"senha alterada com sucesso"}])                       
     else:
