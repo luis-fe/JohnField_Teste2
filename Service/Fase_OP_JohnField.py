@@ -68,23 +68,45 @@ def ObterNomeFase(codFase):
 
 
 def FasesDisponivelPMovimentarOP(codOP, codCliente):
-    idOP = str(codOP)+'||'+str(codCliente)
-    fases = FaseJohnField.BuscarFases()
-    consulta = """
-    select "codFase", 'utilizado' as "faseUsada" from "Easy"."Fase/OP" fo 
-    where fo."idOP" = %s
+    idOP = str(codOP) + '||' + str(codCliente)
+
+    fases = """
+    SELECT f."codFase", 
+           f."nomeFase", 
+           f."FaseInicial" AS "FaseInical?",
+           f."FaseFinal" AS "FaseFinal?", 
+           f."ObrigaInformaTamCor" AS "ObrigaInformaTamCor?", 
+           f."LeadTime"
+    FROM "Easy"."Fase" f
+    INNER JOIN "Easy"."Roteiro" r ON r."codFase" = f."codFase"
+    WHERE r."codRoteiro" = (
+        SELECT "codRoteiro" 
+        FROM "Easy"."DetalhaOP_Abertas" doa 
+        WHERE doa."codOP" = %s 
+          AND doa."codCliente" = %s
+    )
     """
+
+    consulta = """
+    SELECT "codFase", 'utilizado' AS "faseUsada" 
+    FROM "Easy"."Fase/OP" fo 
+    WHERE fo."idOP" = %s
+    """
+
     conn = ConexaoPostgreMPL.conexaoJohn()
-    consulta = pd.read_sql(consulta,conn,params=(idOP,))
 
-    consulta = pd.merge(fases,consulta,on='codFase', how='left')
-    consulta.fillna('-',inplace=True)
-    consulta = consulta[consulta['faseUsada'] == '-']
-    conn.close()
+    try:
+        consulta_df = pd.read_sql(consulta, conn, params=(idOP,))
+        fases_df = pd.read_sql(fases, conn, params=(codOP, codCliente))
 
-    consulta = consulta.loc[:,['codFase','nomeFase']]
+        result = pd.merge(fases_df, consulta_df, on='codFase', how='left')
+        result.fillna('-', inplace=True)
+        result = result[result['faseUsada'] == '-']
+        result = result.loc[:, ['codFase', 'nomeFase']]
+    finally:
+        conn.close()
 
-    return consulta
+    return result
 
 def EncerrarOP(idUsuarioMovimentacao, codOP, codCliente):
     idOP = str(codOP)+'||'+str(codCliente)
