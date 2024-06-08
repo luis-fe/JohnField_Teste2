@@ -245,11 +245,14 @@ def CabecalhosTamanhos(c, dataframe, i, quantidadeCores):
     AvaliarTam = len(tamanhos)
 
     if AvaliarTam <= 9:
-        posicaoTamanho = 4.4
+        posicaoTamanho = 4.2
 
         for tamanho in tamanhos:
             c.setFont("Helvetica", 12)
-            title = tamanho
+            title = tamanho[0:6]
+            title = title.replace(' ', '')
+            title = title.replace('(inf', 'inf')
+            title = title.replace('(in', 'inf')
             c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
             posicaoTamanho = posicaoTamanho + 1.5
 
@@ -260,7 +263,12 @@ def CabecalhosTamanhos(c, dataframe, i, quantidadeCores):
         posicaoTamanho = 4.2
         for tamanho in tamanhos:
             c.setFont("Helvetica", 10)
-            title = tamanho
+            title = tamanho[0:6]
+            title = title.replace(' ', '')
+            title = title.replace('(inf', 'inf')
+            title = title.replace('(in', 'inf')
+
+
             c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
             posicaoTamanho = posicaoTamanho + 0.92
 
