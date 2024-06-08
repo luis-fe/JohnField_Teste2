@@ -6,6 +6,7 @@ import tempfile
 from reportlab.graphics.barcode import code128
 import qrcode
 from Service import ClientesJohnField, OP_JonhField, OP_Tam_Cor_JohnField
+
 def criar_pdf(saida_pdf, codCliente, codOP):
 
     informacoes = OP_JonhField.ObterOP_EMAberto()
@@ -77,7 +78,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Adicionando cabecalho de cores
         c.setFont("Helvetica-Bold", 14)
         title = 'CORES'
-        c.drawString(1.2 * cm, 23.8 * cm, title)
+        c.drawString(0.3 * cm, 23.8 * cm, title)
 
 
         # Adicionando cabecalho de SUBTOTAIS
@@ -109,8 +110,8 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         c.drawString(17.6 * cm, 25.0 * cm, title)
 
         c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
-        c.line(1 * cm, 24.5 * cm, 20 * cm, 24.5 * cm)  # Desenhar uma linha
-        c.line(1 * cm, 23.5 * cm, 20 * cm, 23.5 * cm)  # Desenhar uma linha
+        c.line(0.2 * cm, 24.5 * cm, 20 * cm, 24.5 * cm)  # Desenhar uma linha
+        c.line(0.2 * cm, 23.5 * cm, 20 * cm, 23.5 * cm)  # Desenhar uma linha
 
 
         # DELIMITACAO DA TABELA DE GRADES
@@ -152,9 +153,9 @@ def criar_pdf(saida_pdf, codCliente, codOP):
                 # Posição vertical para cada linha
                 y_position = (22.4 - 1.2 * i) * cm
 
-                c.drawString(1.2 * cm, y_position, title)
+                c.drawString(0.35 * cm, y_position, title)
                 c.setLineWidth(1)
-                c.line(1 * cm, y_position - 0.2 * cm, 20 * cm, y_position - 0.2 * cm)
+                c.line(0.2 * cm, y_position - 0.2 * cm, 20 * cm, y_position - 0.2 * cm)
 
                 qTotal, posicaoQuantidade = InserindoQuantidades(c,verificaGrade,y_position,i)
 
@@ -219,20 +220,20 @@ def OP_Tam_Cores(codOP, codCliente):
 def LimiteDaGrade(c,limite,total):
     # Linha Horizontal
     c.setLineWidth(3)  # Definir a largura da linha em 1 ponto
-    c.line(1 * cm, (limite+1.35) * cm, 20 * cm, (limite+1.35)  * cm)  # Desenhar a antipenultima linha de delimitacao
+    c.line(0.2 * cm, (limite+1.35) * cm, 20 * cm, (limite+1.35)  * cm)  # Desenhar a antipenultima linha de delimitacao
     # Definir os cabeçalhos
     c.setFont("Helvetica-Bold", 14)
     title = 'TOTAL'
-    c.drawString(1.2 * cm, (limite+0.4) * cm, title)
+    c.drawString(0.3 * cm, (limite+0.4) * cm, title)
     title = total
     c.drawString(18 * cm, (limite+0.4) * cm, title)
 
     c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
-    c.line(1 * cm, limite * cm, 20 * cm, limite * cm)  # Desenhar a ultima linha de delimitacao
+    c.line(0.2 * cm, limite * cm, 20 * cm, limite * cm)  # Desenhar a ultima linha de delimitacao
 
     # Linhas Vericais
     c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
-    c.line(1.0 * cm, limite * cm, 1.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
+    c.line(0.2 * cm, limite * cm, 0.2 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
     c.line(4.0 * cm, limite * cm, 4.0 * cm, 24.5 * cm)  # Desenhar a primeira linha vertical da grade
     c.line(20 * cm, limite * cm, 20 * cm, 24.5 * cm)  # Desenhar a segunda linha vertical da grade
     c.line(17.8 * cm, limite * cm, 17.8 * cm, 24.5 * cm)  # Desenhar a terceira linha vertical da grade
