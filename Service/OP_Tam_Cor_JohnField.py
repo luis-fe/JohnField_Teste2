@@ -39,8 +39,9 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
 def ConsultaTamCor_OP(codOP, codCliente):
     idOP = str(codOP)+'||'+str(codCliente)
     consulta = """
-    select "descCor", "tamanho", "quantidade" from "Easy"."OP_Cores_Tam" 
-    where "idOP" = %s
+    select "descCor", "tamanho", "quantidade" from "Easy"."OP_Cores_Tam" op
+    inner join "Easy"."Tamanhos" t on t."DescricaoTamanho" = op.tamanho 
+    where "idOP" = %s order by t.codsequencia asc
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql(consulta,conn,params=(idOP,))
