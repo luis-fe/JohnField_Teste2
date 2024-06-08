@@ -106,7 +106,7 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         # Título centralizado
         c.setFont("Helvetica", 11)
         title = str(informacoes['dataCriacaoOP'][0])
-        title = title[8:10]+'/'+title[5:7]+'/'+title[:4]+' '+title[11:16]
+        title = title[0:2]+'/'+title[3:5]+'/'+title[6:10]
         c.drawString(17.6 * cm, 25.0 * cm, title)
 
         c.setLineWidth(2.5)  # Definir a largura da linha em 1 ponto
