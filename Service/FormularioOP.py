@@ -194,8 +194,8 @@ def criar_pdf(saida_pdf, codCliente, codOP):
         qr.add_data(str(codOP)+'||'+str(codCliente))  # Substitua pelo link desejado
         qr.make(fit=True)
 
-        barcode = code128.Code128(str(str(codOP)+'&'+str(codCliente)), barWidth=1.0, barHeight=23.9)  # Criar código de barras
-        barcode.drawOn(c, 15. * cm, 25.8 * cm)  # Desenhar código de barras na posição desejada
+        barcode = code128.Code128(str(str(codOP)+'&'+str(codCliente)), barWidth=1.0, barHeight=23.)  # Criar código de barras
+        barcode.drawOn(c, 15.8 * cm, 26. * cm)  # Desenhar código de barras na posição desejada
 
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(qr_filename)  # Salvar a imagem do QR code no arquivo temporário
