@@ -5,6 +5,8 @@ from reportlab.pdfgen import canvas
 import tempfile
 from reportlab.graphics.barcode import code128
 import qrcode
+
+import ConexaoPostgreMPL
 from Service import ClientesJohnField, OP_JonhField, OP_Tam_Cor_JohnField
 
 def criar_pdf(saida_pdf, codCliente, codOP):
@@ -141,7 +143,8 @@ def criar_pdf(saida_pdf, codCliente, codOP):
             inicioCores = 0
             for i in range(quantidadeCores):
                 #iNSERIDO OS TAMANHOS
-                posicaoTamanho = CabecalhosTamanhos(c, verificaGrade, i, quantidadeCores)
+                print('buscando cabecalhos de tamanhos')
+                CabecalhosTamanhos(c, verificaGrade, i, quantidadeCores, codOP, codCliente)
 
                 #Inserindo a descricao das cores
                 c.setFont("Helvetica", 12)
@@ -239,14 +242,17 @@ def LimiteDaGrade(c,limite,total):
     c.line(17.8 * cm, limite * cm, 17.8 * cm, 24.5 * cm)  # Desenhar a terceira linha vertical da grade
 
 
-def CabecalhosTamanhos(c, dataframe, i, quantidadeCores):
+def CabecalhosTamanhos(c, dataframe, i, quantidadeCores,codOP, codCliente):
+    print('_____________________')
     tamanhos = dataframe['tamanho'][i]
+    totalTam = TotalTamahos(codOP, codCliente)
 
     AvaliarTam = len(tamanhos)
 
     if AvaliarTam <= 9:
         posicaoTamanho = 4.2
 
+        i = 0
         for tamanho in tamanhos:
             c.setFont("Helvetica", 12)
             title = tamanho[0:6]
@@ -254,11 +260,17 @@ def CabecalhosTamanhos(c, dataframe, i, quantidadeCores):
             title = title.replace('(inf', 'inf')
             title = title.replace('(in', 'inf')
             c.drawString(posicaoTamanho * cm, 23.8 * cm, title)
+            quat = totalTam['qt'][i]
+            i = i + 1
+            c.drawString(posicaoTamanho * cm, 10.8 * cm, str(quat))
+
+
+
             posicaoTamanho = posicaoTamanho + 1.5
 
             if quantidadeCores <= 10:
                 c.setLineWidth(1.0)  # Definir a largura da linha em 1 ponto
-                c.line((posicaoTamanho - 0.15) * cm, (23.8 + 0.7) * cm, (posicaoTamanho - 0.15) * cm, (11.4) * cm)
+                c.line((posicaoTamanho - 0.15) * cm, (23.8 + 0.7) * cm, (posicaoTamanho - 0.15) * cm, (10.05) * cm)
     else:
         posicaoTamanho = 4.2
         for tamanho in tamanhos:
@@ -274,7 +286,7 @@ def CabecalhosTamanhos(c, dataframe, i, quantidadeCores):
 
             if quantidadeCores <= 10:
                 c.setLineWidth(1.0)  # Definir a largura da linha em 1 ponto
-                c.line((posicaoTamanho - 0.2) * cm, (23.8 + 0.7) * cm, (posicaoTamanho - 0.2) * cm, (11.4) * cm)
+                c.line((posicaoTamanho - 0.2) * cm, (23.8 + 0.7) * cm, (posicaoTamanho - 0.2) * cm, (10.05) * cm)
 
     return posicaoTamanho
 
@@ -305,3 +317,17 @@ def InserindoQuantidades(c,verificaGrade,y_position,i):
             qTotal = qTotal + q
 
     return qTotal, posicaoQuantidade
+
+
+def TotalTamahos(codOP, codCliente):
+    chaveOP = str(codOP)+'||'+str(codCliente)
+    sql = """
+    select "idOP" , tamanho , sum(quantidade) as qt from "Easy"."OP_Cores_Tam" oct 
+inner join "Easy"."Tamanhos" t on t."DescricaoTamanho" = oct.tamanho 
+where "idOP" = %s
+group by "idOP" , tamanho, codsequencia 
+order by t.codsequencia 
+    """
+    with ConexaoPostgreMPL.conexaoJohn() as conn:
+        sql = pd.read_sql(sql,conn,params=(chaveOP,))
+    return sql
