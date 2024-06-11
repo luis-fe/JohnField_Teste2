@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import Dashboard
+from Service import Dashboard, OpsEncerradas
 import pandas as pd
 Dashboard_routesJohn = Blueprint('DashboardJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
@@ -42,6 +42,27 @@ def OpsAbertoPorFase():
 
 
     consulta = Dashboard.OpsAbertoPorFase(nomeFase)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
+@Dashboard_routesJohn.route('/api/JonhField/OpsEncerradasPeriodo', methods=['GET'])
+@token_required
+def OpsEncerradasPeriodo():
+
+    dataInicio = request.args.get('dataInicio', '')
+    dataFinal = request.args.get('dataFinal', '')
+
+
+    consulta = OpsEncerradas.RelatorioEncerramento(dataInicio,dataFinal)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
