@@ -14,9 +14,10 @@ def RelatorioEncerramento(dataInicio, dataFinal):
     select * from railway."Easy"."DetalhaOP" do2 
     """
 
-    with ConexaoPostgreMPL as conn:
+    with ConexaoPostgreMPL.conexaoJohn() as conn:
         consulta = pd.read_sql(consulta,conn,params=(dataInicio,dataFinal,))
         consulta2 = pd.read_sql(consulta2,conn)
 
         consulta = pd.merge(consulta,consulta2,on='idOP',how='left')
     return consulta
+
