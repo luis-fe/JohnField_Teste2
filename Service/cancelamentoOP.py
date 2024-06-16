@@ -1,7 +1,9 @@
 import pandas as pd
 import ConexaoPostgreMPL
+import datetime
+import pytz
 
-def cancelamentoOP(codOP, codCliente):
+def cancelamentoOP(codOP, codCliente, idusuario):
     chaveOP = str(codOP)+'||'+str(codCliente)
     conn = ConexaoPostgreMPL.conexaoJohn()
 
@@ -31,13 +33,22 @@ def cancelamentoOP(codOP, codCliente):
     cursor.execute(FaseOP,(OrdemProducao))
     conn.commit()
 
+    RegistroExclusao = """insert into  "Easy"."RegistroOPCancelada"
+    ("codOP", "codCliente", "dataCancelamento","usuario_autentificacao") values
+    (%s, %s , %s , %s)"""
+    datahora = obterHoraAtual()
+
+    cursor = conn.cursor()
+    cursor.execute(RegistroExclusao,(codOP,codCliente,datahora, idusuario))
+    conn.commit()
+
     cursor.close()
     conn.close()
 
     return pd.DataFrame([{'status':True, 'Mensagem':'OP cancalada com sucesso !'}])
 
 
-def AutentificacaoCancelamento(nomeLogin, senha):
+def AutentificacaoCancelamento(nomeLogin, senha, codOP, codCliente):
     conn = ConexaoPostgreMPL.conexaoJohn()
     sql = """select idusuario , "nomeUsuario" , "nomeLogin" , "Senha" , permite_cancelar_op  from "Easy"."Usuario" u 
         where nomeLogin = %s """
@@ -54,5 +65,12 @@ def AutentificacaoCancelamento(nomeLogin, senha):
         return pd.DataFrame([{'status':False ,'Mensagem':'Senha informada nao corresponde '}])
 
     else:
-        return pd.DataFrame([{'status':True ,'Mensagem':'Habilitado para cancelar OP'}])
+        usuario = consulta['idusuario'][0]
+        cancelamentoOP(codOP, codCliente, usuario )
+        return pd.DataFrame([{'status':True ,'Mensagem':'Op Cancelada com sucesso'}])
 
+def obterHoraAtual():
+    fuso_horario = pytz.timezone('America/Sao_Paulo')  # Define o fuso horário do Brasil
+    agora = datetime.datetime.now(fuso_horario)
+    hora_str = agora.strftime('%Y-%m-%d %H:%M:%S')
+    return hora_str

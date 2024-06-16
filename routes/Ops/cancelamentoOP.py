@@ -22,9 +22,10 @@ def cancelamentoOP():
     data = request.get_json()
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
+    senha = data.get('senha')
+    login = data.get('login')
 
-
-    consulta = cancelamentoOP.cancelamentoOP(codOP, codCliente)
+    consulta = cancelamentoOP.AutentificacaoCancelamento(login, senha, codOP, codCliente)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
