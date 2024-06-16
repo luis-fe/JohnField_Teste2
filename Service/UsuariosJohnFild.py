@@ -5,14 +5,15 @@ import ConexaoPostgreMPL
 def ConsultaUsuarios():
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
-    select idusuario ,"nomeLogin" ,"nomeUsuario" , "Perfil"  from "Easy"."Usuario" u  
+    select idusuario ,"nomeLogin" ,"nomeUsuario" , "Perfil", permite_cancelar_op  from "Easy"."Usuario" u  
     where u."situacaoUsuario" =  'ATIVO'  
     """,conn)
     conn.close()
+    consulta['permite_cancelar_op'].fillna('NAO',inplace=True)
 
     return consulta
 
-def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha):
+def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha, permite_cancelar_op):
 
     consulta = ConsultaUsuariosID(idUsuario)
 
@@ -21,10 +22,10 @@ def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha):
         conn = ConexaoPostgreMPL.conexaoJohn()
 
         insert = """
-        insert into "Easy"."Usuario" ( idusuario , "nomeUsuario" , "nomeLogin","Perfil" ,"Senha" ,"situacaoUsuario" ) values (%s , %s, %s ,%s, %s, 'ATIVO')
+        insert into "Easy"."Usuario" ( idusuario , "nomeUsuario" , "nomeLogin","Perfil" ,"Senha" ,"situacaoUsuario", permite_cancelar_op ) values (%s , %s, %s ,%s, %s, 'ATIVO', %s)
         """
         cursor = conn.cursor()
-        cursor.execute(insert,(idUsuario, nomeUsuario, login, Perfil, Senha))
+        cursor.execute(insert,(idUsuario, nomeUsuario, login, Perfil, Senha, permite_cancelar_op))
         conn.commit()
         cursor.close()
 
@@ -40,14 +41,15 @@ def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha):
 def ConsultaUsuariosID(idUsuario):
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
-    select idusuario , "nomeUsuario" , "Perfil", "Senha" , "nomeLogin"  from "Easy"."Usuario" u    
+    select idusuario , "nomeUsuario" , "Perfil", "Senha" , "nomeLogin", permite_cancelar_op  from "Easy"."Usuario" u    
     where idusuario = %s 
     """,conn,params=(int(idUsuario),))
     conn.close()
+    consulta['permite_cancelar_op'].fillna('NAO',inplace=True)
 
     return consulta
 
-def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login):
+def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login, permite_cancelar_op):
     consulta = ConsultaUsuariosID(idUsuario)
 
     if consulta.empty:
@@ -69,15 +71,20 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login):
         if loginAtual == login :
             login = loginAtual
 
+
+        permite_cancelar_opAtual = consulta['permite_cancelar_op'][0]
+        if permite_cancelar_opAtual == permite_cancelar_op :
+            permite_cancelar_op = permite_cancelar_opAtual
+
         conn = ConexaoPostgreMPL.conexaoJohn()
         update = """
         update "Easy"."Usuario"
-        set  "nomeUsuario" = %s , "Perfil" = %s ,"Senha" = %s, "nomeLogin" = %s
+        set  "nomeUsuario" = %s , "Perfil" = %s ,"Senha" = %s, "nomeLogin" = %s, permite_cancelar_op = %s
         where idusuario = %s 
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeUsuario, Perfil, Senha, login, idUsuario))
+        cursor.execute(update,(nomeUsuario, Perfil, Senha, login, idUsuario, permite_cancelar_op))
         conn.commit()
         cursor.close()
 
