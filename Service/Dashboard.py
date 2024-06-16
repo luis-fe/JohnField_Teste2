@@ -6,6 +6,7 @@ def OPsAbertoPorCliente(nomeCliente = ''):
 
     consulta = """
     select * from "Easy"."DetalhaOP_Abertas" doa 
+    order by "codFase" asc 
     """
 
     quantidade = """
