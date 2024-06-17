@@ -84,7 +84,7 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login, permite_cance
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeUsuario, Perfil, Senha, login, idUsuario, permite_cancelar_op))
+        cursor.execute(update,(nomeUsuario, Perfil, Senha, login, permite_cancelar_op, idUsuario ))
         conn.commit()
         cursor.close()
 
