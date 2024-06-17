@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import Fase_OP_JohnField, cancelamentoOP
-import pandas as pd
+import Service.cancelamentoOP
+
 CancelamentoOP_routesJohn = Blueprint('CancelamentoOPJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 def token_required(f):
@@ -25,27 +25,7 @@ def cancelamentoOP():
     senha = data.get('senha')
     login = data.get('login')
 
-    consulta = cancelamentoOP.AutentificacaoCancelamento(login, senha, codOP, codCliente)
-    # Obtém os nomes das colunas
-    column_names = consulta.columns
-    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
-    consulta_data = []
-    for index, row in consulta.iterrows():
-        consulta_dict = {}
-        for column_name in column_names:
-            consulta_dict[column_name] = row[column_name]
-        consulta_data.append(consulta_dict)
-    return jsonify(consulta_data)
-
-
-@CancelamentoOP_routesJohn.route('/api/JonhField/AutentificacaoCancelamento', methods=['GET'])
-@token_required
-def AutentificacaoCancelamento():
-    login = request.args.get('login')
-    senha = request.args.get('senha')
-
-
-    consulta = cancelamentoOP.AutentificacaoCancelamento(login, senha)
+    consulta = Service.cancelamentoOP.cancelarOP(login, senha, codOP, codCliente)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

@@ -10,27 +10,27 @@ def cancelamentoOP(codOP, codCliente, idusuario):
     OP_Cores_Tam = """delete from "Easy"."OP_Cores_Tam"
     where "idOP"  = %s """
     cursor = conn.cursor()
-    cursor.execute(OP_Cores_Tam,(chaveOP))
+    cursor.execute(OP_Cores_Tam,(chaveOP,))
     conn.commit()
 
 
     OP_Cores_Tam = """delete from "Easy"."OP_Cores_Tam"
     where "idOP"  = %s """
     cursor = conn.cursor()
-    cursor.execute(OP_Cores_Tam,(chaveOP))
+    cursor.execute(OP_Cores_Tam,(chaveOP,))
     conn.commit()
 
 
     FaseOP = """delete from "Easy"."Fase/OP"
     where "idOP"  = %s """
     cursor = conn.cursor()
-    cursor.execute(FaseOP,(chaveOP))
+    cursor.execute(FaseOP,(chaveOP,))
     conn.commit()
 
     OrdemProducao = """delete from "Easy"."OrdemProducao"
     where "idOP"  = %s """
     cursor = conn.cursor()
-    cursor.execute(FaseOP,(OrdemProducao))
+    cursor.execute(FaseOP,(OrdemProducao,))
     conn.commit()
 
     RegistroExclusao = """insert into  "Easy"."RegistroOPCancelada"
@@ -39,7 +39,7 @@ def cancelamentoOP(codOP, codCliente, idusuario):
     datahora = obterHoraAtual()
 
     cursor = conn.cursor()
-    cursor.execute(RegistroExclusao,(codOP,codCliente,datahora, idusuario))
+    cursor.execute(RegistroExclusao,(codOP,codCliente,datahora, int(idusuario)))
     conn.commit()
 
     cursor.close()
@@ -48,12 +48,12 @@ def cancelamentoOP(codOP, codCliente, idusuario):
     return pd.DataFrame([{'status':True, 'Mensagem':'OP cancalada com sucesso !'}])
 
 
-def AutentificacaoCancelamento(nomeLogin, senha, codOP, codCliente):
+def cancelarOP(nomeLogin, senha, codOP, codCliente):
     conn = ConexaoPostgreMPL.conexaoJohn()
     sql = """select idusuario , "nomeUsuario" , "nomeLogin" , "Senha" , permite_cancelar_op  from "Easy"."Usuario" u 
-        where nomeLogin = %s """
+        where "nomeLogin" = %s """
 
-    consulta = pd.read_sql(sql,conn,params=(nomeLogin))
+    consulta = pd.read_sql(sql,conn,params=(nomeLogin,))
     consulta['permite_cancelar_op'].fillna('NAO',inplace=True)
     conn.close()
     permissao = consulta['permite_cancelar_op'][0]
