@@ -72,7 +72,7 @@ def NovoUsuario():
     login = data.get('login', '')
     Perfil = data.get('Perfil', '')
     senha = data.get('senha','informar')
-    permite_cancelar_op= data.get('senha','permite_cancelar_op')
+    permite_cancelar_op= data.get('permite_cancelar_op','NAO')
 
     if senha == 'informar':
         consulta = pd.DataFrame([{'status':False, 'mensagem':'Por favor Informe uma senha'}])
@@ -99,7 +99,7 @@ def AlterarUsuario():
     login = data.get('login', '')
     Perfil = data.get('Perfil', '')
     senha = data.get('senha', 'informar')
-    permite_cancelar_op= data.get('senha','permite_cancelar_op')
+    permite_cancelar_op= data.get('permite_cancelar_op','NAO')
 
 
 
