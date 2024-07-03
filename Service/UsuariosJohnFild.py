@@ -102,11 +102,11 @@ def AutentificacaoUsuario(login, senha):
     if consulta.empty:
         return pd.DataFrame([{'status':False,'Mensagem':'Login nao Encontrado!'}])
 
-    elif senha == consulta['Senha'][0]:
-        return pd.DataFrame([{'status':True,'Mensagem':'Senha Encontrada!','idUsuario':consulta['idusuario'][0]}])
+    elif senha == str(consulta['Senha'][0]):
+        return pd.DataFrame([{'status':True,'Mensagem':'Senha Encontrada!','idUsuario':consulta['idusuario'][0], 'senha':senha , 'consulta' : consulta['Senha'][0]}])
 
     else:
-        return pd.DataFrame([{'status':False,'Mensagem':'Senha Nao Validada!'}])
+        return pd.DataFrame([{'status':False,'Mensagem':'Senha Nao Validada!','senha':senha , 'consulta' : consulta['Senha'][0]}])
 
 
 def InativarUsuario(idUsuario):
