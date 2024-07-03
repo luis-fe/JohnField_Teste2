@@ -50,7 +50,7 @@ def Autentificacao():
     # Obtém o código do usuário e a senha dos parâmetros da URL
     login = request.args.get('login')
     senha = request.args.get('senha')
-
+    print(senha)
     consulta = UsuariosJohnFild.AutentificacaoUsuario(login, senha)
     # Obtém os nomes das colunas
     column_names = consulta.columns
