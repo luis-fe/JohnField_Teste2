@@ -71,10 +71,10 @@ def NovoUsuario():
     nomeUsuario = data.get('nomeUsuario', '-')
     login = data.get('login', '')
     Perfil = data.get('Perfil', '')
-    senha = data.get('senha','informar')
+    senha = data.get('senha','-')
     permite_cancelar_op= data.get('permite_cancelar_op','NAO')
 
-    if senha == 'informar':
+    if senha == '-':
         consulta = pd.DataFrame([{'status':False, 'mensagem':'Por favor Informe uma senha'}])
     else:
         consulta = UsuariosJohnFild.NovoUsuario(idUsuario, nomeUsuario,login , Perfil, senha, permite_cancelar_op)
@@ -98,12 +98,12 @@ def AlterarUsuario():
     nomeUsuario = data.get('nomeUsuario', '')
     login = data.get('login', '')
     Perfil = data.get('Perfil', '')
-    senha = data.get('senha', 'informar')
+    #senha = data.get('senha', 'informar')
     permite_cancelar_op= data.get('permite_cancelar_op','NAO')
 
 
 
-    consulta = UsuariosJohnFild.AtualizarUsuario(idUsuario, nomeUsuario, Perfil, senha ,login, permite_cancelar_op)
+    consulta = UsuariosJohnFild.AtualizarUsuario(idUsuario, nomeUsuario, Perfil ,login, permite_cancelar_op)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

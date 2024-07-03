@@ -49,7 +49,7 @@ def ConsultaUsuariosID(idUsuario):
 
     return consulta
 
-def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login, permite_cancelar_op):
+def AtualizarUsuario(idUsuario, nomeUsuario, Perfil ,login, permite_cancelar_op):
     consulta = ConsultaUsuariosID(idUsuario)
 
     if consulta.empty:
@@ -63,9 +63,6 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login, permite_cance
         if PerfilAtual == Perfil :
             Perfil = PerfilAtual
 
-        SenhaAtual = consulta['Senha'][0]
-        if SenhaAtual == Senha :
-            Senha = SenhaAtual
 
         loginAtual = consulta['nomeLogin'][0]
         if loginAtual == login :
@@ -79,12 +76,12 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil, Senha ,login, permite_cance
         conn = ConexaoPostgreMPL.conexaoJohn()
         update = """
         update "Easy"."Usuario"
-        set  "nomeUsuario" = %s , "Perfil" = %s ,"Senha" = %s, "nomeLogin" = %s, permite_cancelar_op = %s
+        set  "nomeUsuario" = %s , "Perfil" = %s , "nomeLogin" = %s, permite_cancelar_op = %s
         where idusuario = %s 
         """
 
         cursor = conn.cursor()
-        cursor.execute(update,(nomeUsuario, Perfil, Senha, login, permite_cancelar_op, idUsuario ))
+        cursor.execute(update,(nomeUsuario, Perfil, login, permite_cancelar_op, idUsuario ))
         conn.commit()
         cursor.close()
 
