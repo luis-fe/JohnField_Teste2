@@ -79,8 +79,9 @@ def OPsAbertoPorCliente(nomeCliente = ''):
 
 def OpsAbertoPorFase(nomeFase = ''):
     consulta = """
-      select * from "Easy"."DetalhaOP_Abertas" doa 
-      """
+select * from "Easy"."DetalhaOP_Abertas" doa 
+order by "codFase"      
+"""
 
     quantidade = """
         select "idOP" , sum(quantidade) as quantidade  from "Easy"."OP_Cores_Tam" oct 
@@ -131,7 +132,10 @@ def OpsAbertoPorFase(nomeFase = ''):
 
 
     DistribuicaoClientes = consulta.groupby(['FaseAtual']).agg(
-        quantidadeOP=('codCliente', 'size'), quantidadePc=('quantidade', 'sum')).reset_index()
+        quantidadeOP=('codCliente', 'size'),
+        quantidadePc=('quantidade', 'sum'),
+        codFase=('codFase','first')
+    ).reset_index()
 
     DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP'] / int(OPAberto)) * 100)
     DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc'] / float(pcsAberto1)) * 100)
@@ -144,6 +148,7 @@ def OpsAbertoPorFase(nomeFase = ''):
     OPAbertoAtr = round(OPAbertoAtr)
     OPAbertoAtr = '{:,.0f}'.format(OPAbertoAtr)
     OPAbertoAtr = OPAbertoAtr.replace(',', '.')
+
     if nomeFase !='':
         consulta = consulta[consulta['FaseAtual']==nomeFase]
         OPAberto = consulta['codOP'].count()
