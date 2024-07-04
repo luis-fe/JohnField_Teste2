@@ -136,6 +136,7 @@ order by "codFase"
         quantidadePc=('quantidade', 'sum'),
         codFase=('codFase','first')
     ).reset_index()
+    DistribuicaoClientes = DistribuicaoClientes.sort_values(by=['codFase'], ascending=True)  # escolher como deseja classificar
 
     DistribuicaoClientes['quantidadeOP%'] = round((DistribuicaoClientes['quantidadeOP'] / int(OPAberto)) * 100)
     DistribuicaoClientes['quantidadePc%'] = round((DistribuicaoClientes['quantidadePc'] / float(pcsAberto1)) * 100)
