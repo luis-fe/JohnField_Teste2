@@ -52,8 +52,10 @@ def criar_formulario(saida_pdf, nomeOperacao):
             if iPagina < 5:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao
+                title = operacao[:17]
+                title2 = operacao[17:]
                 c.drawString(inicio * cm, 24.2 * cm, title)
+                c.drawString(inicio * cm, 23.7 * cm, title2)
 
                 # Categoria da operação
 
@@ -68,8 +70,10 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 9:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao
+                title = operacao[:17]
+                title2 = operacao[17:]
                 c.drawString(inicio2 * cm, (24.2 - 5.5) * cm, title)
+                c.drawString(inicio2 * cm, (23.7 - 5.5) * cm, title2)
 
                 # Categoria da operação
 
@@ -85,8 +89,10 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 13:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao
+                title = operacao[:17]
+                title2 = operacao[17:]
                 c.drawString(inicio3 * cm, (24.2 - (5.5 * 2)) * cm, title)
+                c.drawString(inicio3 * cm, (23.7 - (5.5 * 2)) * cm, title2)
 
                 # Categoria da operação
 
@@ -102,8 +108,10 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 17:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao
-                c.drawString(inicio4 * cm, (24.2 - (5.5 * 3)) * cm, title)
+                title = operacao[:17]
+                title2 = operacao[17:]
+                c.drawString(inicio3 * cm, (24.2 - (5.5 * 3)) * cm, title)
+                c.drawString(inicio3 * cm, (23.7 - (5.5 * 3)) * cm, title2)
 
                 # Categoria da operação
 
@@ -119,9 +127,10 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 21:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao
-                c.drawString(inicio5 * cm, (24.2 - (5.5 * 4)) * cm, title)
-
+                title = operacao[:17]
+                title2 = operacao[17:]
+                c.drawString(inicio3 * cm, (24.2 - (5.5 * 3)) * cm, title)
+                c.drawString(inicio3 * cm, (23.7 - (5.5 * 3)) * cm, title2)
                 # Categoria da operação
 
                 # Gerar QR code
@@ -165,8 +174,10 @@ def criar_formulario(saida_pdf, nomeOperacao):
 
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao
+                title = operacao[:17]
+                title2 = operacao[17:]
                 c.drawString(inicio * cm, 24.2 * cm, title)
+                c.drawString(inicio * cm, 23.7 * cm, title2)
 
                 # Categoria da operação
 

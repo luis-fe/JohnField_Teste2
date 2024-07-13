@@ -179,3 +179,9 @@ order by "codFase"
         '4 -DetalhamentoEmAberto': consulta.to_dict(orient='records')}
 
     return pd.DataFrame([dados])
+
+
+
+def RankingOperadoresEficiencia():
+
+    return '1'
