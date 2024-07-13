@@ -61,7 +61,7 @@ def criar_formulario(saida_pdf, nomeOperacao, nomeCategoria):
 
                 # Gerar QR code
                 qr = qrcode.QRCode(version=1, box_size=int(1.72 * cm), border=0)
-                qr.add_data(str(operacao) + ' ; ' + str(categoria))
+                qr.add_data(str(operacao) + ' || ' + str(categoria))
                 qr.make(fit=True)
                 qr_img = qr.make_image(fill_color="black", back_color="white")
                 qr_img.save(qr_filename)
