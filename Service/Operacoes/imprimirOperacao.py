@@ -53,7 +53,6 @@ def criar_formulario(saida_pdf, nomeOperacao):
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
                 ultimoEspaco = operacao[:17].rfind(' ')
-                print(ultimoEspaco)
                 if ultimoEspaco < 17  and ultimoEspaco>10 :
                     title = operacao[:ultimoEspaco]
                     title2 = operacao[ultimoEspaco:]
@@ -76,8 +75,13 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 9:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao[:17]
-                title2 = operacao[17:]
+                ultimoEspaco = operacao[:17].rfind(' ')
+                if ultimoEspaco < 17 and ultimoEspaco > 10:
+                    title = operacao[:ultimoEspaco]
+                    title2 = operacao[ultimoEspaco:]
+                else:
+                    title = operacao[:17]
+                    title2 = operacao[17:]
                 c.drawString(inicio2 * cm, (24.2 - 5.5) * cm, title)
                 c.drawString(inicio2 * cm, (23.7 - 5.5) * cm, title2)
 
@@ -95,8 +99,13 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 13:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao[:17]
-                title2 = operacao[17:]
+                ultimoEspaco = operacao[:17].rfind(' ')
+                if ultimoEspaco < 17 and ultimoEspaco > 10:
+                    title = operacao[:ultimoEspaco]
+                    title2 = operacao[ultimoEspaco:]
+                else:
+                    title = operacao[:17]
+                    title2 = operacao[17:]
                 c.drawString(inicio3 * cm, (24.2 - (5.5 * 2)) * cm, title)
                 c.drawString(inicio3 * cm, (23.7 - (5.5 * 2)) * cm, title2)
 
@@ -114,8 +123,13 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 17:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao[:17]
-                title2 = operacao[17:]
+                ultimoEspaco = operacao[:17].rfind(' ')
+                if ultimoEspaco < 17 and ultimoEspaco > 10:
+                    title = operacao[:ultimoEspaco]
+                    title2 = operacao[ultimoEspaco:]
+                else:
+                    title = operacao[:17]
+                    title2 = operacao[17:]
                 c.drawString(inicio3 * cm, (24.2 - (5.5 * 3)) * cm, title)
                 c.drawString(inicio3 * cm, (23.7 - (5.5 * 3)) * cm, title2)
 
@@ -133,8 +147,13 @@ def criar_formulario(saida_pdf, nomeOperacao):
             elif iPagina < 21:
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao[:17]
-                title2 = operacao[17:]
+                ultimoEspaco = operacao[:17].rfind(' ')
+                if ultimoEspaco < 17 and ultimoEspaco > 10:
+                    title = operacao[:ultimoEspaco]
+                    title2 = operacao[ultimoEspaco:]
+                else:
+                    title = operacao[:17]
+                    title2 = operacao[17:]
                 c.drawString(inicio3 * cm, (24.2 - (5.5 * 3)) * cm, title)
                 c.drawString(inicio3 * cm, (23.7 - (5.5 * 3)) * cm, title2)
                 # Categoria da operação
@@ -180,8 +199,13 @@ def criar_formulario(saida_pdf, nomeOperacao):
 
                 # Título da operação
                 c.setFont("Helvetica-Bold", 12)
-                title = operacao[:17]
-                title2 = operacao[17:]
+                ultimoEspaco = operacao[:17].rfind(' ')
+                if ultimoEspaco < 17 and ultimoEspaco > 10:
+                    title = operacao[:ultimoEspaco]
+                    title2 = operacao[ultimoEspaco:]
+                else:
+                    title = operacao[:17]
+                    title2 = operacao[17:]
                 c.drawString(inicio * cm, 24.2 * cm, title)
                 c.drawString(inicio * cm, 23.7 * cm, title2)
 
