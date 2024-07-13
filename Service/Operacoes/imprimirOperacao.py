@@ -36,7 +36,6 @@ def criar_formulario(saida_pdf, nomeOperacao):
         for l2 in range(8):
             c.line(0 * cm, (alturaLinha - (l2 * 5.5)) * cm, 21 * cm, (alturaLinha - (l2 * 5.5)) * cm)
         c.line(inicioLinha * (l + 1) * cm, 28.4 * cm, inicioLinha * (l + 1) * cm, 0.9 * cm)
-
     # Variáveis de controle para iteração
     inicio = 0.4
     inicio2 = 0.4
