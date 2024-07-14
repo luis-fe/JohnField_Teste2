@@ -82,7 +82,6 @@ def get_ProdutividadePeriodo():
     dataInicio = request.args.get('dataInicio', '')
     dataFinal = request.args.get('dataFinal', '')
 
-
     consulta = Dashboard.RankingOperadoresEficiencia(dataInicio,dataFinal)
     # Obtém os nomes das colunas
     column_names = consulta.columns
