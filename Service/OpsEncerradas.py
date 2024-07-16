@@ -6,7 +6,7 @@ import ConexaoPostgreMPL
 
 def RelatorioEncerramento(dataInicio, dataFinal):
     consulta  ="""
-    select "idOP", dataencerramento::varchar as dataencerramento, u."nomeUsuario" as usuario_encerramento  from railway."Easy"."OpsEncerradas" oe
+    select "idOP", dataencerramento::varchar as dataencerramento, u."nomeUsuario" as usuario_encerramento, quantidade  from railway."Easy"."OpsEncerradas" oe
     inner join "Easy"."Usuario" u on u.idusuario = oe.usuario_encerramento
     where dataencerramento >= %s and dataencerramento <=%s
     """
