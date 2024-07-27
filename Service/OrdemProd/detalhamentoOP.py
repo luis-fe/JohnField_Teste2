@@ -12,7 +12,7 @@ SELECT
     oe.quantidade,
     op."DataCriacao"::Date, 
     oe.dataencerramento::Date, 
-    (oe.dataencerramento::Date - op."DataCriacao"::Date) AS LeadTime
+    (oe.dataencerramento::Date - op."DataCriacao"::Date) AS "LeadTime"
 FROM "Easy"."OpsEncerradas" oe
 INNER JOIN "Easy"."OrdemProducao" op ON op."idOP" = oe."idOP"
 INNER JOIN "Easy"."Cliente" c ON c.codcliente = op."codCliente"
