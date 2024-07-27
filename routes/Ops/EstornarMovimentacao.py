@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
 from Service import Fase_OP_JohnField, estornarOP
-import pandas as pd
 EstornoOP_routesJohn = Blueprint('EstornarOPJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 def token_required(f):
@@ -26,6 +25,29 @@ def EstornarMovOP():
 
 
     consulta = estornarOP.EstornoOP(codOP, codCliente, idUsuario)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
+
+@EstornoOP_routesJohn.route('/api/JonhField/EstornoOPEncerrada', methods=['DELETE'])
+@token_required
+def delete_EstornoOPEncerrada():
+    data = request.get_json()
+    idUsuario = data.get('idUsuario')
+    codOP = data.get('codOP')
+    codCliente = data.get('codCliente')
+
+
+    consulta = estornarOP.EstornoOPEncerrada(codOP, codCliente, idUsuario)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
