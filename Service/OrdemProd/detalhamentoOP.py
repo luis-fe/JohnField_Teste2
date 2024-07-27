@@ -31,7 +31,7 @@ WHERE oe."idOP" = %s ;
         '2-Data Criacao':f'{consulta["DataCriacao"][0]}',
         '3-Data Encerrameto':f'{consulta["dataencerramento"][0]}',
         '4-Lead Time': f'{consulta["LeadTime"][0]} dias',
-        '5-Total Pçs': f'{consulta["quantidade"][0]} dias',
+        '5-Total': f'{consulta["quantidade"][0]} Pçs',
         '6-Detalhamento Grade': detalhaTam.to_dict(orient='records')}
 
     return pd.DataFrame([dados])
