@@ -258,15 +258,14 @@ def ColetaProducaoRetroativa(codOperador, nomeOperacao, qtdPecas, dataRetroativa
         else:
             operacoes = operacoes['codOperacao'][0]
 
-            sql = """
-        SELECT 
+            sql = """SELECT 
             MAX("DataHora"::time) AS "utimoTempo", 
             COUNT("DataHora") AS registros 
-        FROM 
-            "Easy"."RegistroProducao" rp 
-        WHERE 
+            FROM 
+            "Easy"."RegistroProducao" rp
+            WHERE 
             "codOperador" = %s
-            AND (("DataHora"::timestamp AT TIME ZONE 'UTC') AT TIME ZONE 'America/Sao_Paulo')::date = ( %s AT TIME ZONE 'America/Sao_Paulo')::date;
+            AND "DataHora"::date = %s::date;
                 """
             conn = ConexaoPostgreMPL.conexaoJohn()
             sql = pd.read_sql(sql, conn, params=(codOperador,dataRetroativa,))
