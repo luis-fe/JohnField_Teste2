@@ -13,10 +13,8 @@ def CalcularTempo(dataInicio, dataFim, tempoInicio, tempoFim):
         return delta.total_seconds() / 60
     else:
         # Se as datas forem diferentes, considera-se uma diferença de 24h para simplificar
-        tempoInicio = datetime.combine(datetime.strptime(dataInicio, "%Y-%m-%d"), tempoInicio)
-        tempoFim = datetime.combine(datetime.strptime(dataFim, "%Y-%m-%d"), tempoFim)
-        delta = tempoFim - tempoInicio
-        return delta.total_seconds() / 60
+        
+        return '-'
 
 def RankingOperacoesEfic(dataInicio, dataFinal):
     sql = """
