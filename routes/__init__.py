@@ -20,6 +20,7 @@ from .Ops.cancelamentoOP import CancelamentoOP_routesJohn
 from .Operacoes.Operadores import operador_routesJohn
 from .Operacoes.ColetaProducao import ColetaProducao_routesJohn
 from .Ops.DetalhamentoOP import DetalhamentoOPJohn
+from .Dashboard.Produtividade import Produtividade_route
 
 # Registre as rotas nos blueprints
 routes_blueprint.register_blueprint(usuarios_routesJohn)
@@ -38,3 +39,4 @@ routes_blueprint.register_blueprint(CancelamentoOP_routesJohn)
 routes_blueprint.register_blueprint(operador_routesJohn)
 routes_blueprint.register_blueprint(ColetaProducao_routesJohn)
 routes_blueprint.register_blueprint(DetalhamentoOPJohn)
+routes_blueprint.register_blueprint(Produtividade_route)
