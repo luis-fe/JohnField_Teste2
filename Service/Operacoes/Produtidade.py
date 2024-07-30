@@ -23,6 +23,7 @@ def RankingOperacoesEfic(dataInicio, dataFinal):
     SELECT
         "Codigo Registro",
         "Data",
+        "DiaInicial",
         "Hr Inicio",
         "Hr Final",
         "codOperador",
@@ -49,7 +50,7 @@ def RankingOperacoesEfic(dataInicio, dataFinal):
     # Adicionar uma coluna calculada usando a função CalcularTempo
     produtividade['TempoRealizado(Min)'] = produtividade.apply(
         lambda row: CalcularTempo(
-            row['Data'], row['Data'], row['Hr Inicio'], row['Hr Final']
+            row['DiaInicial'], row['Data'], row['Hr Inicio'], row['Hr Final']
         ), axis=1
     )
 
