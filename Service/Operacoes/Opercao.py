@@ -4,7 +4,7 @@ from Service import FaseJohnField, CategiaJohnField
 
 def Buscar_Operacoes():
     print('meu teste')
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
 
     sql = """
         select  c.*, f."nomeFase",c2."nomeCategoria"  ,to2."tempoPadrao" as "TempoPadrao(s)", f."nomeFase", "Maq/Equipamento"  from "Easy"."Operacao" c
@@ -12,18 +12,14 @@ def Buscar_Operacoes():
     inner join "Easy"."TemposOperacao" to2 on to2."codOperacao" = c."codOperacao" 
     inner join "Easy"."Categoria" c2 on c2.codcategoria = to2."codCategoria" 
     """
-
     consulta = pd.read_sql(sql,conn)
-    conn.close()
-
     consulta['Pcs/Hora'] = (60*60)/consulta['TempoPadrao(s)']
     consulta['Pcs/Hora'] = consulta['Pcs/Hora'].astype(int)
-    print(consulta)
 
     return consulta
 
 def BuscarOperacaoEspecifica(nomeOperacao, nomeCategoria):
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
 
     consulta = """
     select * from "Easy"."Operacao" o
@@ -33,7 +29,6 @@ def BuscarOperacaoEspecifica(nomeOperacao, nomeCategoria):
     """
 
     consulta = pd.read_sql(consulta,conn,params=(nomeOperacao,nomeCategoria,))
-    conn.close()
 
     return consulta
 
