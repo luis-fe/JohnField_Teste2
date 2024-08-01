@@ -111,8 +111,13 @@ def ColetaProducao(codOperador, nomeOperacao, qtdPecas):
             VerificaIntervaloTime = '00:'+VerificaIntervalo+':00'
             VerificaIntervaloTime = datetime.strptime(VerificaIntervaloTime, "%H:%M:%S")
             VerificaIntervaloTime = VerificaIntervaloTime.time()
+            # Converte os objetos time para datetime
+            ultimotempo_dt = datetime.combine(datetime.today(), ultimotempo)
+            VerificaIntervaloTime_dt = datetime.combine(datetime.today(), VerificaIntervaloTime)
+
             # Calcula a diferença entre os dois objetos datetime
-            time_Verifica = ultimotempo + VerificaIntervaloTime
+            time_Verifica_dt = ultimotempo_dt + timedelta(hours=VerificaIntervaloTime_dt.hour, minutes=VerificaIntervaloTime_dt.minute, seconds=VerificaIntervaloTime_dt.second)
+            time_Verifica = time_Verifica_dt.time()
 
             if HorarioFinal < time_Verifica:
                 return pd.DataFrame([{'Mensagem': f'Ultimo Registro ocorreu em menos de {VerificaIntervalo}!', "Status": False }])
