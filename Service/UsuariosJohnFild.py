@@ -89,13 +89,12 @@ def AtualizarUsuario(idUsuario, nomeUsuario, Perfil ,login, permite_cancelar_op)
         return pd.DataFrame([{'Mensagem': "Usuario Alterado com Sucesso!", "status": True}])
 
 def AutentificacaoUsuario(login, senha):
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = """
     select "Senha", "idusuario" from "Easy"."Usuario" u where u."nomeLogin" = %s
     """
     consulta = pd.read_sql(consulta,conn,params=(login,))
 
-    conn.close()
     if consulta.empty:
         return pd.DataFrame([{'status':False,'Mensagem':'Login nao Encontrado!'}])
 
