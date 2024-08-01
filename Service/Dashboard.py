@@ -14,13 +14,10 @@ def OPsAbertoPorCliente(nomeCliente = ''):
   group by oct."idOP" 
     """
 
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta,conn)
     quantidade = pd.read_sql(quantidade,conn)
     consulta['idOP'] = consulta["codOP"] +'||'+consulta["codCliente"].astype(str)
-
-    conn.close()
-
 
     consulta = pd.merge(consulta,quantidade,on='idOP',how='left')
     consulta['quantidade'].fillna(0, inplace=True)
@@ -88,12 +85,11 @@ order by "codFase"
     group by oct."idOP" 
       """
 
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta, conn)
     quantidade = pd.read_sql(quantidade, conn)
     consulta['idOP'] = consulta["codOP"] + '||' + consulta["codCliente"].astype(str)
 
-    conn.close()
 
     consulta = pd.merge(consulta, quantidade, on='idOP', how='left')
     consulta['quantidade'].fillna(0, inplace=True)
