@@ -424,7 +424,7 @@ def ExclusaoColeta(nomeOperador, dataFinal,periodo):
 
             conn.close()
 
-            return pd.DataFrame([{'Status':True, 'Mensagem':'Registro Excluido com sucesso'}])
+            return pd.DataFrame([{'Status':True, 'Mensagem':f'Registro Excluido com sucesso horaFinal {HrFinal}'}])
                  
 
 
