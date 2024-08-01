@@ -49,3 +49,17 @@ def conexaoJohn():
     portbanco = "44412"
 
     return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)
+
+def conexaoEngine():
+    db_name = "railway"
+    db_user = "postgres"
+    db_password = "JxTDCLllqhjvIPqxbWhqeyOMGqGLuHTD"
+    db_host = "viaduct.proxy.rlwy.net"
+    portbanco = "44412"
+
+
+    if not all([db_name, db_user, db_password, db_host]):
+        raise ValueError("One or more environment variables are not set")
+
+    connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{portbanco}/{db_name}"
+    return create_engine(connection_string)
