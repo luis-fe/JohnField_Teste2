@@ -415,7 +415,7 @@ def ExclusaoColeta(nomeOperador, dataFinal,periodo):
                 """
             conn = ConexaoPostgreMPL.conexaoJohn()
             cursor = conn.cursor()
-            HrFinal = periodo[10:]
+            HrFinal = periodo[11:]
             print(HrFinal)
             cursor.execute(delete,(nomeOperador, HrFinal,dataFinal))
                 
