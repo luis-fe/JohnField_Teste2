@@ -119,7 +119,7 @@ def ColetaProducao(codOperador, nomeOperacao, qtdPecas):
             time_Verifica_dt = ultimotempo_dt + timedelta(hours=VerificaIntervaloTime_dt.hour, minutes=VerificaIntervaloTime_dt.minute, seconds=VerificaIntervaloTime_dt.second)
             time_Verifica = time_Verifica_dt.time()
 
-            if HorarioFinal < time_Verifica:
+            if ultimotempo < time_Verifica:
                 return pd.DataFrame([{'Mensagem': f'Ultimo Registro ocorreu em menos de {VerificaIntervalo}!', "Status": False }])
             else:
 
