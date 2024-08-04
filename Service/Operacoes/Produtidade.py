@@ -7,8 +7,8 @@ def CalcularTempo(dataInicio, dataFim, tempoInicio, tempoFim):
     tempoInicio = datetime.strptime(tempoInicio, "%H:%M:%S")
     tempoFim = datetime.strptime(tempoFim, "%H:%M:%S")
 
-    dataInicio = datetime.strptime(dataInicio, "%Y-%m-%d")
-    dataFim = datetime.strptime(dataFim, "%Y-%m-%d")
+    #dataInicio = datetime.strptime(dataInicio, "%Y-%m-%d")
+    #dataFim = datetime.strptime(dataFim, "%Y-%m-%d")
     delta_dias = (dataFim - dataInicio).days
 
 
