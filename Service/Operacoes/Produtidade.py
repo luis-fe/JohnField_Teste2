@@ -28,7 +28,7 @@ def CalcularTempo(dataInicio, dataFim, tempoInicio, tempoFim):
         
         delta = delta1.total_seconds() + delta2.total_seconds()
         
-        return delta.total_seconds() / 60
+        return delta / 60
 
 
     else:
