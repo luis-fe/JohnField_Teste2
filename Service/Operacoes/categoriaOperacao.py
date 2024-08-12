@@ -29,7 +29,7 @@ def InserirCategoria(CategoriaOperacao, MetaDiaria):
 
         conn = ConexaoPostgreMPL.conexaoJohn()
         with conn.cursor() as curr:
-            curr.execute(insert,(ultimoPonto,CategoriaOperacao, int(MetaDiaria)))
+            curr.execute(insert,(int(ultimoPonto),CategoriaOperacao, int(MetaDiaria)))
             conn.commit()
         conn.close()
         return pd.DataFrame([{'Status': True, "Mensagem":"Categora Salva Com Sucesso !" }])
