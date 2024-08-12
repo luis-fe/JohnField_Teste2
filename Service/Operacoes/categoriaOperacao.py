@@ -34,7 +34,7 @@ def InserirCategoria(CategoriaOperacao, MetaDiaria):
         conn.close()
         return pd.DataFrame([{'Status': True, "Mensagem":"Categora Salva Com Sucesso !" }])
 
-def AlterarCategoria(CategoriaOperacao, MetaDiaria):
+def AlterarMeta(CategoriaOperacao, MetaDiaria):
     #Verificar
     verificar = ConsultarCategoriaOperacao()
     verificar1 = verificar[verificar['CategoriaOperacao']==CategoriaOperacao].reset_index()

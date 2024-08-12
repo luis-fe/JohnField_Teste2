@@ -53,3 +53,24 @@ def put_InserirCategoria():
         consulta_data = busca.to_dict(orient='records')
 
         return jsonify(consulta_data)
+
+@CategoriaOperacao_routesJohn.route('/api/JonhField/AlterarMeta', methods=['POST'])
+@token_required
+def put_AlterarMeta():
+        data = request.get_json()
+        CategoriaOperacao = data.get('CategoriaOperacao')
+        NovaMeta = data.get('NovaMeta')
+
+        busca = categoriaOperacao.AlterarMeta(CategoriaOperacao, int(NovaMeta))
+
+        # Verifica se 'busca' é um DataFrame
+        if not isinstance(busca, pd.DataFrame):
+            return jsonify({'error': 'Unexpected data format'}), 500
+
+        # Obtém os nomes das colunas
+        column_names = busca.columns.tolist()
+
+        # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+        consulta_data = busca.to_dict(orient='records')
+
+        return jsonify(consulta_data)
