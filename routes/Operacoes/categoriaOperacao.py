@@ -61,7 +61,7 @@ def put_AlterarMeta():
         CategoriaOperacao = data.get('CategoriaOperacao')
         NovaMeta = data.get('NovaMeta')
 
-        busca = categoriaOperacao.AlterarMeta(CategoriaOperacao, int(NovaMeta))
+        busca = categoriaOperacao.AlterarMeta(CategoriaOperacao, NovaMeta)
 
         # Verifica se 'busca' é um DataFrame
         if not isinstance(busca, pd.DataFrame):
