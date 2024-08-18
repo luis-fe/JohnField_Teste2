@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import produtividadeClass
+from Service.Operacoes import Produtidade
 import pandas as pd
-Produtividade_routesJohn = Blueprint('ProdutividadeJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
+
+Produtividade_route = Blueprint('Produtividade_route', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 def token_required(f):
     @wraps(f)
@@ -14,16 +15,16 @@ def token_required(f):
 
     return decorated_function
 
-@Produtividade_routesJohn.route('/api/JonhField/ProdutividadeCategoriaOperacao', methods=['GET'])
+
+@Produtividade_route.route('/api/JonhField/TesteProdutividade', methods=['GET'])
 @token_required
-def get_ProdutividadeCategoriaOperacao():
+def get_Produtividade_route():
 
     dataInicio = request.args.get('dataInicio', '')
     dataFinal = request.args.get('dataFinal', '')
 
-    produtividade = produtividadeClass.Produtividade(dataInicio, dataFinal)
 
-    consulta = produtividade.ProdutividadePorCategoriaOperacao()
+    consulta = Produtidade.RankingOperacoesEfic(dataInicio, dataFinal)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

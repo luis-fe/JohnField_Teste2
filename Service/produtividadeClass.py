@@ -1,5 +1,6 @@
 import pandas as pd
 import ConexaoPostgreMPL
+from datetime import datetime
 
 class Produtividade():
     def __init__(self, dataInicio = None, dataFinal =None):
@@ -40,14 +41,52 @@ class Produtividade():
         """
         conn = ConexaoPostgreMPL.conexaoEngine()
         consulta = pd.read_sql(sql,conn,params=(self.dataInicio, self.dataFinal))
+
+        #Implementar o Numerero de Operadores que realizacao a funcao no dia
         consulta2 = pd.read_sql(sql2,conn,params=(self.dataInicio, self.dataFinal))
         consulta2['QtdOperadores'] = 1
         consulta2 = consulta2.groupby(['nomecategoria']).agg(
         QtdOperadores=('QtdOperadores', 'sum')).reset_index()
         consulta =pd.merge(consulta, consulta2, on = 'nomecategoria', how='left')
 
+
         consulta['Realizado%'] = (consulta['Realizado'] / consulta['MetaDia'])*100
         consulta['Realizado%'] = consulta['Realizado%'].round(1)
 
-        #Implementar o Numerero de Operadores que realizacao a funcao no dia
         return consulta
+    
+
+    def CalcularTempo(self,InicioOperacao, FimOperacao, tempoInicio, tempoFim):
+        # Converte as horas de início e fim em objetos datetime
+        tempoInicio = datetime.strptime(tempoInicio, "%H:%M:%S")
+        tempoFim = datetime.strptime(tempoFim, "%H:%M:%S")
+
+        delta_dias = (FimOperacao - InicioOperacao).days
+
+
+        if InicioOperacao == FimOperacao:
+            # Calcular a diferença entre os horários
+            delta = tempoFim - tempoInicio
+            return delta.total_seconds() / 60
+    
+        elif delta_dias == 1:
+            tempoFImEscala = "17:30:00"
+            tempoInicioEscala = "07:30:00"
+            tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
+            tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
+
+            delta1 = tempoFImEscala - tempoInicio
+            delta2 = tempoFim - tempoFImEscala
+        
+            delta = delta1.total_seconds() + delta2.total_seconds()
+        
+            return delta / 60
+
+
+        else:
+            # Se as datas forem diferentes, considera-se uma diferença de 24h para simplificar
+        
+            return '-'
+
+
+
