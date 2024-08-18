@@ -21,7 +21,7 @@ from .Operacoes.Operadores import operador_routesJohn
 from .Operacoes.ColetaProducao import ColetaProducao_routesJohn
 from .Ops.DetalhamentoOP import DetalhamentoOPJohn
 from .Operacoes.categoriaOperacao import CategoriaOperacao_routesJohn
-from .Dashboard.Produtividade11 import Produtividade_routesJohn
+from .Dashboard.Produtividade import Produtividade_routesJohn
 
 # Registre as rotas nos blueprints
 routes_blueprint.register_blueprint(usuarios_routesJohn)
