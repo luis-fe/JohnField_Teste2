@@ -92,7 +92,7 @@ class Produtividade():
             tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
 
             delta1 = tempoFImEscala - tempoInicio
-            delta2 = tempoFim - tempoFImEscala
+            delta2 = tempoFim - tempoInicioEscala
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         
@@ -105,7 +105,7 @@ class Produtividade():
             tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
 
             delta1 = tempoFImEscala - tempoInicio
-            delta2 = tempoFim - tempoFImEscala
+            delta2 = tempoFim - tempoInicioEscala
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         

@@ -140,3 +140,5 @@ def EncerrarOP(idUsuarioMovimentacao, codOP, codCliente):
         conn.close()
 
         return pd.DataFrame([{'Mensagem':'OP Encerrada com sucesso!','status':True}])
+
+
