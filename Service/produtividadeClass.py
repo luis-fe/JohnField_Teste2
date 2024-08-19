@@ -56,18 +56,24 @@ class Produtividade():
         return consulta
     
 
-    def CalcularTempo(self,InicioOperacao, FimOperacao, tempoInicio, tempoFim):
+    def CalcularTempo(self, InicioOperacao, FimOperacao, tempoInicio, tempoFim):
+        # Converte as datas de início e fim em objetos datetime
+        if isinstance(InicioOperacao, str):
+            InicioOperacao = datetime.strptime(InicioOperacao, "%Y-%m-%d")
+        if isinstance(FimOperacao, str):
+            FimOperacao = datetime.strptime(FimOperacao, "%Y-%m-%d")
+        
         # Converte as horas de início e fim em objetos datetime
         tempoInicio = datetime.strptime(tempoInicio, "%H:%M:%S")
         tempoFim = datetime.strptime(tempoFim, "%H:%M:%S")
+        
         # Gera uma sequência de datas entre as duas datas
         datas = pd.date_range(start=InicioOperacao, end=FimOperacao)
 
-        # Verifica se algum domingo está presente
-        tem_domingo = any(datas.weekday == 6)
+        # Verifica se há algum domingo na sequência de datas
+        tem_domingo = any(date.weekday() == 6 for date in datas)
 
         delta_dias = (FimOperacao - InicioOperacao).days
-
 
         if InicioOperacao == FimOperacao:
             # Calcular a diferença entre os horários
@@ -86,8 +92,8 @@ class Produtividade():
             delta = delta1.total_seconds() + delta2.total_seconds()
         
             return delta / 60
-        elif delta_dias == 3 and tem_domingo ==True:
-            
+
+        elif delta_dias == 3 and tem_domingo:
             tempoFImEscala = "16:20:00"
             tempoInicioEscala = "07:30:00"
             tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
@@ -99,12 +105,10 @@ class Produtividade():
             delta = delta1.total_seconds() + delta2.total_seconds()
         
             return delta / 60
-
-
         else:
-            # Se as datas forem diferentes, considera-se uma diferença de 24h para simplificar
-        
+            # Se as datas forem diferentes e não forem tratadas acima
             return '-'
+        
     def ProdutividadeOperadores(self):
 
         sql = """
