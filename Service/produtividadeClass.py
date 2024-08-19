@@ -118,8 +118,8 @@ class Produtividade():
         sql = """
         SELECT
             "Codigo Registro",
-            "Data",
-            "DiaInicial",
+            "Data"::Date,
+            "DiaInicial::Date",
             "Hr Inicio",
             "Hr Final",
             "codOperador",
