@@ -119,7 +119,7 @@ class Produtividade():
         SELECT
             "Codigo Registro",
             "Data"::Date,
-            "DiaInicial"::Date",
+            "DiaInicial"::Date,
             "Hr Inicio",
             "Hr Final",
             "codOperador",
