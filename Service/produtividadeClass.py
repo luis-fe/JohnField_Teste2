@@ -66,8 +66,7 @@ class Produtividade():
         # Converte as horas de início e fim em objetos datetime
         tempoInicio = datetime.strptime(tempoInicio, "%H:%M:%S")
         tempoFim = datetime.strptime(tempoFim, "%H:%M:%S")
-        print(f"InicioOperacao: {InicioOperacao}, Tipo: {type(InicioOperacao)}")
-        print(f"FimOperacao: {FimOperacao}, Tipo: {type(FimOperacao)}")
+
 
         # Agora podemos gerar uma sequência de datas
         try:
@@ -96,7 +95,7 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         
-            return delta / 60
+            return delta_dias
 
         elif (delta_dias == 3 or delta_dias == 2 ) and tem_domingo:
             tempoFImEscala = "16:20:00"
@@ -109,10 +108,10 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         
-            return delta / 60
+            return delta_dias
         else:
             # Se as datas forem diferentes e não forem tratadas acima
-            return '-'
+            return delta_dias
         
     def ProdutividadeOperadores(self):
 
