@@ -57,15 +57,21 @@ class Produtividade():
     
 
     def CalcularTempo(self, InicioOperacao, FimOperacao, tempoInicio, tempoFim):
-        # Converte as datas de início e fim em objetos datetime
+    # Converte as datas de início e fim em objetos datetime se forem strings
         if isinstance(InicioOperacao, str):
             InicioOperacao = datetime.strptime(InicioOperacao, "%Y-%m-%d")
         if isinstance(FimOperacao, str):
             FimOperacao = datetime.strptime(FimOperacao, "%Y-%m-%d")
-        
+    
         # Converte as horas de início e fim em objetos datetime
         tempoInicio = datetime.strptime(tempoInicio, "%H:%M:%S")
         tempoFim = datetime.strptime(tempoFim, "%H:%M:%S")
+    
+        # Agora podemos gerar uma sequência de datas
+        try:
+            datas = pd.date_range(start=InicioOperacao, end=FimOperacao)
+        except ValueError as e:
+            raise ValueError(f"Erro ao gerar o range de datas: {e}")
         
         # Gera uma sequência de datas entre as duas datas
         datas = pd.date_range(start=InicioOperacao, end=FimOperacao)
