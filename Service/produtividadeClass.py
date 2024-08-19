@@ -66,7 +66,9 @@ class Produtividade():
         # Converte as horas de início e fim em objetos datetime
         tempoInicio = datetime.strptime(tempoInicio, "%H:%M:%S")
         tempoFim = datetime.strptime(tempoFim, "%H:%M:%S")
-    
+        print(f"InicioOperacao: {InicioOperacao}, Tipo: {type(InicioOperacao)}")
+        print(f"FimOperacao: {FimOperacao}, Tipo: {type(FimOperacao)}")
+
         # Agora podemos gerar uma sequência de datas
         try:
             datas = pd.date_range(start=InicioOperacao, end=FimOperacao)
@@ -139,7 +141,7 @@ class Produtividade():
             "Data", "codOperador", "Codigo Registro"
         """
 
-        conn = ConexaoPostgreMPL.conexaoJohn()
+        conn = ConexaoPostgreMPL.conexaoEngine()
         produtividade = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal))
 
         if produtividade.empty:
