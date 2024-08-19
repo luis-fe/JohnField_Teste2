@@ -98,7 +98,7 @@ class Produtividade():
         
             return delta / 60
 
-        elif delta_dias == 3 and tem_domingo:
+        elif (delta_dias == 3 or delta_dias == 2 ) and tem_domingo:
             tempoFImEscala = "16:20:00"
             tempoInicioEscala = "07:30:00"
             tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
