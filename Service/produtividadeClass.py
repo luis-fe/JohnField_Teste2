@@ -72,8 +72,7 @@ class Produtividade():
         try:
             datas = pd.date_range(start=InicioOperacao, end=FimOperacao)
         except ValueError as e:
-            datas = pd.date_range(start=FimOperacao, end=FimOperacao)
-            #raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{InicioOperacao},fim{FimOperacao}")
+            raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{InicioOperacao},fim{FimOperacao}")
 
         # Verifica se há algum domingo na sequência de datas
         tem_domingo = any(date.weekday() == 6 for date in datas)
@@ -120,7 +119,7 @@ class Produtividade():
         SELECT
             "Codigo Registro",
             "Data"::Date,
-            "DiaInicial"::Date,
+            case when "DiaInicial" is null then "Data"::Date else  "DiaInicial"::Date end "DiaInicial",
             "Hr Inicio",
             "Hr Final",
             "codOperador",
