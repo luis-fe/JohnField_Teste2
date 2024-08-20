@@ -82,7 +82,7 @@ class Produtividade():
         if InicioOperacao == FimOperacao:
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
-            return tem_domingo
+            return delta/60
     
         elif delta_dias == 1:
             tempoFImEscala = "17:30:00"
@@ -95,7 +95,7 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         
-            return tem_domingo
+            return delta/60
 
         elif (delta_dias == 3 or delta_dias == 2 ) and tem_domingo:
             tempoFImEscala = "16:20:00"
@@ -108,10 +108,10 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         
-            return tem_domingo
+            return delta/60
         else:
             # Se as datas forem diferentes e não forem tratadas acima
-            return tem_domingo
+            return '-'
         
     def ProdutividadeOperadores(self):
 
