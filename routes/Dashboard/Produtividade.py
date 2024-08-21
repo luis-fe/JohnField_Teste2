@@ -14,7 +14,7 @@ def token_required(f):
 
     return decorated_function
 
-@Produtividade_routesJohn.route('/api/JonhField/ProdutividadeCategoriaOperacao', methods=['GET'])
+@Produtividade_routesJohn.route('/api/JonhField/ProdutividadeOperadorNovo', methods=['GET'])
 @token_required
 def get_ProdutividadeCategoriaOperacao():
 
@@ -36,7 +36,7 @@ def get_ProdutividadeCategoriaOperacao():
     return jsonify(consulta_data)
 
 
-@Produtividade_routesJohn.route('/api/JonhField/ProdutividadeOperacoesPeriodo', methods=['GET'])
+@Produtividade_routesJohn.route('/api/JonhField/ProdutividadePeriodo', methods=['GET'])
 @token_required
 def get_ProdutividadeOperadorNovo():
 
