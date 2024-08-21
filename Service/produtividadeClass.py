@@ -111,7 +111,9 @@ class Produtividade():
             return delta/ 60
         else:
             # Se as datas forem diferentes e não forem tratadas acima
-            return '-'
+            # Calcular a diferença entre os horários
+            delta = tempoFim - tempoInicio
+            return delta.total_seconds() / 60
         
     def ProdutividadeOperadores(self):
 
