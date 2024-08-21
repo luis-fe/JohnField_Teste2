@@ -75,7 +75,7 @@ def OpsEncerradasPeriodo():
     return jsonify(consulta_data)
 
 
-@Dashboard_routesJohn.route('/api/JonhField/ProdutividadePeriodo', methods=['GET'])
+@Dashboard_routesJohn.route('/api/JonhField/ProdutividadePeriodoTeste', methods=['GET'])
 @token_required
 def get_ProdutividadePeriodo():
 
@@ -95,7 +95,7 @@ def get_ProdutividadePeriodo():
     return jsonify(consulta_data)
 
 
-@Dashboard_routesJohn.route('/api/JonhField/ProdutividadeOperacoesPeriodoTeste', methods=['GET'])
+@Dashboard_routesJohn.route('/api/JonhField/ProdutividadeCategoriaOperacao', methods=['GET'])
 @token_required
 def get_ProdutividadeOperacoesPeriodo():
 
