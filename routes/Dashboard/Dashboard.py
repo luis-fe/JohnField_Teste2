@@ -95,7 +95,7 @@ def get_ProdutividadePeriodo():
     return jsonify(consulta_data)
 
 
-@Dashboard_routesJohn.route('/api/JonhField/ProdutividadeOperacoesPeriodo', methods=['GET'])
+@Dashboard_routesJohn.route('/api/JonhField/ProdutividadeOperacoesPeriodoTeste', methods=['GET'])
 @token_required
 def get_ProdutividadeOperacoesPeriodo():
 
