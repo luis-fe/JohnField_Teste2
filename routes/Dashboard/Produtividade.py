@@ -14,7 +14,7 @@ def token_required(f):
 
     return decorated_function
 
-@Produtividade_routesJohn.route('/api/JonhField/ProdutividadeOperadorNovo', methods=['GET'])
+@Produtividade_routesJohn.route('/api/JonhField/ProdutividadeCategoriaOperacao', methods=['GET'])
 @token_required
 def get_ProdutividadeCategoriaOperacao():
 
