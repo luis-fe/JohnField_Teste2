@@ -4,7 +4,7 @@ import re
 from Service import OperadorClass
 
 class Paradas():
-    def __init__(self, dataInicio, dataFinal, horaInicio, horaFinal, codOperador, motivo = '-'):
+    def __init__(self, dataInicio, dataFinal, horaInicio = None, horaFinal = None, codOperador = None, motivo = '-'):
         self.dataInicio = dataInicio
         self.dataFinal = dataFinal
         self.horaInicio = horaInicio
