@@ -3,8 +3,7 @@ from functools import wraps
 from Service import ParadasClass
 import pandas as pd
 
-Paradas_rotuesJohn = Blueprint('Paradas_rotuesJohn',
-                               __name__)  # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
+Paradas_rotuesJohn = Blueprint('Paradas_rotuesJohn',__name__)  # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 
 def token_required(f):

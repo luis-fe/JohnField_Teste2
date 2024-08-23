@@ -1,7 +1,7 @@
 import ConexaoPostgreMPL
 import pandas as pd
 import re
-import OperadorClass
+from Service import OperadorClass
 
 class Paradas():
     def __init__(self, dataInicio, dataFinal, horaInicio, horaFinal, codOperador, motivo = '-'):
