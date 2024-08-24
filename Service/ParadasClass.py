@@ -31,7 +31,7 @@ class Paradas():
 
             with ConexaoPostgreMPL.conexaoJohn() as conn:
                 with conn.cursor() as curr:
-                    curr.excute(insert,(self.dataInicio, self.dataFinal, self.horaInicio, self.horaFinal, self.codOperador, self.nomeOperador, self.motivo))
+                    curr.execute(insert,(self.dataInicio, self.dataFinal, self.horaInicio, self.horaFinal, self.codOperador, self.nomeOperador, self.motivo))
                     conn.commit()
 
             return pd.DataFrame([{'Status':True, 'Mensagem':'Inserido com sucesso!'}])
@@ -51,7 +51,7 @@ class Paradas():
 
             with ConexaoPostgreMPL.conexaoJohn() as conn:
                 with conn.cursor() as curr:
-                    curr.excute(update,(self.dataInicio, self.dataFinal, self.horaInicio, self.horaFinal, self.codOperador, self.nomeOperador, self.motivo, dataInicioNovo
+                    curr.execute(update,(self.dataInicio, self.dataFinal, self.horaInicio, self.horaFinal, self.codOperador, self.nomeOperador, self.motivo, dataInicioNovo
                                         , dataFinalNovo, horaInicioNovo, horaFinaNovo))
                     conn.commit()
 
