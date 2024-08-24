@@ -25,6 +25,6 @@ class Operador():
                     where "codOperador"::varchar = %s
         """
 
-        consulta = pd.read_sql(consulta,conn,params=(self.codOperador))
+        consulta = pd.read_sql(consulta,conn,params=(str(self.codOperador)),)
 
         return consulta['nomeOperador'][0]
