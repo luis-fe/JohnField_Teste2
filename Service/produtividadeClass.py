@@ -100,7 +100,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,(delta / 60))
+            self.AtualizarValores(delta_dias,round((delta / 60),2))
         
             return delta / 60
 
