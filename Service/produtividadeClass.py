@@ -207,7 +207,7 @@ class Produtividade():
                     
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
-                curr.execute(insert,(dia_entreData, self.codOperador, self.codregistro))
+                curr.execute(insert,(dia_entreData, tempoMin,self.codOperador, self.codregistro))
                 conn.commit()
 
 
