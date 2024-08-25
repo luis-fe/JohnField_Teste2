@@ -96,7 +96,7 @@ class Produtividade():
             delta1 = tempoFImEscala - tempoInicio
             delta2 = tempoFim - tempoInicioEscala
         
-            delta = delta1.total_seconds() #+ delta2.total_seconds()
+            delta = delta1.total_seconds() + delta2.total_seconds()
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
