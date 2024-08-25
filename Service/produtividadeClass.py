@@ -98,9 +98,9 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
 
-            self.codOperador = codOperador
-            self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2))
+            #self.codOperador = codOperador
+            #self.codregistro = codRegistro
+            #self.AtualizarValores(delta_dias,round((delta / 60),2))
         
             return delta / 60
 
@@ -162,7 +162,7 @@ class Produtividade():
 
 
             produtividade['tempoTotal(min)Acum'] = produtividade.groupby(['Data', 'codOperador'])[
-                'tempoTotal(min)'].cumsum()
+                'TempoRealizado(Min)'].cumsum()
             produtividade['tempo Previsto'] = produtividade['qtdPcs'] / round(produtividade['Meta(pcs/hr)'] / 60, 2)
             produtividade['tempo PrevistoAcum'] = produtividade.groupby(['Data', 'codOperador'])[
                 'tempo Previsto'].cumsum()
