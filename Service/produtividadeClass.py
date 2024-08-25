@@ -80,9 +80,7 @@ class Produtividade():
         tem_domingo = any(date.weekday() == 6 for date in datas)
 
         delta_dias = (FimOperacao - InicioOperacao).days
-        self.codOperador = codOperador
-        self.codregistro = codRegistro
-        self.AtualizarValores(delta_dias)
+
 
         if InicioOperacao == FimOperacao:
             # Calcular a diferença entre os horários
@@ -99,6 +97,10 @@ class Produtividade():
             delta2 = tempoFim - tempoInicioEscala
         
             delta = delta1.total_seconds() + delta2.total_seconds()
+
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,(delta / 60))
         
             return delta / 60
 
@@ -198,9 +200,9 @@ class Produtividade():
 
             return pd.DataFrame([dados])
         
-    def AtualizarValores(self,dia_entreData):
+    def AtualizarValores(self,dia_entreData, tempoMin):
     
-        insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s
+        insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s, "tempoMin" =%s
          where "codOperador" = %s and "sequencia" = %s """
                     
         with ConexaoPostgreMPL.conexaoJohn() as conn:
