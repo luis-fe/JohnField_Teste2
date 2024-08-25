@@ -129,7 +129,7 @@ class Produtividade():
             "Codigo Registro",
             "Data"::Date,
             case when "DiaInicial" is null then "Data"::Date else  "DiaInicial"::Date end "DiaInicial",
-            "Hr Inicio",
+            "Hr Inicio"::varchar,
             "Hr Final",
             "codOperador",
             "nomeOperador",
