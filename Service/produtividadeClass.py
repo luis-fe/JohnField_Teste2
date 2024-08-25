@@ -58,7 +58,7 @@ class Produtividade():
         return consulta
     
 
-    def CalcularTempo(self, InicioOperacao, FimOperacao, tempoInicio, tempoFim, codOperador, codRegistro):
+    def CalcularTempo(self, InicioOperacao, FimOperacao, tempoInicio, tempoFim, codOperador, codRegistro,tempoParada):
     # Converte as datas de início e fim em objetos datetime se forem strings
         if isinstance(InicioOperacao, str):
             InicioOperacao = datetime.strptime(InicioOperacao, "%Y-%m-%d")
@@ -86,11 +86,11 @@ class Produtividade():
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
             
-            self.codOperador = codOperador
-            self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2))
+            #self.codOperador = codOperador
+            #self.codregistro = codRegistro
+            #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2))
             
-            return delta.total_seconds() / 60
+            return (delta.total_seconds() / 60) - float(tempoParada)
     
         elif delta_dias == 1:
             tempoFImEscala = "17:30:00"
@@ -101,13 +101,13 @@ class Produtividade():
             delta1 = tempoFImEscala - tempoInicio
             delta2 = tempoFim - tempoInicioEscala
         
-            delta = delta1.total_seconds() + delta2.total_seconds()
+            delta = delta1.total_seconds() + delta2.total_seconds() 
 
-            self.codOperador = codOperador
-            self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2))
+            #self.codOperador = codOperador
+            #self.codregistro = codRegistro
+            #self.AtualizarValores(delta_dias,round((delta / 60),2))
         
-            return delta / 60
+            return (delta / 60) -float(tempoParada)
 
         elif (delta_dias == 3 or delta_dias == 2 ) and tem_domingo:
             tempoFImEscala = "16:20:00"
@@ -120,12 +120,12 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
         
-            return delta/ 60
+            return (delta/ 60)-float(tempoParada)
         else:
             # Se as datas forem diferentes e não forem tratadas acima
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
-            return delta.total_seconds() / 60
+            return (delta.total_seconds() / 60)-float(tempoParada)
         
     def ProdutividadeOperadores(self):
 
@@ -159,10 +159,11 @@ class Produtividade():
 
         else:
         # Adicionar uma coluna calculada usando a função CalcularTempo
+        #"tempoTotal(min)"
             produtividade['TempoRealizado(Min)'] = produtividade.apply(
             lambda row: self.CalcularTempo(
             row['DiaInicial'], row['Data'], row['Hr Inicio'], row['Hr Final'],row['codOperador'],
-            row['Codigo Registro']
+            row['Codigo Registro'],row['paradas min']
         ), axis=1)
 
 
