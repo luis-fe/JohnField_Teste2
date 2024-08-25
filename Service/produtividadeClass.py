@@ -85,6 +85,11 @@ class Produtividade():
         if InicioOperacao == FimOperacao:
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
+            
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2))
+            
             return delta.total_seconds() / 60
     
         elif delta_dias == 1:
@@ -98,9 +103,9 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
 
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta / 60),2))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta / 60),2))
         
             return delta / 60
 
