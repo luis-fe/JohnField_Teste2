@@ -1,3 +1,4 @@
+from math import e
 import ConexaoPostgreMPL
 import pandas as pd
 import re
@@ -44,15 +45,15 @@ class Paradas():
         if validacao['Status'][0] == False:
             return validacao
         else:
-            update = """UPDATE Easy"."ApontaParadas" SET "dataInicio" = %s , "dataFinal"= %s, "horaInicio"= %s, 
-        "horaFinal"= %s, "codOperador"= %s, "nomeOperador"= %s, "motivo"= %s 
-        where "dataInicio" = %s  and "dataFinal"= %s
-         and "horaInicio"= %s and "horaFinal"= %s and "codOperador"= %s"""
+            update = """UPDATE "Easy"."ApontaParadas" SET "dataInicio" = %s , "dataFinal"= %s, "horaInicio"= %s, 
+        "horaFinal"= %s, "motivo"= %s 
+        where "dataInicio" = %s
+         and "horaInicio"= %s and "codOperador"::int= %s """
 
             with ConexaoPostgreMPL.conexaoJohn() as conn:
                 with conn.cursor() as curr:
-                    curr.execute(update,(self.dataInicio, self.dataFinal, self.horaInicio, self.horaFinal, self.codOperador, self.nomeOperador, self.motivo, dataInicioNovo
-                                        , dataFinalNovo, horaInicioNovo, horaFinaNovo))
+                    curr.execute(update,(dataInicioNovo, dataFinalNovo, horaInicioNovo, horaFinaNovo, 
+                                          self.motivo , self.dataInicio,  self.horaInicio,  int(self.codOperador)))
                     conn.commit()
 
 
@@ -83,12 +84,18 @@ class Paradas():
         # Expressão regular para verificar o formato hh:mm
         padrao_horario = r'^\d{2}:\d{2}$'
 
+        # Aqui verificamos se o horario final esta none que aplicaca-se em alguns casos especifico
+        if self.horaFinal == None:
+            horaFinal = self.horaInicio
+        else:
+            horaFinal = self.horaFinal
+
         if re.match(padrao_horario, self.horaInicio):
             situacao1 = True
         else:
             situacao1 = False
 
-        if re.match(padrao_horario, self.horaFinal):
+        if re.match(padrao_horario, horaFinal):
             situacao2 = True
         else:
             situacao2 = False
