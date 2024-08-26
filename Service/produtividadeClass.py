@@ -119,6 +119,10 @@ class Produtividade():
             delta2 = tempoFim - tempoInicioEscala
         
             delta = delta1.total_seconds() + delta2.total_seconds()
+
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta / 60),2))
         
             return (delta/ 60)-float(tempoParada)
         else:
