@@ -122,7 +122,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2))
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(tem_domingo))
         
             return (delta/ 60)-float(tempoParada)
         else:
@@ -210,14 +210,14 @@ class Produtividade():
 
             return pd.DataFrame([dados])
         
-    def AtualizarValores(self,dia_entreData, tempoMin):
+    def AtualizarValores(self,dia_entreData, tempoMin,tem_domingo):
     
-        insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s, "tempoMin" =%s
+        insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s, "tempoMin" =%s, "tem_domingo" = %s
          where "codOperador" = %s and "sequencia" = %s """
                     
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
-                curr.execute(insert,(dia_entreData, tempoMin,self.codOperador, self.codregistro))
+                curr.execute(insert,(dia_entreData, tempoMin,tem_domingo,self.codOperador, self.codregistro))
                 conn.commit()
 
 
