@@ -70,7 +70,7 @@ def get_RegistroPorPeriodo():
         codOperador = request.args.get('codOperador', '')
         dataInicio = request.args.get('dataInicio', '')
         dataFim = request.args.get('dataFim', '')
-        print(dataInicio)
+
 
         consulta = ColetaProducao.ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim)
 

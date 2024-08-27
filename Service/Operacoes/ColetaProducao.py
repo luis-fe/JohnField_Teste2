@@ -161,9 +161,9 @@ def ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim):
              AND "Data" <= %s
              """
 
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(sql, conn, params=(dataInicio, dataFim,))
-    conn.close()
+
 
     consulta['tempoTotal(min)'] = consulta['tempoTotal(min)'].round(2)
     consulta['Realizado pcs/Hora'] = 60*(consulta['qtdPcs']/consulta['tempoTotal(min)'])
