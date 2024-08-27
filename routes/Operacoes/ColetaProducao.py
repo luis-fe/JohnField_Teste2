@@ -74,10 +74,6 @@ def get_RegistroPorPeriodo():
 
         busca = ColetaProducao.ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim)
 
-        # Verifica se 'busca' é um DataFrame
-        if not isinstance(busca, pd.DataFrame):
-            return jsonify({'error': 'Unexpected data format'}), 500
-
         # Obtém os nomes das colunas
         column_names = busca.columns.tolist()
 
