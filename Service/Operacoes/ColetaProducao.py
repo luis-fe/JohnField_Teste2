@@ -162,7 +162,7 @@ def ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim):
              """
 
     conn = ConexaoPostgreMPL.conexaoJohn()
-    consulta = pd.read_sql(sql, conn, params=(dataInicio, dataFim))
+    consulta = pd.read_sql(sql, conn, params=(dataInicio, dataFim,))
     conn.close()
 
     consulta['tempoTotal(min)'] = consulta['tempoTotal(min)'].round(2)
