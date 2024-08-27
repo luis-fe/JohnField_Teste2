@@ -155,7 +155,17 @@ def ColetaProducao(codOperador, nomeOperacao, qtdPecas):
 
 def ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim):
     sql = """
-            SELECT * FROM "Easy"."ColetasProducao"
+            select
+	cp."Data",
+	cp."Codigo Registro",
+	cp."codOperador",
+	cp."nomeOperador",
+	cp."Maq/Equipamento",
+	cp."Hr Inicio"::varchar,
+	cp."Hr Final"::varchar,
+	cp."Data"
+from
+	"Easy"."ColetasProducao" cp
              WHERE
              "Data":date >= %s 
              AND "Data":date <= %s
