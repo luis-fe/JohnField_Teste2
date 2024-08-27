@@ -157,8 +157,8 @@ def ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim):
     sql = """
             SELECT * FROM "Easy"."ColetasProducao"
              WHERE
-             "Data" >= %s 
-             AND "Data" <= %s
+             "Data":date >= %s 
+             AND "Data":date <= %s
              """
 
     conn = ConexaoPostgreMPL.conexaoEngine()
