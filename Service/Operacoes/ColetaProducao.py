@@ -162,7 +162,8 @@ def ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim):
 	cp."nomeOperador",
 	cp."Maq/Equipamento",
 	cp."Hr Inicio"::varchar,
-	cp."Hr Final"::varchar
+	cp."Hr Final"::varchar,
+	"tempoTotal(min)"
 from
 	"Easy"."ColetasProducao" cp
              WHERE
