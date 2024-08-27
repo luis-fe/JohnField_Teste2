@@ -162,13 +162,12 @@ def ConsultaRegistroPorPeriodo(codOperador, dataInicio, dataFim):
 	cp."nomeOperador",
 	cp."Maq/Equipamento",
 	cp."Hr Inicio"::varchar,
-	cp."Hr Final"::varchar,
-	cp."Data"
+	cp."Hr Final"::varchar
 from
 	"Easy"."ColetasProducao" cp
              WHERE
-             "Data":date >= %s 
-             AND "Data":date <= %s
+             "Data"::date >= %s 
+             AND "Data"::date <= %s
              """
 
     conn = ConexaoPostgreMPL.conexaoEngine()
