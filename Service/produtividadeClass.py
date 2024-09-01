@@ -93,8 +93,8 @@ class Produtividade():
             return (delta.total_seconds() / 60) - float(tempoParada)
     
         elif delta_dias == 1:
-            tempoFImEscala = "17:30:00"
-            tempoInicioEscala = "07:00:00"
+            tempoFImEscala = "17:20:00"
+            tempoInicioEscala = "07:10:00"
             tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
             tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
 
@@ -111,7 +111,7 @@ class Produtividade():
 
         elif (delta_dias == 3 or delta_dias == 2 ) and tem_domingo:
             tempoFImEscala = "16:20:00"
-            tempoInicioEscala = "07:00:00"
+            tempoInicioEscala = "07:10:00"
             tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
             tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
 
