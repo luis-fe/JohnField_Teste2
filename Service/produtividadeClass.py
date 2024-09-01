@@ -173,7 +173,7 @@ class Produtividade():
 
             produtividade['tempoTotal(min)Acum'] = produtividade.groupby(['Data', 'codOperador'])[
                 'TempoRealizado(Min)'].cumsum()
-            produtividade['tempo Previsto'] = produtividade['qtdPcs'] / round(produtividade['Meta(pcs/hr)'] / 60, 2)
+            produtividade['tempo Previsto'] = (produtividade['qtdPcs'] / produtividade['Meta(pcs/hr)']) * 60
             produtividade['tempo PrevistoAcum'] = produtividade.groupby(['Data', 'codOperador'])[
                 'tempo Previsto'].cumsum()
             produtividade['tempo PrevistoAcum'] = produtividade['tempo PrevistoAcum'].round(2)
