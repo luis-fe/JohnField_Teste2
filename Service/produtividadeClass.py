@@ -88,7 +88,7 @@ class Produtividade():
             
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao))
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao),FimOperacao)
             
             return (delta.total_seconds() / 60) - float(tempoParada)
     
@@ -105,7 +105,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao))
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao),FimOperacao)
         
             return (delta / 60) -float(tempoParada)
 
@@ -122,7 +122,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao))
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao),FimOperacao)
         
             return (delta/ 60)-float(tempoParada)
         else:
@@ -138,7 +138,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao))
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao),FimOperacao)
 
 
             return (delta.total_seconds() / 60)-float(tempoParada)
@@ -222,14 +222,14 @@ class Produtividade():
 
             return pd.DataFrame([dados])
         
-    def AtualizarValores(self,dia_entreData, tempoMin,tem_domingo):
+    def AtualizarValores(self,dia_entreData, tempoMin,tem_domingo, data):
     
         insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s, "tempoMin" =%s, "tem_domingo" = %s
-         where "codOperador" = %s and "sequencia" = %s """
+         where "codOperador" = %s and "sequencia" = %s and "Data" = %s """
                     
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
-                curr.execute(insert,(dia_entreData, tempoMin,tem_domingo,self.codOperador, self.codregistro))
+                curr.execute(insert,(dia_entreData, tempoMin,tem_domingo,self.codOperador, self.codregistro, data))
                 conn.commit()
 
 
