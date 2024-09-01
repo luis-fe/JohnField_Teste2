@@ -105,7 +105,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2),str(InicioOperacao + '-'+FimOperacao))
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao))
         
             return (delta / 60) -float(tempoParada)
 
