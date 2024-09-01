@@ -225,7 +225,7 @@ class Produtividade():
     def AtualizarValores(self,dia_entreData, tempoMin,tem_domingo, data):
     
         insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s, "tempoMin" =%s, "tem_domingo" = %s
-         where "codOperador" = %s and "sequencia" = %s and "Data" = %s """
+         where "codOperador" = %s and "sequencia" = %s and "DataHora"::Date = %s """
                     
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
