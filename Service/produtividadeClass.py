@@ -88,7 +88,7 @@ class Produtividade():
             
             #self.codOperador = codOperador
             #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(tem_domingo))
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(tem_domingo))
             
             return (delta.total_seconds() / 60) - float(tempoParada)
     
@@ -148,7 +148,7 @@ class Produtividade():
         sql = """
         SELECT
             "Codigo Registro",
-            "Data"::Date,
+            "Data",
             case when "DiaInicial" is null then "Data"::Date else  "DiaInicial"::Date end "DiaInicial",
             "Hr Inicio"::varchar,
             "Hr Final",
