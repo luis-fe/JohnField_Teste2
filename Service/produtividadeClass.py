@@ -86,9 +86,9 @@ class Produtividade():
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
             
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(tem_domingo))
             
             return (delta.total_seconds() / 60) - float(tempoParada)
     
@@ -105,7 +105,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta / 60),2))
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(tem_domingo))
         
             return (delta / 60) -float(tempoParada)
 
@@ -129,6 +129,11 @@ class Produtividade():
             # Se as datas forem diferentes e não forem tratadas acima
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(tem_domingo))
+
+
             return (delta.total_seconds() / 60)-float(tempoParada)
         
     def ProdutividadeOperadores(self):
