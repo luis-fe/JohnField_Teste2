@@ -86,9 +86,9 @@ class Produtividade():
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
             
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(tem_domingo))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao))
             
             return (delta.total_seconds() / 60) - float(tempoParada)
     
@@ -105,7 +105,7 @@ class Produtividade():
 
             self.codOperador = codOperador
             self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao))
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao))
         
             return (delta / 60) -float(tempoParada)
 
@@ -120,9 +120,9 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
 
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta / 60),2),str(tem_domingo))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao))
         
             return (delta/ 60)-float(tempoParada)
         else:
@@ -136,9 +136,9 @@ class Produtividade():
 
 
 
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(tem_domingo))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao))
 
 
             return (delta.total_seconds() / 60)-float(tempoParada)
