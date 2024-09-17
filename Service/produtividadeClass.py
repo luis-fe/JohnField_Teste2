@@ -86,15 +86,15 @@ class Produtividade():
             # Calcular a diferença entre os horários
             delta = tempoFim - tempoInicio
             
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+           #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao),FimOperacao)
             
             return (delta.total_seconds() / 60) - float(tempoParada)
     
         elif delta_dias == 1:
-            tempoFImEscala = "17:30:00"
-            tempoInicioEscala = "07:00:00"
+            tempoFImEscala = "17:20:00"
+            tempoInicioEscala = "07:10:00"
             tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
             tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
 
@@ -103,15 +103,15 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds() 
 
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta / 60),2))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            #self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao),FimOperacao)
         
             return (delta / 60) -float(tempoParada)
 
         elif (delta_dias == 3 or delta_dias == 2 ) and tem_domingo:
             tempoFImEscala = "16:20:00"
-            tempoInicioEscala = "07:00:00"
+            tempoInicioEscala = "07:10:00"
             tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
             tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
 
@@ -120,15 +120,27 @@ class Produtividade():
         
             delta = delta1.total_seconds() + delta2.total_seconds()
 
-            #self.codOperador = codOperador
-            #self.codregistro = codRegistro
-            #self.AtualizarValores(delta_dias,round((delta / 60),2),str(tem_domingo))
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            #self.AtualizarValores(delta_dias,round((delta / 60),2),str(FimOperacao),FimOperacao)
         
             return (delta/ 60)-float(tempoParada)
         else:
             # Se as datas forem diferentes e não forem tratadas acima
             # Calcular a diferença entre os horários
-            delta = tempoFim - tempoInicio
+            tempoInicioEscala = "07:10:00"
+            tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
+
+            
+            delta = tempoFim - tempoInicioEscala
+
+
+
+            self.codOperador = codOperador
+            self.codregistro = codRegistro
+            #self.AtualizarValores(delta_dias,round((delta.total_seconds() / 60),2),str(FimOperacao),FimOperacao)
+
+
             return (delta.total_seconds() / 60)-float(tempoParada)
         
     def ProdutividadeOperadores(self):
@@ -136,7 +148,7 @@ class Produtividade():
         sql = """
         SELECT
             "Codigo Registro",
-            "Data"::Date,
+            "Data",
             case when "DiaInicial" is null then "Data"::Date else  "DiaInicial"::Date end "DiaInicial",
             case when  "Hr Inicio" is null  then "Hr Final"::varchar else "Hr Inicio"::varchar end "Hr Inicio"  ,
             "Hr Final",
@@ -173,7 +185,7 @@ class Produtividade():
 
             produtividade['tempoTotal(min)Acum'] = produtividade.groupby(['Data', 'codOperador'])[
                 'TempoRealizado(Min)'].cumsum()
-            produtividade['tempo Previsto'] = produtividade['qtdPcs'] / round(produtividade['Meta(pcs/hr)'] / 60, 2)
+            produtividade['tempo Previsto'] = (produtividade['qtdPcs'] / produtividade['Meta(pcs/hr)']) * 60
             produtividade['tempo PrevistoAcum'] = produtividade.groupby(['Data', 'codOperador'])[
                 'tempo Previsto'].cumsum()
             produtividade['tempo PrevistoAcum'] = produtividade['tempo PrevistoAcum'].round(2)
@@ -210,14 +222,14 @@ class Produtividade():
 
             return pd.DataFrame([dados])
         
-    def AtualizarValores(self,dia_entreData, tempoMin,tem_domingo):
+    def AtualizarValores(self,dia_entreData, tempoMin,tem_domingo, data):
     
         insert = """update "Easy"."RegistroProducao" set "dia_entre_datas" = %s, "tempoMin" =%s, "tem_domingo" = %s
-         where "codOperador" = %s and "sequencia" = %s """
+         where "codOperador" = %s and "sequencia" = %s and "DataHora"::Date = %s """
                     
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
-                curr.execute(insert,(dia_entreData, tempoMin,tem_domingo,self.codOperador, self.codregistro))
+                curr.execute(insert,(dia_entreData, tempoMin,tem_domingo,self.codOperador, self.codregistro, data))
                 conn.commit()
 
 
