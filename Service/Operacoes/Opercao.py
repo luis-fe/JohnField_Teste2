@@ -10,11 +10,13 @@ def Buscar_Operacoes():
         select  c.*, f."nomeFase",c2."nomeCategoria"  ,to2."tempoPadrao" as "TempoPadrao(s)", f."nomeFase", "Maq/Equipamento"  from "Easy"."Operacao" c
     inner join "Easy"."Fase" f on f."codFase" = c."codFase"
     inner join "Easy"."TemposOperacao" to2 on to2."codOperacao" = c."codOperacao" 
-    inner join "Easy"."Categoria" c2 on c2.codcategoria = to2."codCategoria" 
+    left join "Easy"."Categoria" c2 on c2.codcategoria = to2."codCategoria" 
     """
     consulta = pd.read_sql(sql,conn)
     consulta['Pcs/Hora'] = (60*60)/consulta['TempoPadrao(s)']
     consulta['Pcs/Hora'] = consulta['Pcs/Hora'].astype(int)
+    consulta['nomeCategoria'] = consulta['nomeCategoria'].fillna('-',inplace=True)
+
 
     return consulta
 
