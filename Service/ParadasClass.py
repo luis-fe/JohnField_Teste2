@@ -76,8 +76,11 @@ class Paradas():
         consulta ="""
                     select
                         *
-                    from"Easy"."ApontaParadas" ap where "dataInicio"::Date >= %s and "dataFinal"::date <= %s """
-        consulta = pd.read_sql(consulta,conn,params=(self.dataInicio, self.dataFinal))
+                    from
+                        "Easy"."ApontaParadas" ap 
+                    where 
+                        "dataInicio"::date >= %s and "dataFinal"::date <= %s """
+        consulta = pd.read_sql(consulta,conn,params=(self.dataInicio, self.dataFinal,))
         return consulta
 
     def ValidarEnvioDataHorario(self):
