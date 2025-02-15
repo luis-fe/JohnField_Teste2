@@ -63,7 +63,8 @@ class ColetaProdutividade():
             # 1.1: caso o intervalo entre apontamentos aconteca em n minutos, 
             # considerar como verdade a ocorrencia anterior
 
-            self.tempoApontamento_Time =  self._conversaoDeStr_To_time(self.tempoApontamento)
+            self.tempoApontamento_Time = datetime.strptime(self.tempoApontamento, "%H:%M:%S")
+            
             self.limiteTempoMinApontamento_Time =  self._conversaoDeStr_To_time(self.limiteTempoMinApontamento)
             delta = self.tempoApontamento_Time - (self.tempoApontamento_Time - self.limiteTempoMinApontamento_Time )
             delta1 = delta.total_seconds()
