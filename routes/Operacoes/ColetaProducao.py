@@ -187,7 +187,8 @@ def post_RegistrarProducaoTeste():
     nomeCategoria = data.get('nomeCategoria')
     qtdPecas = data.get('qtdPecas','-')
 
-    consulta = ColetaProdutividade.ColetaProdutividade(codOperador,10,1,qtdPecas)
+    registro = ColetaProdutividade.ColetaProdutividade(codOperador,10,1,qtdPecas)
+    consulta = registro.inserirProdutividade()
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
