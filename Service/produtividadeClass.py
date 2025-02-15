@@ -1,13 +1,14 @@
 import pandas as pd
 import ConexaoPostgreMPL
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class Produtividade():
+    '''Classe criada para gerenciar a produtividade e os apontamentos'''
     def __init__(self, dataInicio = None, dataFinal =None):
-        self.dataInicio = dataInicio
-        self.dataFinal = dataFinal
-        self.codOperador = None 
-        self.codregistro= None
+        self.dataInicio = dataInicio # Data de inicio do intervalo de apontamento
+        self.dataFinal = dataFinal # Data final do intervalo de apontamento
+        self.codOperador = None # codigo do operador 
+        self.codregistro= None # codigo do registro
 
     def ProdutividadePorCategoriaOperacao(self):
         sql = """

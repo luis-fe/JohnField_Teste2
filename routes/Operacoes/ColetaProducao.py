@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
 from Service.Operacoes import ColetaProducao
+from Service import ColetaProdutividade
 import pandas as pd
 
 ColetaProducao_routesJohn = Blueprint('ColetaProdJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
@@ -175,3 +176,25 @@ def get_ConfIntervaloColeta():
         consulta_data = busca.to_dict(orient='records')
 
         return jsonify(consulta_data)
+
+
+@ColetaProducao_routesJohn.route('/api/JonhField/RegistrarProducaoTeste', methods=['POST'])
+@token_required
+def post_RegistrarProducao():
+    data = request.get_json()
+    nomeOperacao = data.get('nomeOperacao')
+    codOperador = data.get('codOperador')
+    nomeCategoria = data.get('nomeCategoria')
+    qtdPecas = data.get('qtdPecas','-')
+
+    consulta = ColetaProdutividade.ColetaProdutividade(codOperador,10,1,qtdPecas)
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
