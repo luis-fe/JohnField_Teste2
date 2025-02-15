@@ -1,3 +1,4 @@
+from sqlite3 import Connection
 import ConexaoPostgreMPL
 import pandas as pd
 from datetime import datetime
@@ -120,5 +121,13 @@ class ColetaProdutividade():
             values
             ( %s, %s, %s, %s, %s, %s, %s )
         """
+
+
+        with ConexaoPostgreMPL.conexao() as conn:
+            with conn.cursor() as curr:
+                
+                curr.execute(insert,(self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
+                                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento))
+                conn.commit()
 
         return pd.DataFrame([{'status':True,"mensagem":"Registrado com sucesso !"}])
