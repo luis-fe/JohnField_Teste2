@@ -123,7 +123,7 @@ class ColetaProdutividade():
         """
 
 
-        with ConexaoPostgreMPL.conexao() as conn:
+        with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
                 
                 curr.execute(insert,(self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
