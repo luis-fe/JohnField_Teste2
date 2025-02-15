@@ -58,31 +58,19 @@ class ColetaProdutividade():
 
         if not consulta.empty:
             self.ultimoTempo = str(consulta['utimoTempo'][0])
+            self.dataUltimoApontamento = consulta['utimaData'][0]
+
+
             
-            self.dataUltimoApontamento = consulta['dataApontamento'][0]
-
-            # 1.1: caso o intervalo entre apontamentos aconteca em n minutos, 
-            # considerar como verdade a ocorrencia anterior
-
-            # Convertendo para datetime (assumindo a data de referência como 1970-01-01)
-            self.tempoApontamento_Time = datetime.strptime(self.tempoApontamento, "%H:%M:%S")
-            self.limiteTempoMinApontamento_Time = datetime.strptime(self.limiteTempoMinApontamento, "%H:%M:%S")
-
-            # Calculando a diferença entre os tempos
-            delta = self.tempoApontamento_Time - self.limiteTempoMinApontamento_Time
-
-            # Convertendo para timestamp usando uma data arbitrária
-            base_date = datetime(1970, 1, 1)  # Definindo uma data base para evitar erros
-            delta1 = (base_date + delta).timestamp()
-            delta2 = (base_date + (self.limiteTempoMinApontamento_Time - base_date)).timestamp()
-
+            delta1 = self.dataUltimoApontamento - self.agora
+            delta2 = datetime.strptime(self.limiteTempoMinApontamento)
             # Formatando a saída
             self.dataUltimoApontamento = f"{delta1}|{delta2}"
 
                         
             if self.dataHoraApontamento == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
-                dataTarget = self._conversaoDeTime_To_Str(delta)
+                dataTarget = self.dataUltimoApontamento
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
@@ -102,6 +90,7 @@ class ColetaProdutividade():
         data_str = agora.strftime('%Y-%m-%d')
         tempo_str = agora.strftime('%H:%M:%S')
 
+        self.agora = agora
         self.dataHoraApontamento = hora_str
         self.dataApontamento = data_str
         self.tempoApontamento = tempo_str
