@@ -78,7 +78,7 @@ class ColetaProdutividade():
                 self.dataUltimoApontamento = consulta['dataApontamento'][0]
 
         else:
-            self.ultimoTempo = None
+            self.ultimoTempo = '-'
             self.dataUltimoApontamento = None
 
 
