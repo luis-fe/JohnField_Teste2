@@ -180,7 +180,7 @@ def get_ConfIntervaloColeta():
 
 @ColetaProducao_routesJohn.route('/api/JonhField/RegistrarProducaoTeste', methods=['POST'])
 @token_required
-def post_RegistrarProducao():
+def post_RegistrarProducaoTeste():
     data = request.get_json()
     nomeOperacao = data.get('nomeOperacao')
     codOperador = data.get('codOperador')
