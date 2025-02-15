@@ -67,7 +67,7 @@ class ColetaProdutividade():
             self.tempoApontamento_Time = datetime.strptime(self.tempoApontamento, "%H:%M:%S")
             self.limiteTempoMinApontamento_Time =  datetime.strptime(self.limiteTempoMinApontamento, "%H:%M:%S")
             
-            delta = self.tempoApontamento_Time - (self.tempoApontamento_Time - self.limiteTempoMinApontamento_Time )
+            delta = self.tempoApontamento_Time - (self.tempoApontamento_Time -self.limiteTempoMinApontamento_Time)
             delta1 = delta.timestamp()
             delta2 = self.limiteTempoMinApontamento_Time.timestamp()
             self.dataUltimoApontamento = str(delta1) +'|'+ str(delta2)
