@@ -1,7 +1,7 @@
 from sqlite3 import Connection
 import ConexaoPostgreMPL
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
 
