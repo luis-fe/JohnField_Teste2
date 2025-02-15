@@ -126,8 +126,11 @@ class ColetaProdutividade():
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
                 
-                curr.execute(insert,(self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
-                                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento))
+                curr.execute(insert,
+                            (
+                    self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
+                    self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento)
+                            )
                 conn.commit()
 
         return pd.DataFrame([{'status':True,"mensagem":"Registrado com sucesso !"}])
