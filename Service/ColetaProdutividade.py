@@ -70,6 +70,8 @@ class ColetaProdutividade():
             delta = self.tempoApontamento_Time - (self.tempoApontamento_Time - self.limiteTempoMinApontamento_Time )
             delta1 = delta.timestamp()
             delta2 = self.limiteTempoMinApontamento_Time.timestamp()
+            self.dataUltimoApontamento = str(delta1) +'|'+ str(delta2)
+
             
             if self.dataHoraApontamento == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
