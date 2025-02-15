@@ -78,7 +78,7 @@ class ColetaProdutividade():
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
                 self.dataUltimoApontamento = consulta['dataApontamento'][0]
-
+                self.dataUltimoApontamento = str(delta1) +'|'+ str(delta2)
         else:
             self.ultimoTempo = '-'
             self.dataUltimoApontamento = None
