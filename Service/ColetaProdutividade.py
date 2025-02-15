@@ -57,7 +57,8 @@ class ColetaProdutividade():
         consulta = pd.read_sql(sql, conn, params=(self.codOperador,self.dataHoraApontamento))
 
         if not consulta.empty:
-            self.ultimoTempo = consulta['utimoTempo'][0]
+            self.ultimoTempo = str(consulta['utimoTempo'][0])
+            
             self.dataUltimoApontamento = consulta['dataApontamento'][0]
 
             # 1.1: caso o intervalo entre apontamentos aconteca em n minutos, 
@@ -75,7 +76,7 @@ class ColetaProdutividade():
                 dataTarget = self._conversaoDeTime_To_Str(delta)
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
                 
-                self.ultimoTempo = consulta['utimoTempo'][0]
+                self.ultimoTempo = str(consulta['utimoTempo'][0])
                 self.dataUltimoApontamento = consulta['dataApontamento'][0]
 
         else:
