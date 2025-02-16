@@ -75,7 +75,8 @@ class ColetaProdutividade():
                         
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
-                dataTarget = self.dataUltimoApontamento
+                dataTarget = self.subtrair_minutos()     
+             
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
@@ -157,3 +158,8 @@ class ColetaProdutividade():
             data_atual += timedelta(days=1)
         
         return contador
+    
+    def subtrair_minutos(self) -> str:
+        dt = datetime.strptime(self.dataHoraApontamento, "%Y-%m-%d %H:%M:%S")
+        dt -= timedelta(minutes=10)
+        return dt.strftime("%Y-%m-%d %H:%M:%S")
