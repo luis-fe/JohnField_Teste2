@@ -121,13 +121,14 @@ class ColetaProdutividade():
             "Easy"."FolhaRegistro" 
             (
                 "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
-                "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador
+                "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador,
+                "descontoFimSemana"
             )
             values
-            ( %s, %s, %s, %s, %s, %s, %s, %s )
+            ( %s, %s, %s, %s, %s, %s, %s, %s, %s )
         """
 
-
+        
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with conn.cursor() as curr:
                 
@@ -135,7 +136,7 @@ class ColetaProdutividade():
                             (
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
-                    self.validador)
+                    self.validador, self.contar_finais_de_semana())
                             )
                 conn.commit()
 
