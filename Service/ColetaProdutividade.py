@@ -59,11 +59,10 @@ class ColetaProdutividade():
         if not consulta.empty:
             self.ultimoTempo = str(consulta['utimoTempo'][0])
             self.dataUltimoApontamento = consulta['utimaData'][0]
-
-
             
             delta1 = self.dataUltimoApontamento - self.agora
-            delta2 = datetime.strptime(self.limiteTempoMinApontamento)
+            limite_hms = datetime.strptime(self.limiteTempoMinApontamento, "%H:%M:%S")
+            delta2 = timedelta(hours=limite_hms.hour, minutes=limite_hms.minute, seconds=limite_hms.second).total_seconds()
             # Formatando a saída
             self.dataUltimoApontamento = f"{delta1}|{delta2}"
 
