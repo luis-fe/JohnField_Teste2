@@ -44,7 +44,7 @@ class ColetaProdutividade():
                 MAX("DataHora"::time) AS "utimoTempo", 
                 COUNT("DataHora") AS registros ,
                 MAX("DataHora"::varchar) AS "utimaData",
-                MAX(("DataHora"::date)::varchar) AS "dataApontamento"
+                MAX(("DataHora"::date)::varchar) AS "dataUltimoApontamento"
             FROM 
                 "Easy"."RegistroProducao" rp 
             WHERE 
@@ -59,20 +59,21 @@ class ColetaProdutividade():
         if not consulta.empty:
             self.ultimoTempo = str(consulta['utimoTempo'][0])
             self.dataUltimoApontamento = consulta['utimaData'][0]
+            self.dataUltimoApontamento_A_M_D = consulta['dataUltimoApontamento'][0]
             self.dataUltimoApontamento_tempo = datetime.strptime(self.dataUltimoApontamento, 
                                                                  "%Y-%m-%d %H:%M:%S")
             self.dataHoraApontamento_tempo = datetime.strptime(self.dataHoraApontamento, 
                                                                  "%Y-%m-%d %H:%M:%S")
 
             
-            delta1 = (-self.dataUltimoApontamento_tempo + self.dataHoraApontamento_tempo).total_seconds()
+            delta1 = (self.dataHoraApontamento_tempo - self.dataHoraApontamento_tempo).total_seconds()
             limite_hms = datetime.strptime(self.limiteTempoMinApontamento, "%H:%M:%S")
             delta2 = timedelta(hours=limite_hms.hour, minutes=limite_hms.minute, seconds=limite_hms.second).total_seconds()
             # Formatando a saída
-            self.dataUltimoApontamento = f"{delta1}|{delta2}"
+            self.dataUltimoApontamento = f"{delta1}|{delta2}|{self.dataUltimoApontamento_A_M_D}||{self.dataApontamento}"
 
                         
-            if self.dataHoraApontamento == self.dataApontamento and delta1<=delta2 :
+            if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
                 dataTarget = self.dataUltimoApontamento
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
