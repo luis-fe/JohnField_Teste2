@@ -79,7 +79,7 @@ class ColetaProdutividade():
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
-                self.dataUltimoApontamento = consulta['dataApontamento'][0]
+                self.dataUltimoApontamento = consulta['utimaData'][0]
                 self.validador = str(delta1) +'|'+ str(delta2)
         else:
             self.ultimoTempo = '-'
