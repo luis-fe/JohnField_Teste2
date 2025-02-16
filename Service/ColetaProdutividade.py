@@ -41,15 +41,15 @@ class ColetaProdutividade():
 
         sql = """
             SELECT 
-                MAX("DataHora"::time) AS "utimoTempo", 
-                COUNT("DataHora") AS registros ,
-                MAX("DataHora"::varchar) AS "utimaData",
-                MAX(("DataHora"::date)::varchar) AS "dataUltimoApontamento"
+                MAX("dataHoraApontamento"::time) AS "utimoTempo", 
+                COUNT("dataHoraApontamento") AS registros ,
+                MAX("dataHoraApontamento"::varchar) AS "utimaData",
+                MAX(("dataHoraApontamento"::date)::varchar) AS "dataUltimoApontamento"
             FROM 
-                "Easy"."RegistroProducao" rp 
+                "Easy"."FolhaRegistro" rp 
             WHERE 
                 "codOperador" = %s
-                AND (("DataHora"::timestamp AT TIME ZONE 'UTC') AT TIME ZONE 'America/Sao_Paulo')::date 
+                AND (("dataHoraApontamento"::timestamp AT TIME ZONE 'UTC') AT TIME ZONE 'America/Sao_Paulo')::date 
                 <= ( %s AT TIME ZONE 'America/Sao_Paulo')::date;
             """
         
