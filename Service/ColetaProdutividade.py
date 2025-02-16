@@ -81,7 +81,7 @@ class ColetaProdutividade():
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
                 self.dataUltimoApontamento = consulta['utimaData'][0]
-                self.validador = str(delta1) +'|'+ str(delta2)
+                self.validador = str(delta1) +'|'+ str(delta2)+'|'+ str(dataTarget)
         else:
             self.ultimoTempo = '-'
             self.dataUltimoApontamento = None
