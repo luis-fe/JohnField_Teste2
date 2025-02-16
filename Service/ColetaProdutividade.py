@@ -60,7 +60,7 @@ class ColetaProdutividade():
             self.ultimoTempo = str(consulta['utimoTempo'][0])
             self.dataUltimoApontamento = consulta['utimaData'][0]
             
-            delta1 = self.dataUltimoApontamento - self.agora
+            delta1 = self.dataUltimoApontamento - self.dataHoraApontamento
             limite_hms = datetime.strptime(self.limiteTempoMinApontamento, "%H:%M:%S")
             delta2 = timedelta(hours=limite_hms.hour, minutes=limite_hms.minute, seconds=limite_hms.second).total_seconds()
             # Formatando a saída
@@ -89,7 +89,6 @@ class ColetaProdutividade():
         data_str = agora.strftime('%Y-%m-%d')
         tempo_str = agora.strftime('%H:%M:%S')
 
-        self.agora = agora
         self.dataHoraApontamento = hora_str
         self.dataApontamento = data_str
         self.tempoApontamento = tempo_str
