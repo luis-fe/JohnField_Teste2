@@ -49,7 +49,7 @@ class ColetaProdutividade():
                 "Easy"."FolhaRegistro" rp 
             WHERE 
                 "codOperador" = %s
-                AND (("dataHoraApontamento"::timestamp AT TIME ZONE 'UTC') AT TIME ZONE 'America/Sao_Paulo')::date <= %s;
+                AND (("dataHoraApontamento"::timestamp AT TIME ZONE 'UTC') AT TIME ZONE 'America/Sao_Paulo')::date < %s;
             """
         
         conn = ConexaoPostgreMPL.conexaoJohn()
