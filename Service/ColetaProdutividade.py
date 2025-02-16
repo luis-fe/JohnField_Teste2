@@ -11,9 +11,9 @@ class ColetaProdutividade():
     def __init__(self, codOperador = None, limiteTempoMinApontamento = None, 
                  codOperacao = None, qtdePc = None):
         
-        self.codOperador = codOperador
+        self.codOperador = str(codOperador)
         self.limiteTempoMinApontamento = limiteTempoMinApontamento
-        self.codOperacao = codOperacao
+        self.codOperacao = str(codOperacao)
         self.qtdePc = qtdePc
 
         #2 - buscar a DataHora atual do sistema
@@ -140,3 +140,20 @@ class ColetaProdutividade():
                 conn.commit()
 
         return pd.DataFrame([{'status':True,"mensagem":"Registrado com sucesso !"}])
+    
+    def contar_finais_de_semana(self) -> int:
+        data_inicio = datetime.strptime(self.dataUltimoApontamento_A_M_D, "%Y-%m-%d").date()
+        data_fim = datetime.strptime(self.dataApontamento, "%Y-%m-%d").date()
+        
+        if data_fim.weekday() in [5, 6]:  # 5 = Sábado, 6 = Domingo
+            data_fim -= timedelta(days=1)  # Remove um dia para desconsiderar a saída
+        
+        contador = 0
+        data_atual = data_inicio
+        
+        while data_atual <= data_fim:
+            if data_atual.weekday() in [5, 6]:  # 5 = Sábado, 6 = Domingo
+                contador += 1
+            data_atual += timedelta(days=1)
+        
+        return contador
