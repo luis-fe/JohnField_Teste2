@@ -49,7 +49,7 @@ class ColetaProdutividade():
                 "Easy"."FolhaRegistro" rp 
             WHERE 
                 "codOperador" = %s
-                AND "dataHoraApontamento"::Date <= now();
+                AND "dataHoraApontamento"::Date <= %s;
             """
         
         conn = ConexaoPostgreMPL.conexaoJohn()
