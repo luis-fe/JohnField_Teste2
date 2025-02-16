@@ -70,7 +70,7 @@ class ColetaProdutividade():
             limite_hms = datetime.strptime(self.limiteTempoMinApontamento, "%H:%M:%S")
             delta2 = timedelta(hours=limite_hms.hour, minutes=limite_hms.minute, seconds=limite_hms.second).total_seconds()
             # Formatando a saída
-            self.dataUltimoApontamento = f"{delta1}|{delta2}|{self.dataUltimoApontamento_A_M_D}||{self.dataApontamento}"
+            self.validador = f"{delta1}|{delta2}|{self.dataUltimoApontamento_A_M_D}||{self.dataApontamento}"
 
                         
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
@@ -80,10 +80,11 @@ class ColetaProdutividade():
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
                 self.dataUltimoApontamento = consulta['dataApontamento'][0]
-                self.dataUltimoApontamento = str(delta1) +'|'+ str(delta2)
+                self.validador = str(delta1) +'|'+ str(delta2)
         else:
             self.ultimoTempo = '-'
             self.dataUltimoApontamento = None
+            self.validador = '-'
 
 
     def dataHoraAtual(self):
@@ -120,10 +121,10 @@ class ColetaProdutividade():
             "Easy"."FolhaRegistro" 
             (
                 "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
-                "dataHoraApontamento","ultimoTempo","dataUltimoApontamento"
+                "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador
             )
             values
-            ( %s, %s, %s, %s, %s, %s, %s )
+            ( %s, %s, %s, %s, %s, %s, %s, %s )
         """
 
 
@@ -133,7 +134,8 @@ class ColetaProdutividade():
                 curr.execute(insert,
                             (
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
-                    self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento)
+                    self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
+                    self.validador)
                             )
                 conn.commit()
 
