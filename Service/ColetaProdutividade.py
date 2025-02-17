@@ -15,6 +15,7 @@ class ColetaProdutividade():
         self.limiteTempoMinApontamento = limiteTempoMinApontamento
         self.codOperacao = str(codOperacao)
         self.qtdePc = qtdePc
+        self.horarioInicial = '-'
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -71,6 +72,10 @@ class ColetaProdutividade():
             # Formatando a saída
             self.validador = f"{delta1}|{delta2}|{self.dataUltimoApontamento_A_M_D}||{self.dataApontamento}"
 
+            # Verifica se o ultimo horario foi no mesmo dia 
+            if self.dataUltimoApontamento_A_M_D == self.dataApontamento:
+                self.horarioInicial = self.ultimoTempo
+
                         
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
@@ -83,6 +88,11 @@ class ColetaProdutividade():
                 self.dataUltimoApontamento_A_M_D = consulta['dataUltimoApontamento'][0]
 
                 self.validador = str(delta1) +'|'+ str(delta2)+'|'+ str(dataTarget)
+                # Verifica se o ultimo horario foi no mesmo dia 
+                if  self.dataUltimoApontamento_A_M_D == self.dataApontamento:
+                    self.horarioInicial = self.ultimoTempo
+
+
         else:
             self.ultimoTempo = '-'
             self.dataUltimoApontamento = None
@@ -124,10 +134,10 @@ class ColetaProdutividade():
             (
                 "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
                 "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador,
-                "descontoFimSemana"
+                "descontoFimSemana", "horarioInicial"
             )
             values
-            ( %s, %s, %s, %s, %s, %s, %s, %s, %s )
+            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
         """
 
         
@@ -138,7 +148,7 @@ class ColetaProdutividade():
                             (
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
-                    self.validador, self.contar_finais_de_semana())
+                    self.validador, self.contar_finais_de_semana(), self.horarioInicial)
                             )
                 conn.commit()
 
