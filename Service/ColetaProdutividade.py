@@ -81,7 +81,7 @@ class ColetaProdutividade():
                 self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
                                                                  "%H:%M:%S")
 
-                self.tempoRealizado = (self.ultimoTempo_tempo - self.tempoApontamento_tempo).total_seconds()
+                self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
                 self.tempoRealizado = round(self.tempoRealizado/60,3)
                         
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
@@ -98,10 +98,17 @@ class ColetaProdutividade():
                 # Verifica se o ultimo horario foi no mesmo dia 
                 if  self.dataUltimoApontamento_A_M_D == self.dataApontamento:
                     self.horarioInicial = self.ultimoTempo
+                    self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
+                                                                 "%H:%M:%S")
+                    self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
+                                                                 "%H:%M:%S")
+
+                    self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
+                    self.tempoRealizado = round(self.tempoRealizado/60,3)
 
 
         else:
-            self.ultimoTempo = '-'
+            self.ultimoTempo = self.horarioManha
             self.dataUltimoApontamento = None
             self.validador = '-'
 
