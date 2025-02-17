@@ -85,7 +85,7 @@ class ColetaProdutividade():
             self.contar_finais_de_semana()
 
             # Verifica se o ultimo horario foi no mesmo dia 
-            self.__obtendoTempoRealizado
+            self.__obtendoTempoRealizado()
             
 
 
@@ -111,7 +111,7 @@ class ColetaProdutividade():
                 self.contar_finais_de_semana()
 
                 # Verifica se o ultimo horario foi no mesmo dia 
-                self.__obtendoTempoRealizado
+                self.__obtendoTempoRealizado()
 
 
         else:
