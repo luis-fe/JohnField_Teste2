@@ -184,8 +184,7 @@ class ColetaProdutividade():
         try:
             datas = pd.date_range(start=self.dataUltimoApontamento_A_M_D, end=self.dataApontamento)
         except ValueError as e:
-            raise ValueError(f"Erro ao gerar o range de datas: {e},
-                             inico operacao{self.dataUltimoApontamento_A_M_D},fim{self.dataApontamento}")
+            raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{self.dataUltimoApontamento_A_M_D},fim{self.dataApontamento}")
 
         self.tem_domingo = any(date.weekday() == 6 for date in datas)
 
