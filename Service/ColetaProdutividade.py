@@ -21,6 +21,7 @@ class ColetaProdutividade():
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
+        self.escalaInicial_Trabalho()
 
 
     def apontarProdutividade(self):
@@ -62,6 +63,10 @@ class ColetaProdutividade():
             
             self.ultimoTempo = str(consulta['utimoTempo'][0])
             self.dataUltimoApontamento = consulta['utimaData'][0]
+            
+            if self.dataUltimoApontamento == None:
+                self.dataUltimoApontamento = self.horarioManha
+
             self.dataUltimoApontamento_A_M_D = consulta['dataUltimoApontamento'][0]
             self.dataUltimoApontamento_tempo = datetime.strptime(self.dataUltimoApontamento, 
                                                                  "%Y-%m-%d %H:%M:%S")
