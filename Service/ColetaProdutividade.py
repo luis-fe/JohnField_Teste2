@@ -16,6 +16,7 @@ class ColetaProdutividade():
         self.codOperacao = str(codOperacao)
         self.qtdePc = qtdePc
         self.horarioInicial = '-'
+        self.tempoRealizado = 0
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -75,7 +76,13 @@ class ColetaProdutividade():
             # Verifica se o ultimo horario foi no mesmo dia 
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento:
                 self.horarioInicial = self.ultimoTempo
+                self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
+                                                                 "%H:%M:%S")
+                self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
+                                                                 "%H:%M:%S")
 
+                self.tempoRealizado = (self.ultimoTempo_tempo - self.tempoApontamento_tempo).total_seconds()
+                self.tempoRealizado = round(self.tempoRealizado/60,3)
                         
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
@@ -134,10 +141,10 @@ class ColetaProdutividade():
             (
                 "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
                 "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador,
-                "descontoFimSemana", "horarioInicial"
+                "descontoFimSemana", "horarioInicial","tempoRealizado"
             )
             values
-            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
+            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
         """
 
         
@@ -148,7 +155,7 @@ class ColetaProdutividade():
                             (
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
-                    self.validador, self.contar_finais_de_semana(), self.horarioInicial)
+                    self.validador, self.contar_finais_de_semana(), self.horarioInicial, self.tempoRealizado)
                             )
                 conn.commit()
 
@@ -175,3 +182,22 @@ class ColetaProdutividade():
         dt = datetime.strptime(self.dataHoraApontamento, "%Y-%m-%d %H:%M:%S")
         dt -= timedelta(minutes=10)
         return dt.strftime("%Y-%m-%d %H:%M:%S")
+    
+
+    def escalaInicial_Trabalho(self):
+        '''metodo que encontra a escala inicial de trabalho'''
+        sql = """
+        select
+            periodo1_inicio,
+            periodo2_inicio
+        from
+            "Easy"."EscalaTrabalho" et 
+            """
+        
+        conn = ConexaoPostgreMPL.conexaoEngine()
+        consulta = pd.read_sql(sql, conn)
+
+        self.horarioManha = consulta['periodo1_inicio'][0]
+        self.horarioTarde = consulta['periodo2_inicio'][0]
+
+        
