@@ -17,6 +17,7 @@ class ColetaProdutividade():
         self.qtdePc = qtdePc
         self.horarioInicial = '-'
         self.tempoRealizado = 0
+        self.delta_dias = 1000
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -72,6 +73,10 @@ class ColetaProdutividade():
             delta2 = timedelta(hours=limite_hms.hour, minutes=limite_hms.minute, seconds=limite_hms.second).total_seconds()
             # Formatando a saída
             self.validador = f"{delta1}|{delta2}|{self.dataUltimoApontamento_A_M_D}||{self.dataApontamento}"
+
+            self.delta_dias = (self.dataHoraApontamento_tempo - self.dataUltimoApontamento_tempo).days
+
+
 
             # Verifica se o ultimo horario foi no mesmo dia 
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento:
@@ -148,10 +153,10 @@ class ColetaProdutividade():
             (
                 "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
                 "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador,
-                "descontoFimSemana", "horarioInicial","tempoRealizado"
+                "descontoFimSemana", "horarioInicial","tempoRealizado","delta_dias"
             )
             values
-            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
+            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
         """
 
         
@@ -162,7 +167,8 @@ class ColetaProdutividade():
                             (
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
-                    self.validador, self.contar_finais_de_semana(), self.horarioInicial, self.tempoRealizado)
+                    self.validador, self.contar_finais_de_semana(), self.horarioInicial, 
+                    self.tempoRealizado,self.delta_dias)
                             )
                 conn.commit()
 
