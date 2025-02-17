@@ -59,6 +59,7 @@ class ColetaProdutividade():
         consulta = pd.read_sql(sql, conn, params=(self.codOperador,self.dataHoraApontamento))
 
         if not consulta.empty:
+            
             self.ultimoTempo = str(consulta['utimoTempo'][0])
             self.dataUltimoApontamento = consulta['utimaData'][0]
             self.dataUltimoApontamento_A_M_D = consulta['dataUltimoApontamento'][0]
@@ -76,19 +77,20 @@ class ColetaProdutividade():
 
             self.delta_dias = (self.dataHoraApontamento_tempo - self.dataUltimoApontamento_tempo).days
 
-
+            self.horarioInicial = self.ultimoTempo
+            self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
+                                                                 "%H:%M:%S")
+            self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
+                                                                 "%H:%M:%S")
+            self.contar_finais_de_semana()
 
             # Verifica se o ultimo horario foi no mesmo dia 
-            if self.dataUltimoApontamento_A_M_D == self.dataApontamento:
-                self.horarioInicial = self.ultimoTempo
-                self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
-                                                                 "%H:%M:%S")
-                self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
-                                                                 "%H:%M:%S")
+            self.__obtendoTempoRealizado
+            
 
-                self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
-                self.tempoRealizado = round(self.tempoRealizado/60,3)
-                        
+
+
+
             if self.dataUltimoApontamento_A_M_D == self.dataApontamento and delta1<=delta2 :
                 '''Aqui é feito um if para verificar se o apontamento ocorreu nos ultimos n minutos'''
                 dataTarget = self.subtrair_minutos()     
@@ -101,15 +103,15 @@ class ColetaProdutividade():
 
                 self.validador = str(delta1) +'|'+ str(delta2)+'|'+ str(dataTarget)
                 # Verifica se o ultimo horario foi no mesmo dia 
-                if  self.dataUltimoApontamento_A_M_D == self.dataApontamento:
-                    self.horarioInicial = self.ultimoTempo
-                    self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
+                self.horarioInicial = self.ultimoTempo
+                self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
                                                                  "%H:%M:%S")
-                    self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
+                self.tempoApontamento_tempo = datetime.strptime(self.tempoApontamento, 
                                                                  "%H:%M:%S")
+                self.contar_finais_de_semana()
 
-                    self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
-                    self.tempoRealizado = round(self.tempoRealizado/60,3)
+                # Verifica se o ultimo horario foi no mesmo dia 
+                self.__obtendoTempoRealizado
 
 
         else:
@@ -178,6 +180,16 @@ class ColetaProdutividade():
         data_inicio = datetime.strptime(self.dataUltimoApontamento_A_M_D, "%Y-%m-%d").date()
         data_fim = datetime.strptime(self.dataApontamento, "%Y-%m-%d").date()
         
+        # Verifica se há algum domingo na sequência de datas
+        try:
+            datas = pd.date_range(start=self.dataUltimoApontamento_A_M_D, end=self.dataApontamento)
+        except ValueError as e:
+            raise ValueError(f"Erro ao gerar o range de datas: {e},
+                             inico operacao{self.dataUltimoApontamento_A_M_D},fim{self.dataApontamento}")
+
+        self.tem_domingo = any(date.weekday() == 6 for date in datas)
+
+
         if data_fim.weekday() in [5, 6]:  # 5 = Sábado, 6 = Domingo
             data_fim -= timedelta(days=1)  # Remove um dia para desconsiderar a saída
         
@@ -214,3 +226,35 @@ class ColetaProdutividade():
         self.horarioTarde = consulta['periodo2_inicio'][0]
 
         
+
+    def __obtendoTempoRealizado(self):
+        if self.dataUltimoApontamento_A_M_D == self.dataApontamento:
+
+
+                self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
+                self.tempoRealizado = round(self.tempoRealizado/60,3)
+            
+        elif self.delta_dias == 1:
+                tempoFImEscala = "17:20:00"
+                tempoInicioEscala = "07:10:00"
+                tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
+                tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
+                
+                delta1 = tempoFImEscala - self.ultimoTempo_tempo
+                delta2 = self.tempoApontamento_tempo - tempoInicioEscala
+        
+                self.tempoRealizado  = delta1.total_seconds() + delta2.total_seconds() 
+                self.tempoRealizado = round(self.tempoRealizado/60,3)
+                
+        elif (self.delta_dias == 3 or self.delta_dias == 2 ) and self.tem_domingo:
+                tempoFImEscala = "16:20:00"
+                tempoInicioEscala = "07:10:00"
+                tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
+                tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
+                
+                delta1 = tempoFImEscala - self.ultimoTempo_tempo
+                delta2 = self.tempoApontamento_tempo - tempoInicioEscala
+        
+                self.tempoRealizado  = delta1.total_seconds() + delta2.total_seconds() 
+                self.tempoRealizado = round(self.tempoRealizado/60,3)
+            
