@@ -72,7 +72,7 @@ def ColetaProducao(codOperador, nomeOperacao, qtdPecas):
             hora_esc3 = sqlEscala['periodo3_inicio'][0]
 
             if sql['utimoTempo'][0] == None:
-                    ultimotempo = hora_esc1 + ':00'
+                    ultimotempo = hora_esc1
                     registro = sql['registros'][0] + 1
 
             else:
@@ -90,11 +90,11 @@ def ColetaProducao(codOperador, nomeOperacao, qtdPecas):
             
             datetime_obj = datetime.strptime(Tempo, "%Y-%m-%d %H:%M:%S")
             ultimotempo = datetime.strptime(ultimotempo, "%H:%M:%S")
-            hora_esc1Fim = datetime.strptime(hora_esc1Fim +':00', "%H:%M:%S")
-            hora_esc2 = datetime.strptime(hora_esc2 +':00', "%H:%M:%S")
-            hora_esc2Fim = datetime.strptime(hora_esc2Fim +':00', "%H:%M:%S")
+            hora_esc1Fim = datetime.strptime(hora_esc1Fim , "%H:%M:%S")
+            hora_esc2 = datetime.strptime(hora_esc2 , "%H:%M:%S")
+            hora_esc2Fim = datetime.strptime(hora_esc2Fim, "%H:%M:%S")
 
-            hora_esc3 = datetime.strptime(hora_esc3 +':00', "%H:%M:%S")
+            hora_esc3 = datetime.strptime(hora_esc3 , "%H:%M:%S")
 
 
             # Extrai o componente time do objeto datetime
@@ -318,7 +318,7 @@ def ColetaProducaoRetroativa(codOperador, nomeOperacao, qtdPecas, dataRetroativa
             hora_esc3 = sqlEscala['periodo3_inicio'][0]
 
             if sql['utimoTempo'][0] == None:
-                    ultimotempo = hora_esc1 + ':00'
+                    ultimotempo = hora_esc1
                     registro = sql['registros'][0] + 1
 
             else:
@@ -326,7 +326,7 @@ def ColetaProducaoRetroativa(codOperador, nomeOperacao, qtdPecas, dataRetroativa
                     ultimotempo = str(ultimotempo)
                     registro = sql['registros'][0] + 1
 
-            Tempo = dataRetroativa+' '+HorarioTermino+':00'
+            Tempo = dataRetroativa+' '+HorarioTermino
 
             if not sql2.empty:
                 utimaData = sql2['utimaData'][0]
@@ -337,11 +337,11 @@ def ColetaProducaoRetroativa(codOperador, nomeOperacao, qtdPecas, dataRetroativa
             # Converte a string para um objeto datetime
             datetime_obj = datetime.strptime(Tempo, "%Y-%m-%d %H:%M:%S")
             ultimotempo = datetime.strptime(ultimotempo, "%H:%M:%S")
-            hora_esc1Fim = datetime.strptime(hora_esc1Fim +':00', "%H:%M:%S")
-            hora_esc2 = datetime.strptime(hora_esc2 +':00', "%H:%M:%S")
-            hora_esc2Fim = datetime.strptime(hora_esc2Fim +':00', "%H:%M:%S")
+            hora_esc1Fim = datetime.strptime(hora_esc1Fim, "%H:%M:%S")
+            hora_esc2 = datetime.strptime(hora_esc2 , "%H:%M:%S")
+            hora_esc2Fim = datetime.strptime(hora_esc2Fim, "%H:%M:%S")
 
-            hora_esc3 = datetime.strptime(hora_esc3 +':00', "%H:%M:%S")
+            hora_esc3 = datetime.strptime(hora_esc3 , "%H:%M:%S")
 
 
             # Extrai o componente time do objeto datetime
