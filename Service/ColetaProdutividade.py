@@ -5,6 +5,19 @@ from datetime import datetime, timedelta
 import pytz
 
 
+"""
+REGRAS DO APONTAMENTO:
+1) No ato do registro é considerado como intervalo de producao a dataAtual - dataUltimoRegistro 
+2) Caso o usuario registrar operacoes em ate 10 min de diferenca da ultima, será contabilizado o intervalo da penultimaOperacao
+3) Caso o sistema nao encontre operacao anterior ( "primeira vez"), considera o tempo de entrada na "escala" do colaborador
+4) O sistema sempre desconta os domingos e sabados ( se o ultimo apontamento for sexta )
+5) O sistema sempre desconta os domingo ( se o ultimo apontamento for sabado )
+6) O sistema desconta os feriados Nacionais (caso tenha feriado local, o usuario deve informar)
+7) O sistema nao considera apontamentos maiores que 3 dias, nesse caso é informado o horario da entrada 
+"""
+
+
+
 class ColetaProdutividade():
     '''Classe criada para a gestao da coleta de produtividade'''
 
