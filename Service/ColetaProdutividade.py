@@ -192,7 +192,7 @@ class ColetaProdutividade():
                             (
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
-                    self.validador, self.contar_finais_de_semana(), self.horarioInicial, 
+                    self.validador, fimSemana, self.horarioInicial, 
                     self.tempoRealizado,self.delta_dias)
                             )
                 conn.commit()
