@@ -314,5 +314,5 @@ class ColetaProdutividade():
                 if self.tempoApontamento_tempo > self.horarioTarde_tempo:
                     self.desconto = self.descontoAlmoco + self.desconto
 
-
+                self.validador = 'caso de sexta que aponta seg'
                 self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
