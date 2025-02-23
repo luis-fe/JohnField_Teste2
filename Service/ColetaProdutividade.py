@@ -1,3 +1,4 @@
+from encodings.punycode import T
 from sqlite3 import Connection
 import ConexaoPostgreMPL
 import pandas as pd
@@ -9,7 +10,7 @@ import pytz
 REGRAS DO APONTAMENTO:
 1) No ato do registro é considerado como intervalo de producao a dataAtual - dataUltimoRegistro 
 2) Caso o usuario registrar operacoes em ate 10 min de diferenca da ultima, será contabilizado o intervalo da penultimaOperacao
-3) OK! Caso o sistema nao encontre operacao anterior ( "primeira vez"), considera o tempo de entrada na "escala" do colaborador
+OK! 3) Caso o sistema nao encontre operacao anterior ( "primeira vez"), considera o tempo de entrada na "escala" do colaborador
 4) O sistema sempre desconta os domingos e sabados ( se o ultimo apontamento for sexta )
 5) O sistema sempre desconta os domingo ( se o ultimo apontamento for sabado )
 6) O sistema desconta os feriados Nacionais (caso tenha feriado local, o usuario deve informar)
@@ -30,7 +31,7 @@ class ColetaProdutividade():
         self.qtdePc = qtdePc
         self.horarioInicial = '-'
         self.tempoRealizado = 0
-        self.delta_dias = 1000
+        self.delta_dias = 0
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -243,6 +244,7 @@ class ColetaProdutividade():
         sql = """
         select
             periodo1_inicio,
+            periodo1_fim,
             periodo2_inicio
         from
             "Easy"."EscalaTrabalho" et 
@@ -253,15 +255,26 @@ class ColetaProdutividade():
 
         self.horarioManha = consulta['periodo1_inicio'][0]
         self.horarioTarde = consulta['periodo2_inicio'][0]
+        self.horarioManhaFim = consulta['periodo1_fim'][0]
+        self.horarioTarde_tempo = datetime.strptime(self.horarioTarde, 
+                                                                 "%H:%M:%S")
+        self.horarioManhaFim_tempo = datetime.strptime(self.horarioManhaFim, 
+                                                                 "%H:%M:%S")
+        self.descontoAlmoco = (self.horarioManhaFim_tempo-self.horarioTarde_tempo).total_seconds()
+
 
         
 
     def __obtendoTempoRealizado(self):
         if self.dataUltimoApontamento_A_M_D == self.dataApontamento:
 
+                if self.ultimoTempo_tempo < self.horarioTarde_tempo:
+                    self.desconto = self.descontoAlmoco
+                else:
+                    self.desconto = 0
 
                 self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
-                self.tempoRealizado = round(self.tempoRealizado/60,3)
+                self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
             
         elif self.delta_dias == 1:
                 tempoFImEscala = "17:20:00"
@@ -286,4 +299,3 @@ class ColetaProdutividade():
         
                 self.tempoRealizado  = delta1.total_seconds() + delta2.total_seconds() 
                 self.tempoRealizado = round(self.tempoRealizado/60,3)
-            
