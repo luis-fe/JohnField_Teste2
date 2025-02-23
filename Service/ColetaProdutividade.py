@@ -71,7 +71,7 @@ class ColetaProdutividade():
         conn = ConexaoPostgreMPL.conexaoJohn()
         consulta = pd.read_sql(sql, conn, params=(self.codOperador,self.dataHoraApontamento))
 
-        if not consulta.empty:
+        if consulta['registros'][0]>0:
             
             self.ultimoTempo = str(consulta['utimoTempo'][0])
             self.dataUltimoApontamento = consulta['utimaData'][0]
@@ -133,7 +133,8 @@ class ColetaProdutividade():
 
         else:
             self.ultimoTempo = self.horarioManha
-            self.dataUltimoApontamento = None
+            self.
+            self.dataUltimoApontamento = self.dataApontamento
             self.validador = '-'
 
 
