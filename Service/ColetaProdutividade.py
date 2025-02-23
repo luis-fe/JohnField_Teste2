@@ -32,6 +32,7 @@ class ColetaProdutividade():
         self.horarioInicial = '-'
         self.tempoRealizado = 0
         self.delta_dias = 0
+        self.desconto = 0
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -181,10 +182,10 @@ class ColetaProdutividade():
             (
                 "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
                 "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador,
-                "descontoFimSemana", "horarioInicial","tempoRealizado","delta_dias"
+                "descontoFimSemana", "horarioInicial","tempoRealizado","delta_dias", tempo_desconto
             )
             values
-            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
+            ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
         """
 
         
@@ -201,7 +202,7 @@ class ColetaProdutividade():
                     self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
                     self.validador, fimSemana, self.horarioInicial, 
-                    self.tempoRealizado,self.delta_dias)
+                    self.tempoRealizado,self.delta_dias, self.desconto)
                             )
                 conn.commit()
 
