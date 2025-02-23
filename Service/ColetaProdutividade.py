@@ -115,8 +115,15 @@ class ColetaProdutividade():
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
+                if self.ultimoTempo == None:
+                    self.ultimoTempo = self.horarioManha
+
                 self.dataUltimoApontamento = consulta['utimaData'][0]
+                if self.dataUltimoApontamento == None:
+                    self.dataUltimoApontamento = self.dataApontamento+' '+self.horarioManha    
                 self.dataUltimoApontamento_A_M_D = consulta['dataUltimoApontamento'][0]
+                if self.dataUltimoApontamento_A_M_D == None:
+                    self.dataUltimoApontamento_A_M_D = self.dataApontamento
 
                 self.validador = str(delta1) +'|'+ str(delta2)+'|'+ str(dataTarget)
                 # Verifica se o ultimo horario foi no mesmo dia 
