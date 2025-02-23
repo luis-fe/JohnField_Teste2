@@ -115,7 +115,7 @@ class ColetaProdutividade():
                 consulta = pd.read_sql(sql, conn, params=(self.codOperador,dataTarget))
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
-                if self.ultimoTempo == None:
+                if self.ultimoTempo == 'None':
                     self.ultimoTempo = self.dataApontamento+' '+self.horarioManha    
 
                 self.dataUltimoApontamento = consulta['utimaData'][0]
