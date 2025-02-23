@@ -298,7 +298,7 @@ class ColetaProdutividade():
                 self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
                 
         elif (self.delta_dias == 3 or self.delta_dias == 2 ) and self.tem_domingo:
-                tempoFImEscala = "16:20:00"
+                tempoFImEscala = "17:20:00"
                 tempoInicioEscala = "07:10:00"
                 tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
                 tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
@@ -307,4 +307,12 @@ class ColetaProdutividade():
                 delta2 = self.tempoApontamento_tempo - tempoInicioEscala
         
                 self.tempoRealizado  = delta1.total_seconds() + delta2.total_seconds() 
-                self.tempoRealizado = round(self.tempoRealizado/60,3)
+
+                if self.ultimoTempo_tempo < self.horarioTarde_tempo:
+                    self.desconto = self.descontoAlmoco
+                
+                if self.tempoApontamento_tempo > self.horarioTarde_tempo:
+                    self.desconto = self.descontoAlmoco + self.desconto
+
+
+                self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
