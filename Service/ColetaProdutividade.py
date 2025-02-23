@@ -133,7 +133,7 @@ class ColetaProdutividade():
 
         else:
             self.ultimoTempo = self.horarioManha
-            self.
+            
             self.dataUltimoApontamento = self.dataApontamento
             self.validador = '-'
 
