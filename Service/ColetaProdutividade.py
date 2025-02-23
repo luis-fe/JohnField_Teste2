@@ -59,7 +59,7 @@ class ColetaProdutividade():
 
         sql = """
             SELECT 
-                MAX("dataHoraApontamento"::time) AS "utimoTempo", 
+                (MAX("dataHoraApontamento"::varchar))::time AS "utimoTempo", 
                 COUNT("dataHoraApontamento") AS registros ,
                 MAX("dataHoraApontamento"::varchar) AS "utimaData",
                 MAX(("dataHoraApontamento"::date)::varchar) AS "dataUltimoApontamento"
