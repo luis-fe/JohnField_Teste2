@@ -116,7 +116,7 @@ class ColetaProdutividade():
                 
                 self.ultimoTempo = str(consulta['utimoTempo'][0])
                 if self.ultimoTempo == 'None':
-                    self.ultimoTempo = self.dataApontamento+' '+self.horarioManha    
+                    self.ultimoTempo = self.horarioManha    
 
                 self.dataUltimoApontamento = consulta['utimaData'][0]
                 if self.dataUltimoApontamento == None:
