@@ -275,7 +275,7 @@ class ColetaProdutividade():
                     self.desconto = 0
 
                 self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
-                self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
+                self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
             
         elif self.delta_dias == 1:
                 tempoFImEscala = "17:20:00"
