@@ -181,6 +181,11 @@ class ColetaProdutividade():
 
         
         with ConexaoPostgreMPL.conexaoJohn() as conn:
+            try:
+                fimSemana = self.contar_finais_de_semana()
+            except:
+                fimSemana = 0
+
             with conn.cursor() as curr:
                 
                 curr.execute(insert,
