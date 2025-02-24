@@ -295,7 +295,7 @@ class ColetaProdutividade():
                     self.desconto = self.descontoAlmoco + self.desconto
 
 
-                self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
+                self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
                 
         elif (self.delta_dias == 3 or self.delta_dias == 2 ) and self.tem_domingo:
                 tempoFImEscala = "17:20:00"
@@ -314,5 +314,5 @@ class ColetaProdutividade():
                 if self.tempoApontamento_tempo > self.horarioTarde_tempo:
                     self.desconto = self.descontoAlmoco + self.desconto
 
-                self.validador = f'caso de sexta que aponta seg{str(delta1)}'
-                self.tempoRealizado = round((self.tempoRealizado-self.desconto)/60,3)
+                self.validador = f'caso de sexta que aponta seg{str(delta2)}'
+                self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
