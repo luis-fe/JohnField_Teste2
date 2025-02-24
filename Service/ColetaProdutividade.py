@@ -375,4 +375,21 @@ class ColetaProdutividade():
         consultaGroupBy['tempo PrevistoAcum'] = consultaGroupBy['tempo PrevistoAcum'].round(2)
         consultaGroupBy['qtdPcsAcum'] = consultaGroupBy.groupby(['Data', 'codOperador'])['qtdePcs'].cumsum()
 
-        return consultaGroupBy
+
+        consulta2 = consultaGroupBy.groupby(['Data', 'codOperador']).agg({
+                "contagem": 'max'}).reset_index()
+
+        consulta2 = pd.merge(consulta2, consultaGroupBy, on=['Data', 'codOperador', 'contagem'])
+        consulta2 = consulta.drop_duplicates()
+
+
+        consulta2['Eficiencia'] = round(consulta2['tempo PrevistoAcum'] / consulta['tempoTotal(min)Acum'], 3) * 100
+        consulta2['Eficiencia'] = consulta2['Eficiencia'].round(1)
+
+
+
+
+
+
+
+        return consulta2
