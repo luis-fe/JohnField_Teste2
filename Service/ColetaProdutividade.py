@@ -327,8 +327,8 @@ class ColetaProdutividade():
 	            "dataUltimoApontamento",
 	            "codOperador" ,
 	            "nomeOperacao" ,
-	            "qtdePcs", 
-	            "tempoRealizado" 
+	            "qtdePcs"::dec, 
+	            "tempoRealizado"::dec 
             from
 	            "Easy"."FolhaRegistro" fr
             where 
@@ -353,12 +353,12 @@ class ColetaProdutividade():
         consulta2 = pd.read_sql(sql2, conn)
 
         consulta = pd.merge(consulta, consulta2 , on='nomeOperacao',how='left')
-        
+        consulta['tempoPadrao(min)'] =(consulta['tempoPadrao(s)']*consulta['qtdePcs'])/60
         consulta['chave'] = consulta['codOperador']+'||'+consulta['dataUltimoApontamento']
         # Agrupando os dados pela coluna 'chave'
         consultaGroupBy = consulta.groupby("chave").agg({
             "nomeOperacao": lambda x: "/".join(sorted(set(x))),  # Concatena operações únicas
-            "tempoPadrao(s)": "sum",  # Soma os tempos
+            "tempoPadrao(min)": "sum",  # Soma os tempos
             "qtdePcs": "max",  # Obtém o máximo de qtdPeças
             "tempoRealizado":"first"
         }).reset_index()
