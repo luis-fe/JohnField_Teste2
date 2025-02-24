@@ -353,12 +353,12 @@ class ColetaProdutividade():
 
         consulta2 = pd.read_sql(sql2, conn)
 
-        consulta = pd.merge(consulta, consulta2 , on ='nomeOperacao')
+        consulta = pd.merge(consulta, consulta2 , on='nomeOperacao',how='left')
         print(f'data frame \n {consulta}')
         
         consulta['chave'] = consulta['codOperador']+'||'+consulta['dataUltimoApontamento']
         # Agrupando os dados pela coluna 'chave'
-        consulta = consulta.groupby("chave").agg({
+        consultaGroupBy = consulta.groupby("chave").agg({
             "nomeOperacao": lambda x: "/".join(sorted(set(x))),  # Concatena operações únicas
             "tempoPadrao(s)": "sum",  # Soma os tempos
             "qtdePcs": "max"  # Obtém o máximo de qtdPeças
