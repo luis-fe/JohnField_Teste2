@@ -335,6 +335,30 @@ class ColetaProdutividade():
 	            fr."dataApontamento" >= %s
 	            and fr."dataApontamento" <= %s
             """
+        
+        sql2 = """
+            select
+	            o."nomeOperacao" ,
+	            "tempoPadrao" as "tempoPadrao(s)"
+            from
+	            "Easy"."TemposOperacao" to2
+            inner join 
+                "Easy"."Operacao" o on
+	            o."codOperacao" = to2."codOperacao" 
+            """
+
         conn = ConexaoPostgreMPL.conexaoEngine()
         consulta = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal))
+        consulta2 = pd.read_sql(sql2, conn)
+
+        consulta = pd.merge(consulta, consulta2 , on ='nomeOperacao')
+        
         consulta['chave'] = consulta['codOperador']+'||'+consulta['dataUltimoApontamento']
+        # Agrupando os dados pela coluna 'chave'
+        consulta = consulta.groupby("chave").agg({
+            "nomeOperacao": lambda x: "/".join(sorted(set(x))),  # Concatena operações únicas
+            "tempoPadrao(s)": "sum",  # Soma os tempos
+            "qtdePcs": "max"  # Obtém o máximo de qtdPeças
+        }).reset_index()
+
+        return consulta

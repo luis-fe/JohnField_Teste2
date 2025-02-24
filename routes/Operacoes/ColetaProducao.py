@@ -199,3 +199,23 @@ def post_RegistrarProducaoTeste():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+@ColetaProducao_routesJohn.route('/api/JonhField/ProdutividadePeriodoTesteNovo', methods=['GET'])
+@token_required
+def get_ProdutividadePeriodoTesteNovo():
+    DataInicio = request.args.get('DataInicio', '')
+    DataFinal = request.args.get('DataFinal', '')
+
+
+    registro = ColetaProdutividade.ColetaProdutividade('codOperador','00:10:00','1','qtdPecas',DataInicio, DataFinal)
+    consulta = registro.dashboardProdutividade()
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
