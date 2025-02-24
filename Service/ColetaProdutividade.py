@@ -386,4 +386,29 @@ class ColetaProdutividade():
         consulta2['Eficiencia'] = round(consulta2['tempo PrevistoAcum'] / consulta['tempoTotal(min)Acum'], 3) * 100
         consulta2['Eficiencia'] = consulta2['Eficiencia'].round(1)
 
+        consulta3 = consulta2.groupby('codOperador').agg({
+                'nomeOperador': 'first',
+                'qtdPcsAcum': 'sum',
+                'tempo PrevistoAcum': 'sum',
+                'tempoTotal(min)Acum': 'sum'
+            }).reset_index()
+        
+        consulta3['tempoTotal(min)Acum'] = consulta3['tempoTotal(min)Acum'].round(4)
+        consulta3['Eficiencia'] = round(consulta3['tempo PrevistoAcum'] / consulta3['tempoTotal(min)Acum'], 3) * 100
+        consulta3['Eficiencia'] = consulta3['Eficiencia'].round(1)
+
+        consulta3 = consulta3.sort_values(by=['Eficiencia'], ascending=False)
+        consulta3['Eficiencia'] = consulta3['Eficiencia'].astype(str) + '%'
+
+        efiMedia = round(consulta3['tempo PrevistoAcum'].sum() / consulta3['tempoTotal(min)Acum'].sum(), 3) * 100
+
+        dados = {
+                '0-Eficiencia Média Periodo': f'{efiMedia}%',
+                '1-Detalhamento': consulta3.to_dict(orient='records')}
+
+        return pd.DataFrame([dados])
+
+        
+
+
         return consulta2
