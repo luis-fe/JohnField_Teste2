@@ -359,7 +359,8 @@ class ColetaProdutividade():
         consultaGroupBy = consulta.groupby("chave").agg({
             "nomeOperacao": lambda x: "/".join(sorted(set(x))),  # Concatena operações únicas
             "tempoPadrao(s)": "sum",  # Soma os tempos
-            "qtdePcs": "max"  # Obtém o máximo de qtdPeças
+            "qtdePcs": "max",  # Obtém o máximo de qtdPeças
+            "tempoRealizado":"first"
         }).reset_index()
 
         return consultaGroupBy
