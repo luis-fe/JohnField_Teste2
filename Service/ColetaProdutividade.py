@@ -365,7 +365,9 @@ class ColetaProdutividade():
             "tempoRealizado":"first",
             "Data":"first"
         }).reset_index()
-
+        consultaGroupBy['contagem'] = 1
+        consultaGroupBy['contagem'] = consultaGroupBy.groupby(['Data', 'codOperador'])[
+                'contagem'].cumsum()
         consultaGroupBy['tempoTotal(min)Acum'] = consultaGroupBy.groupby(['Data', 'codOperador'])[
                 'tempoRealizado'].cumsum()
         consultaGroupBy['tempo PrevistoAcum'] = consultaGroupBy.groupby(['Data', 'codOperador'])[
