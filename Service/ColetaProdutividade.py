@@ -325,6 +325,7 @@ class ColetaProdutividade():
              select
 	            "dataHoraApontamento" ,
 	            "dataUltimoApontamento",
+                "dataApontamento" as "Data",
 	            "codOperador" ,
 	            "nomeOperacao" ,
 	            "qtdePcs"::dec, 
@@ -358,9 +359,18 @@ class ColetaProdutividade():
         # Agrupando os dados pela coluna 'chave'
         consultaGroupBy = consulta.groupby("chave").agg({
             "nomeOperacao": lambda x: "/".join(sorted(set(x))),  # Concatena operações únicas
+            "codOperador":"first",
             "tempoPadrao(min)": "sum",  # Soma os tempos
             "qtdePcs": "max",  # Obtém o máximo de qtdPeças
-            "tempoRealizado":"first"
+            "tempoRealizado":"first",
+            "Data":"first"
         }).reset_index()
+
+        consultaGroupBy['tempoTotal(min)Acum'] = consultaGroupBy.groupby(['Data', 'codOperador'])[
+                'tempoRealizado'].cumsum()
+        consultaGroupBy['tempo PrevistoAcum'] = consultaGroupBy.groupby(['Data', 'codOperador'])[
+                'tempo tempoPadrao(min)'].cumsum()
+        consultaGroupBy['tempo PrevistoAcum'] = consultaGroupBy['tempo PrevistoAcum'].round(2)
+        consultaGroupBy['qtdPcsAcum'] = consultaGroupBy.groupby(['Data', 'codOperador'])['qtdePcs'].cumsum()
 
         return consultaGroupBy
