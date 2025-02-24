@@ -187,7 +187,7 @@ def post_RegistrarProducaoTeste():
     nomeCategoria = data.get('nomeCategoria')
     qtdPecas = data.get('qtdPecas','-')
 
-    registro = ColetaProdutividade.ColetaProdutividade(codOperador,'00:10:00',1,qtdPecas)
+    registro = ColetaProdutividade.ColetaProdutividade(codOperador,'00:10:00',nomeOperacao,qtdPecas)
     consulta = registro.apontarProdutividade()
     # Obtém os nomes das colunas
     column_names = consulta.columns
