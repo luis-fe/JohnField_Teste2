@@ -8,11 +8,11 @@ import pytz
 
 """
 REGRAS DO APONTAMENTO:
-1) No ato do registro é considerado como intervalo de producao a dataAtual - dataUltimoRegistro 
+ok! 1) No ato do registro é considerado como intervalo de producao a dataAtual - dataUltimoRegistro 
 ok! 2) Caso o usuario registrar operacoes em ate 10 min de diferenca da ultima, será contabilizado o intervalo da penultimaOperacao
 OK! 3) Caso o sistema nao encontre operacao anterior ( "primeira vez"), considera o tempo de entrada na "escala" do colaborador
-4) O sistema sempre desconta os domingos e sabados ( se o ultimo apontamento for sexta )
-5) O sistema sempre desconta os domingo ( se o ultimo apontamento for sabado )
+ok! 4) O sistema sempre desconta os domingos e sabados ( se o ultimo apontamento for sexta )
+ok! 5) O sistema sempre desconta os domingo ( se o ultimo apontamento for sabado )
 6) O sistema desconta os feriados Nacionais (caso tenha feriado local, o usuario deve informar)
 7) O sistema nao considera apontamentos maiores que 3 dias, nesse caso é informado o horario da entrada 
 """
@@ -23,16 +23,18 @@ class ColetaProdutividade():
     '''Classe criada para a gestao da coleta de produtividade'''
 
     def __init__(self, codOperador = None, limiteTempoMinApontamento = None, 
-                 codOperacao = None, qtdePc = None):
+                 nomeOperacao = None, qtdePc = None, dataInicio = None, dataFinal = None):
         
         self.codOperador = str(codOperador)
         self.limiteTempoMinApontamento = limiteTempoMinApontamento
-        self.codOperacao = str(codOperacao)
+        self.nomeOperacao = str(nomeOperacao)
         self.qtdePc = qtdePc
         self.horarioInicial = '-'
         self.tempoRealizado = 0
         self.delta_dias = 0
         self.desconto = 0
+        self.dataInicio = dataInicio
+        self.dataFinal = dataFinal
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -180,7 +182,7 @@ class ColetaProdutividade():
         insert into 
             "Easy"."FolhaRegistro" 
             (
-                "codOperador", "codOperacao" , "qtdePcs" , "dataApontamento",
+                "codOperador", "nomeOperacao" , "qtdePcs" , "dataApontamento",
                 "dataHoraApontamento","ultimoTempo","dataUltimoApontamento", validador,
                 "descontoFimSemana", "horarioInicial","tempoRealizado","delta_dias", tempo_desconto
             )
@@ -199,7 +201,7 @@ class ColetaProdutividade():
                 
                 curr.execute(insert,
                             (
-                    self.codOperador, self.codOperacao, self.qtdePc, self.dataApontamento,
+                    self.codOperador, self.nomeOperacao, self.qtdePc, self.dataApontamento,
                     self.dataHoraApontamento, self.ultimoTempo, self.dataUltimoApontamento,
                     self.validador, fimSemana, self.horarioInicial, 
                     self.tempoRealizado,self.delta_dias, self.desconto)
@@ -316,3 +318,23 @@ class ColetaProdutividade():
 
                 self.validador = f'caso de sexta que aponta seg{str(delta2)}'
                 self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
+    
+    def dashboardProdutividade(self):
+
+        sql = """
+             select
+	            "dataHoraApontamento" ,
+	            "dataUltimoApontamento",
+	            "codOperador" ,
+	            "nomeOperacao" ,
+	            "qtdePcs", 
+	            "tempoRealizado" 
+            from
+	            "Easy"."FolhaRegistro" fr
+            where 
+	            fr."dataApontamento" >= %s
+	            and fr."dataApontamento" <= %s
+            """
+        conn = ConexaoPostgreMPL.conexaoEngine()
+        consulta = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal))
+        consulta['chave'] = consulta['codOperador']+'||'+consulta['dataUltimoApontamento']
