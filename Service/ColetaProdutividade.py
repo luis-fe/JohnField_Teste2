@@ -420,7 +420,7 @@ class ColetaProdutividade():
         consulta2['Eficiencia'] = consulta2['Eficiencia'].round(1)
 
         consulta3 = consulta2.groupby('codOperador').agg({
-                'nomeOperador': 'first',
+               # 'nomeOperador': 'first',
                 'qtdPcsAcum': 'sum',
                 'tempo PrevistoAcum': 'sum',
                 'tempoTotal(min)Acum': 'sum'
