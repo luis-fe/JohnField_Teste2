@@ -413,7 +413,7 @@ class ColetaProdutividade():
                 "contagem": 'max'}).reset_index()
 
         consulta2 = pd.merge(consulta2, consultaGroupBy, on=['Data', 'codOperador', 'contagem'])
-        consulta2 = consulta.drop_duplicates()
+        consulta2 = consulta2.drop_duplicates()
 
 
         consulta2['Eficiencia'] = round(consulta2['tempo PrevistoAcum'] / consulta['tempoTotal(min)Acum'], 3) * 100
