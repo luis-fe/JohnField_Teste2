@@ -147,7 +147,6 @@ class ColetaProdutividade():
             self.horarioInicial = self.ultimoTempo 
             self.dataUltimoApontamento = self.dataApontamento+' '+self.horarioManha
             self.validador = '-'
-            self.contar_finais_de_semana()
             self.__obtendoTempoRealizado()
 
 
