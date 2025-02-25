@@ -147,6 +147,9 @@ class ColetaProdutividade():
             self.horarioInicial = self.ultimoTempo 
             self.dataUltimoApontamento = self.dataApontamento+' '+self.horarioManha
             self.validador = '-'
+            self.contar_finais_de_semana()
+            self.__obtendoTempoRealizado()
+
 
 
     def dataHoraAtual(self):
@@ -318,6 +321,32 @@ class ColetaProdutividade():
 
                 self.validador = f'caso de sexta que aponta seg{str(delta2)}'
                 self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
+
+        elif self.delta_dias == 2:
+                tempoFImEscala = "17:20:00"
+                tempoInicioEscala = "07:10:00"
+                tempoFImEscala = datetime.strptime(tempoFImEscala, "%H:%M:%S")
+                tempoInicioEscala = datetime.strptime(tempoInicioEscala, "%H:%M:%S")
+                
+                delta1 = tempoFImEscala - self.ultimoTempo_tempo
+                delta2 = self.tempoApontamento_tempo - tempoInicioEscala
+        
+                self.tempoRealizado  = delta1.total_seconds() + delta2.total_seconds() 
+
+                if self.ultimoTempo_tempo < self.horarioTarde_tempo:
+                    self.desconto = self.descontoAlmoco
+                
+                if self.tempoApontamento_tempo > self.horarioTarde_tempo:
+                    self.desconto = self.descontoAlmoco + self.desconto
+
+
+                self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
+                self.tempoRealizado = self.tempoRealizado +510
+        else:
+
+                self.tempoRealizado = (self.tempoApontamento_tempo-self.ultimoTempo_tempo).total_seconds()
+                self.tempoRealizado = round((self.tempoRealizado+self.desconto)/60,3)
+
     
     def dashboardProdutividade(self):
 
@@ -408,7 +437,4 @@ class ColetaProdutividade():
 
         return pd.DataFrame([dados])
 
-        
-
-
-        return consulta2
+    
