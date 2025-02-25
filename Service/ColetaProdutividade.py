@@ -147,6 +147,8 @@ class ColetaProdutividade():
             self.dataUltimoApontamento = self.dataApontamento+' '+self.horarioManha
             self.validador = '-'
             self.dataUltimoApontamento_A_M_D = self.dataApontamento
+            self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
+                                                                 "%H:%M:%S")
             self.__obtendoTempoRealizado()
 
 
