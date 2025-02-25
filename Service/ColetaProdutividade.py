@@ -147,6 +147,7 @@ class ColetaProdutividade():
             self.horarioInicial = self.ultimoTempo 
             self.dataUltimoApontamento = self.dataApontamento+' '+self.horarioManha
             self.validador = '-'
+            self.dataUltimoApontamento_A_M_D = self.dataApontamento
             self.__obtendoTempoRealizado()
 
 
