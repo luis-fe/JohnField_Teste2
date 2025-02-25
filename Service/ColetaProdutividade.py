@@ -54,7 +54,6 @@ class ColetaProdutividade():
 
 
 
-
     def _buscarUltimoApontamentoOperador(self):
         '''Método que busca a ultima coleta realizado para o operador especificado '''
 
