@@ -28,6 +28,13 @@ def post_RegistrarProducao():
     qtdPecas = data.get('qtdPecas','-')
 
     consulta = ColetaProducao.ColetaProducao(codOperador, nomeOperacao, qtdPecas )
+
+
+    
+    registro = ColetaProdutividade.ColetaProdutividade(codOperador,'00:10:00',nomeOperacao,qtdPecas)
+    registro.apontarProdutividade()
+
+
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
