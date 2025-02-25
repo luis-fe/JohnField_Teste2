@@ -416,7 +416,7 @@ class ColetaProdutividade():
         consulta2 = consulta2.drop_duplicates()
 
 
-        consulta2['Eficiencia'] = round(consulta2['tempo PrevistoAcum'] / consulta['tempoTotal(min)Acum'], 3) * 100
+        consulta2['Eficiencia'] = round(consulta2['tempo PrevistoAcum'] / consulta2['tempoTotal(min)Acum'], 3) * 100
         consulta2['Eficiencia'] = consulta2['Eficiencia'].round(1)
 
         consulta3 = consulta2.groupby('codOperador').agg({
