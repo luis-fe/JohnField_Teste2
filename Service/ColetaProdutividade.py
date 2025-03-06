@@ -95,7 +95,14 @@ class ColetaProdutividade():
             # Formatando a saída
             self.validador = f"{delta1}|{delta2}|{self.dataUltimoApontamento_A_M_D}||{self.dataApontamento}"
 
-            self.delta_dias = (self.dataHoraApontamento_tempo - self.dataUltimoApontamento_tempo).days
+            
+            
+            self.dataHoraApontamento__Dia = datetime.strptime(self.dataHoraApontamento, 
+                                                                 "%Y-%m-%d")
+            self.dataUltimoApontamento_Dia = datetime.strptime(self.dataUltimoApontamento, 
+                                                                 "%Y-%m-%d %H:%M:%S")
+            
+            self.delta_dias = (self.dataHoraApontamento__Dia - self.dataUltimoApontamento_Dia).days
 
             self.horarioInicial = self.ultimoTempo
             self.ultimoTempo_tempo = datetime.strptime(self.ultimoTempo, 
