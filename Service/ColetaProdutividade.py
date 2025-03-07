@@ -100,7 +100,7 @@ class ColetaProdutividade():
             self.dataHoraApontamento__Dia = datetime.strptime(self.dataHoraApontamento, 
                                                                  "%Y-%m-%d")
             self.dataUltimoApontamento_Dia = datetime.strptime(self.dataUltimoApontamento, 
-                                                                 "%Y-%m-%d %H:%M:%S")
+                                                                 "%Y-%m-%d")
             
             self.delta_dias = (self.dataHoraApontamento__Dia - self.dataUltimoApontamento_Dia).days
 
