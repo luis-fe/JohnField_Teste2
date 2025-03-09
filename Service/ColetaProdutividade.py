@@ -489,6 +489,7 @@ class ColetaProdutividade():
 """
         conn = ConexaoPostgreMPL.conexaoEngine()
         feriados = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal) )
+        escala = pd.read_sql(sqlEscala, conn )
         
         if feriados.empty:
             descontoFeriado = 0
@@ -506,9 +507,21 @@ class ColetaProdutividade():
         data_final = pd.to_datetime(self.dataFinal)
         diasUteis = np.busday_count(data_inicial.date(), data_final.date())-descontoFeriado + 1
         
+        tempoEscalaInicio1 = datetime.strptime(escala['periodo1_inicio'][0], "%H:%M:%S")
+        tempoEscalaFim1 = datetime.strptime(escala['periodo1_fim'][0], "%H:%M:%S")
+        tempoEscalaInicio2 = datetime.strptime(escala['periodo2_inicio'][0], "%H:%M:%S")
+        tempoEscalaFim2 = datetime.strptime(escala['periodo2_fim'][0], "%H:%M:%S")
+         
+        delta1 = tempoEscalaFim1 - tempoEscalaInicio1
+        delta2 = tempoEscalaFim2 - tempoEscalaInicio2
+        tempoTrabalho = delta2 + delta1
+
+
+
         dados = {
                 '0-Feriados Periodo': f'{descontoFeriado}',
-                '1-Dias Uteis':f'{diasUteis}'
+                '1-Dias Uteis':f'{diasUteis}',
+                '2-tempoTrabalho':f'{tempoTrabalho}'
                 }
 
         return pd.DataFrame([dados])
