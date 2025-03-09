@@ -4,6 +4,7 @@ import ConexaoPostgreMPL
 import pandas as pd
 from datetime import datetime, timedelta
 import pytz
+import numpy as np
 
 
 """
@@ -489,9 +490,15 @@ class ColetaProdutividade():
             feriado = feriados[feriados['dia_semana']!=1]
             feriado = feriado[feriado['dia_semana']!=7]
             descontoFeriado = feriado['dia_semana'].count()
+
+        # Converter as datas para formato datetime
+        data_inicial = pd.to_datetime(self.dataInicio)
+        data_final = pd.to_datetime(self.dataFinal)
+        diasUteis = np.busday_count(data_inicial.date(), data_final.date())-descontoFeriado
         
         dados = {
-                '0-Eficiencia Média Periodo': f'{descontoFeriado}'
+                '0-Feriados Periodo': f'{descontoFeriado}',
+                '1-Dias Uteis':f'{diasUteis}'
                 }
 
         return pd.DataFrame([dados])
