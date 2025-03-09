@@ -500,7 +500,7 @@ class ColetaProdutividade():
             feriados["data"] = pd.to_datetime(feriados["data"])
             # Criando a coluna do dia da semana (ajustando para que domingo = 1, segunda = 2, ..., sábado = 7)
             feriados["dia_semana"] = feriados["data"].dt.weekday + 1  # Como segunda é 0, somamos 1 para ajustar
-            feriado = feriados[feriados['dia_semana']!=1]
+            feriado = feriados[feriados['dia_semana']!=0]
             feriado = feriado[feriado['dia_semana']!=7]
             descontoFeriado = feriado['dia_semana'].count()
 
