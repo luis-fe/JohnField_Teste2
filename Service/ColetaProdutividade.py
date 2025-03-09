@@ -23,7 +23,8 @@ class ColetaProdutividade():
     '''Classe criada para a gestao da coleta de produtividade'''
 
     def __init__(self, codOperador = None, limiteTempoMinApontamento = None, 
-                 nomeOperacao = None, qtdePc = None, dataInicio = None, dataFinal = None):
+                 nomeOperacao = None, qtdePc = None, dataInicio = None, dataFinal = None,
+                 dataHoraOpcional = None):
         
         self.codOperador = str(codOperador)
         self.limiteTempoMinApontamento = limiteTempoMinApontamento
@@ -35,6 +36,7 @@ class ColetaProdutividade():
         self.desconto = 0
         self.dataInicio = dataInicio
         self.dataFinal = dataFinal
+        self.dataHoraOpcional = dataHoraOpcional
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -162,7 +164,7 @@ class ColetaProdutividade():
             self.__obtendoTempoRealizado()
 
 
-
+    
     def dataHoraAtual(self):
         '''Busca a data e hora atual do Sistema'''
 
@@ -172,9 +174,22 @@ class ColetaProdutividade():
         data_str = agora.strftime('%Y-%m-%d')
         tempo_str = agora.strftime('%H:%M:%S')
 
-        self.dataHoraApontamento = hora_str
-        self.dataApontamento = data_str
-        self.tempoApontamento = tempo_str
+        if self.dataHoraOpcional == None:
+
+            self.dataHoraApontamento = hora_str
+            self.dataApontamento = data_str
+            self.tempoApontamento = tempo_str
+        else:
+            self.dataHoraOpcional = datetime.strptime(self.dataHoraApontamento, 
+                                                                 "%Y-%m-%d %H:%M:%S")
+            hora_str = self.dataHoraOpcional.strftime('%Y-%m-%d %H:%M:%S')
+            data_str = self.dataHoraOpcional.strftime('%Y-%m-%d')
+            tempo_str = self.dataHoraOpcional.strftime('%H:%M:%S')
+            
+            self.dataHoraApontamento = hora_str
+            self.dataApontamento = data_str
+            self.tempoApontamento = tempo_str
+
         
 
     def _conversaoDeStr_To_time(self, tempo):

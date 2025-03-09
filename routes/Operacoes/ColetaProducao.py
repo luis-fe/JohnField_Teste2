@@ -26,12 +26,13 @@ def post_RegistrarProducao():
     codOperador = data.get('codOperador')
     nomeCategoria = data.get('nomeCategoria')
     qtdPecas = data.get('qtdPecas','-')
+    dataHoraOpcional = data.get('dataHoraOpcional',None)
 
     consulta = ColetaProducao.ColetaProducao(codOperador, nomeOperacao, qtdPecas )
 
 
     
-    registro = ColetaProdutividade.ColetaProdutividade(codOperador,'00:10:00',nomeOperacao,qtdPecas)
+    registro = ColetaProdutividade.ColetaProdutividade(codOperador,'00:10:00',nomeOperacao,qtdPecas,'','',dataHoraOpcional)
     registro.apontarProdutividade()
 
 
