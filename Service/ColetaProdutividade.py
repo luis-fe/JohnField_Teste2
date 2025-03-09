@@ -5,6 +5,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import pytz
 import numpy as np
+from routes.Dashboard import Feriados
 
 
 """
@@ -514,6 +515,7 @@ class ColetaProdutividade():
 
         dados = {
                 '0-Feriados Periodo': f'{descontoFeriado}',
+                '0.1-feriados':f'{feriados}',
                 '1-Dias Uteis':f'{diasUteis}',
                 '2-tempoTrabalho':f'{tempoTrabalho}'
                 }
