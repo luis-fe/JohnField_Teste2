@@ -539,6 +539,7 @@ class ColetaProdutividade():
 
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
         ApontamentosOperadoresGroupBy['diasUteis'] = diasUteis
+        ApontamentosOperadoresGroupBy['tempoTrabalho'] = diasUteis * tempoTrabalho
 
 
         dados = {
