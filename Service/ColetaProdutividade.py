@@ -511,17 +511,44 @@ class ColetaProdutividade():
         
         tempoTrabalho = escala['tempo_em_minutos'][0]
 
+        sqlApontamentosOperadores ="""
+        select
+	        fr."codOperador" ,
+	        fr."nomeOperacao",
+	        "dataApontamento",
+	        "dataUltimoApontamento",
+        case 
+            when delta_dias::int >3 then 0 
+            when "dataUltimoApontamento"::date > '2025-03-01' then 0
+            else 
+            extract(EPOCH FROM ('17:30:00' - "dataUltimoApontamento"::time))::int/60 end as "tempoAnterior" ,
+        delta_dias 
+        from
+            "Easy"."FolhaRegistro" fr
+        where
+            fr."dataApontamento" >= '2025-03-01'
+            and 
+            fr."dataApontamento" <= '2025-04-01'
+        """
+
+        ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn )
+
+        ApontamentosOperadores2 = ApontamentosOperadores[ApontamentosOperadores['tempoAnterior']>0]
+        ApontamentosOperadoresGroupBy = ApontamentosOperadores2.groupby("codOperador").agg({
+            "tempoAnterior":"first"
+        }).reset_index()
+
 
 
         dados = {
                 '0-Feriados Periodo': f'{descontoFeriado}',
                 '0.1-feriados':feriado.to_dict(orient='records'),
                 '1-Dias Uteis':f'{diasUteis}',
-                '2-tempoTrabalho':f'{tempoTrabalho}'
+                '2-tempoTrabalho':f'{tempoTrabalho}',
+                '3- ultimostempos':ApontamentosOperadoresGroupBy.to_dict(orient='records')
                 }
 
         return pd.DataFrame([dados])
-
 
 
     
