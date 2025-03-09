@@ -515,7 +515,7 @@ class ColetaProdutividade():
 
         dados = {
                 '0-Feriados Periodo': f'{descontoFeriado}',
-                '0.1-feriados':f'{feriados}',
+                '0.1-feriados':feriado.to_dict(orient='records'),
                 '1-Dias Uteis':f'{diasUteis}',
                 '2-tempoTrabalho':f'{tempoTrabalho}'
                 }
