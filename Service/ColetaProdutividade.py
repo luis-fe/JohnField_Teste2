@@ -540,7 +540,7 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
         ApontamentosOperadoresGroupBy['diasUteis'] = diasUteis
         ApontamentosOperadoresGroupBy['tempoTrabalho'] = diasUteis * tempoTrabalho
-
+        ApontamentosOperadoresGroupBy['dataHora'] = self.tempoApontamento 
 
         dados = {
                 '1-Dias Uteis':f'{diasUteis}',
