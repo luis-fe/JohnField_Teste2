@@ -479,14 +479,15 @@ class ColetaProdutividade():
             """
         
         sqlEscala = """
-    select
-	    periodo1_inicio ,
-	    periodo1_fim ,
-	    periodo2_inicio ,
-	    periodo1_fim
-    from
-	    "Easy"."EscalaTrabalho" et 
-"""
+        
+        SELECT 
+            EXTRACT(EPOCH FROM 
+                (periodo1_fim::time - periodo1_inicio::time) 
+                + (periodo2_fim::time - periodo2_inicio::time)
+            ) / 60 AS tempo_em_minutos
+        FROM "Easy"."EscalaTrabalho" et;
+        
+        """
         conn = ConexaoPostgreMPL.conexaoEngine()
         feriados = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal) )
         escala = pd.read_sql(sqlEscala, conn )
@@ -507,14 +508,7 @@ class ColetaProdutividade():
         data_final = pd.to_datetime(self.dataFinal)
         diasUteis = np.busday_count(data_inicial.date(), data_final.date())-descontoFeriado + 1
         
-        tempoEscalaInicio1 = datetime.strptime(escala['periodo1_inicio'][0], "%H:%M:%S")
-        tempoEscalaFim1 = datetime.strptime(escala['periodo1_fim'][0], "%H:%M:%S")
-        tempoEscalaInicio2 = datetime.strptime(escala['periodo2_inicio'][0], "%H:%M:%S")
-        tempoEscalaFim2 = datetime.strptime(escala['periodo2_fim'][0], "%H:%M:%S")
-         
-        delta1 = tempoEscalaFim1 - tempoEscalaInicio1
-        delta2 = tempoEscalaFim2 - tempoEscalaInicio2
-        tempoTrabalho = delta2 + delta1
+        tempoTrabalho = escala['tempo_em_minutos'][0]
 
 
 
