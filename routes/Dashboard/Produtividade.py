@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import produtividadeClass
+from Service import ColetaProdutividade, produtividadeClass
 import pandas as pd
 Produtividade_routesJohn = Blueprint('ProdutividadeJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
@@ -44,6 +44,27 @@ def get_ProdutividadeOperadorNovo():
     dataFinal = request.args.get('dataFinal', '')
 
     produtividade = produtividadeClass.Produtividade(dataInicio, dataFinal)
+
+    consulta = produtividade.ProdutividadeOperadores()
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+@Produtividade_routesJohn.route('/api/JonhField/ProdutividadePeriodo2', methods=['GET'])
+@token_required
+def get_ProdutividadeOperadorNovo2():
+
+    dataInicio = request.args.get('dataInicio', '')
+    dataFinal = request.args.get('dataFinal', '')
+
+    produtividade = ColetaProdutividade.ColetaProdutividade('','','','',dataInicio,dataFinal)
 
     consulta = produtividade.ProdutividadeOperadores()
     # Obtém os nomes das colunas

@@ -462,5 +462,39 @@ class ColetaProdutividade():
                 '1-Detalhamento': consulta3.to_dict(orient='records')}
 
         return pd.DataFrame([dados])
+    
+    def analisePeriodo(self):
+        '''Metodo para analisar a produtividade no periodo'''
+
+        sql = """
+                select
+                    *
+                from
+                    "Easy".feriados f
+                where
+                    f."data" >= %s
+                    and 
+                    f."data" <= %s
+            """
+        conn = ConexaoPostgreMPL.conexaoEngine()
+        feriados = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal) )
+        
+        if feriados.empty:
+            descontoFeriado = 0
+        else:
+        
+            # Criando a coluna do dia da semana (ajustando para que domingo = 1, segunda = 2, ..., sábado = 7)
+            feriados["dia_semana"] = feriados["data"].dt.weekday + 1  # Como segunda é 0, somamos 1 para ajustar
+            feriado = feriados[feriados['dia_semana']!=1]
+            feriado = feriado[feriado['dia_semana']!=7]
+            descontoFeriado = feriado.count()
+        
+        dados = {
+                '0-Eficiencia Média Periodo': f'{descontoFeriado}'
+                }
+
+        return pd.DataFrame([dados])
+
+
 
     
