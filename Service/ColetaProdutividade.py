@@ -533,22 +533,21 @@ class ColetaProdutividade():
 
         ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn )
 
-        ApontamentosOperadores2 = ApontamentosOperadores[ApontamentosOperadores['tempoAnterior']>0]
-        ApontamentosOperadoresGroupBy = ApontamentosOperadores2.groupby("codOperador").agg({
-            "tempoAnterior":"first"
+        ApontamentosOperadoresGroupBy = ApontamentosOperadores.groupby("codOperador").agg({
+            "tempoAnterior":"max"
         }).reset_index()
 
+        ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
+        ApontamentosOperadoresGroupBy['diasUteis'] = diasUteis
 
 
         dados = {
-                '0-Feriados Periodo': f'{descontoFeriado}',
-                '0.1-feriados':feriado.to_dict(orient='records'),
                 '1-Dias Uteis':f'{diasUteis}',
                 '2-tempoTrabalho':f'{tempoTrabalho}',
                 '3- ultimostempos':ApontamentosOperadoresGroupBy.to_dict(orient='records')
                 }
 
-        return pd.DataFrame([dados])
+        return ApontamentosOperadoresGroupBy
 
 
     
