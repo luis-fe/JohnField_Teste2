@@ -494,7 +494,7 @@ class ColetaProdutividade():
         # Converter as datas para formato datetime
         data_inicial = pd.to_datetime(self.dataInicio)
         data_final = pd.to_datetime(self.dataFinal)
-        diasUteis = np.busday_count(data_inicial.date(), data_final.date())-descontoFeriado
+        diasUteis = np.busday_count(data_inicial.date(), data_final.date())-descontoFeriado + 1
         
         dados = {
                 '0-Feriados Periodo': f'{descontoFeriado}',
