@@ -477,6 +477,16 @@ class ColetaProdutividade():
                     and 
                     f."data" <= %s
             """
+        
+        sqlEscala = """
+    select
+	    periodo1_inicio ,
+	    periodo1_fim ,
+	    periodo2_inicio ,
+	    periodo1_fim
+    from
+	    "Easy"."EscalaTrabalho" et 
+"""
         conn = ConexaoPostgreMPL.conexaoEngine()
         feriados = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal) )
         
