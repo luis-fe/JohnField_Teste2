@@ -488,7 +488,7 @@ class ColetaProdutividade():
             feriados["dia_semana"] = feriados["data"].dt.weekday + 1  # Como segunda é 0, somamos 1 para ajustar
             feriado = feriados[feriados['dia_semana']!=1]
             feriado = feriado[feriado['dia_semana']!=7]
-            descontoFeriado = feriado.count()
+            descontoFeriado = feriado['dia_semana'].count()
         
         dados = {
                 '0-Eficiencia Média Periodo': f'{descontoFeriado}'
