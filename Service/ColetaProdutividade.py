@@ -279,7 +279,8 @@ class ColetaProdutividade():
         select
             periodo1_inicio,
             periodo1_fim,
-            periodo2_inicio
+            periodo2_inicio,
+            periodo2_fim
         from
             "Easy"."EscalaTrabalho" et 
             """
@@ -289,6 +290,8 @@ class ColetaProdutividade():
 
         self.horarioManha = consulta['periodo1_inicio'][0]
         self.horarioTarde = consulta['periodo2_inicio'][0]
+        self.horarioTardeFinal = consulta['periodo2_fim'][0]
+
         self.horarioManhaFim = consulta['periodo1_fim'][0]
         self.horarioTarde_tempo = datetime.strptime(self.horarioTarde, 
                                                                  "%H:%M:%S")
@@ -541,6 +544,8 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['diasUteis'] = diasUteis
         ApontamentosOperadoresGroupBy['tempoTrabalho'] = diasUteis * tempoTrabalho
         ApontamentosOperadoresGroupBy['dataHora'] = self.tempoApontamento 
+        ApontamentosOperadoresGroupBy['horarioTardeFinal'] = self.horarioTardeFinal 
+
 
         dados = {
                 '1-Dias Uteis':f'{diasUteis}',
