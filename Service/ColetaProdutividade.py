@@ -547,6 +547,26 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['horarioTardeFinal'] = self.horarioTardeFinal 
 
 
+
+
+        # Convertendo para datetime
+        ApontamentosOperadoresGroupBy["Hora"] = pd.to_datetime(ApontamentosOperadoresGroupBy["dataHora"], format="%H:%M:%S").dt.time
+        ApontamentosOperadoresGroupBy["horaFinal"] = pd.to_datetime(ApontamentosOperadoresGroupBy["horarioTardeFinal"], format="%H:%M:%S").dt.time
+
+        # Função para calcular os minutos
+        def calcular_minutos(row):
+            if row["Hora"] > row["horaFinal"]:
+                return 0
+            else:
+                hora_inicial = pd.Timestamp.combine(pd.Timestamp.today(), row["Hora"])
+                hora_final = pd.Timestamp.combine(pd.Timestamp.today(), row["horaFinal"])
+                return int((hora_final - hora_inicial).total_seconds() // 60)
+            
+        ApontamentosOperadoresGroupBy["minutosDescontados"] = ApontamentosOperadoresGroupBy.apply(calcular_minutos, axis=1)
+
+        ApontamentosOperadoresGroupBy.drop(['Hora', 'horaFinal'], axis=1, inplace=True)
+
+
         dados = {
                 '1-Dias Uteis':f'{diasUteis}',
                 '2-tempoTrabalho':f'{tempoTrabalho}',
