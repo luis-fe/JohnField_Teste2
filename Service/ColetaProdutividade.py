@@ -523,16 +523,16 @@ class ColetaProdutividade():
 	        "qtdePcs"::dec, 
         case 
             when delta_dias::int >3 then 0 
-            when "dataUltimoApontamento"::date > '2025-03-01' then 0
+            when "dataUltimoApontamento"::date > %s then 0
             else 
             extract(EPOCH FROM ('17:30:00' - "dataUltimoApontamento"::time))::int/60 end as "tempoAnterior" ,
         delta_dias 
         from
             "Easy"."FolhaRegistro" fr
         where
-            fr."dataApontamento" >= '2025-03-01'
+            fr."dataApontamento" >= %s
             and 
-            fr."dataApontamento" <= '2025-04-01'
+            fr."dataApontamento" <= %s
         """
 
         sql2 = """
@@ -546,7 +546,7 @@ class ColetaProdutividade():
 	            o."codOperacao" = to2."codOperacao" 
             """
         consulta2 = pd.read_sql(sql2, conn)
-        ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn )
+        ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn, params=(self.dataInicio, self.dataInicio, self.dataFinal) )
         
         
         ApontamentosOperadores = pd.merge(ApontamentosOperadores, consulta2 , on='nomeOperacao',how='left')
