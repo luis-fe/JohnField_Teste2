@@ -520,7 +520,6 @@ class ColetaProdutividade():
 	        fr."nomeOperacao",
 	        "dataApontamento",
 	        "dataUltimoApontamento",
-            "nomeOperacao" ,
 	        "qtdePcs"::dec, 
         case 
             when delta_dias::int >3 then 0 
@@ -547,9 +546,9 @@ class ColetaProdutividade():
 	            o."codOperacao" = to2."codOperacao" 
             """
         consulta2 = pd.read_sql(sql2, conn)
-
-
         ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn )
+        
+        
         ApontamentosOperadores = pd.merge(ApontamentosOperadores, consulta2 , on='nomeOperacao',how='left')
         ApontamentosOperadores['tempoPadrao(min)'] =(ApontamentosOperadores['tempoPadrao(s)']*ApontamentosOperadores['qtdePcs'])/60
 
