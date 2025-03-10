@@ -520,6 +520,8 @@ class ColetaProdutividade():
 	        fr."nomeOperacao",
 	        "dataApontamento",
 	        "dataUltimoApontamento",
+            "nomeOperacao" ,
+	        "qtdePcs"::dec, 
         case 
             when delta_dias::int >3 then 0 
             when "dataUltimoApontamento"::date > '2025-03-01' then 0
@@ -534,10 +536,27 @@ class ColetaProdutividade():
             fr."dataApontamento" <= '2025-04-01'
         """
 
+        sql2 = """
+            select
+	            o."nomeOperacao" ,
+	            "tempoPadrao" as "tempoPadrao(s)"
+            from
+	            "Easy"."TemposOperacao" to2
+            inner join 
+                "Easy"."Operacao" o on
+	            o."codOperacao" = to2."codOperacao" 
+            """
+        consulta2 = pd.read_sql(sql2, conn)
+
+
         ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn )
+        ApontamentosOperadores = pd.merge(ApontamentosOperadores, consulta2 , on='nomeOperacao',how='left')
+        ApontamentosOperadores['tempoPadrao(min)'] =(ApontamentosOperadores['tempoPadrao(s)']*ApontamentosOperadores['qtdePcs'])/60
+
 
         ApontamentosOperadoresGroupBy = ApontamentosOperadores.groupby("codOperador").agg({
-            "tempoAnterior":"max"
+            "tempoAnterior":"max",
+            "tempoPadrao(min)":"sum"
         }).reset_index()
 
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
