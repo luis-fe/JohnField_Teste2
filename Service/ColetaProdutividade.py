@@ -597,6 +597,8 @@ class ColetaProdutividade():
         
         eficienciaGlobal = ApontamentosOperadoresGroupBy['tempo PrevistoAcum'].sum()/ApontamentosOperadoresGroupBy['tempoTotal(min)Acum'].sum()
         eficienciaGlobal = round(eficienciaGlobal * 100 ,2)
+        ApontamentosOperadoresGroupBy = ApontamentosOperadoresGroupBy.sort_values(by=['Eficiencia'], ascending=False)
+
         
         dados = {
                 '0-Eficiencia Média Periodo':f'{eficienciaGlobal}%',

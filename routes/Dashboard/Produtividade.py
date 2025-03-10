@@ -43,9 +43,9 @@ def get_ProdutividadeOperadorNovo():
     dataInicio = request.args.get('dataInicio', '')
     dataFinal = request.args.get('dataFinal', '')
 
-    produtividade = produtividadeClass.Produtividade(dataInicio, dataFinal)
+    produtividade = ColetaProdutividade.ColetaProdutividade('','','','',dataInicio, dataFinal)
 
-    consulta = produtividade.ProdutividadeOperadores()
+    consulta = produtividade.analisePeriodo()
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
