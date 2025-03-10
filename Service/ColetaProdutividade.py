@@ -557,7 +557,8 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy = ApontamentosOperadores.groupby("codOperador").agg({
             "tempoAnterior":"max",
             "tempoPadrao(min)":"sum",
-            "nomeOperador":"first"
+            "nomeOperador":"first",
+            "qtdePcs":"sum"
         }).reset_index()
 
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
@@ -588,16 +589,19 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['tempoRealizado']= ApontamentosOperadoresGroupBy['tempoTrabalho']+ApontamentosOperadoresGroupBy['tempoAnterior']-ApontamentosOperadoresGroupBy["minutosDescontados"]
         ApontamentosOperadoresGroupBy['Eficiencia'] = round(ApontamentosOperadoresGroupBy['tempoPadrao(min)'] / ApontamentosOperadoresGroupBy['tempoRealizado'], 3) * 100
         ApontamentosOperadoresGroupBy['Eficiencia'] = ApontamentosOperadoresGroupBy['Eficiencia'].round(1)
-
+        ApontamentosOperadoresGroupBy.rename(
+            columns={'qtdePcs': 'qtdPcsAcum',
+                     "tempoPadrao(min)":"tempo PrevistoAcum",
+                     "tempoRealizado":"tempoTotal(min)Acum"},
+            inplace=True)
         
         
         dados = {
-                '1-Dias Uteis':f'{diasUteis}',
-                '2-tempoTrabalho':f'{tempoTrabalho}',
-                '3- ultimostempos':ApontamentosOperadoresGroupBy.to_dict(orient='records')
-                }
+                '0-Eficiencia Média Periodo':f'{diasUteis}',
+                '1-Detalhamento':ApontamentosOperadoresGroupBy.to_dict(orient='records') 
+            }
 
-        return ApontamentosOperadoresGroupBy
+        return pd.DataFrame([dados])
 
 
     
