@@ -517,6 +517,7 @@ class ColetaProdutividade():
         sqlApontamentosOperadores ="""
         select
 	        fr."codOperador" ,
+            (select o."nomeOperador"  from "Easy"."Operador" o where o."codOperador"::varchar = fr."codOperador") as "nomeOperador",
 	        fr."nomeOperacao",
 	        "dataApontamento",
 	        "dataUltimoApontamento",
@@ -555,7 +556,8 @@ class ColetaProdutividade():
 
         ApontamentosOperadoresGroupBy = ApontamentosOperadores.groupby("codOperador").agg({
             "tempoAnterior":"max",
-            "tempoPadrao(min)":"sum"
+            "tempoPadrao(min)":"sum",
+            "nomeOperador":"first"
         }).reset_index()
 
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
