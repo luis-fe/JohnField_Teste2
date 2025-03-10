@@ -584,6 +584,11 @@ class ColetaProdutividade():
 
         ApontamentosOperadoresGroupBy.drop(['Hora', 'horaFinal'], axis=1, inplace=True)
         ApontamentosOperadoresGroupBy['tempoRealizado']= ApontamentosOperadoresGroupBy['tempoTrabalho']+ApontamentosOperadoresGroupBy['tempoAnterior']
+        ApontamentosOperadoresGroupBy['Eficiencia'] = round(ApontamentosOperadoresGroupBy['tempoPadrao(min)'] / ApontamentosOperadoresGroupBy['tempoRealizado'], 3) * 100
+        ApontamentosOperadoresGroupBy['Eficiencia'] = ApontamentosOperadoresGroupBy['Eficiencia'].round(1)
+
+        
+        
         dados = {
                 '1-Dias Uteis':f'{diasUteis}',
                 '2-tempoTrabalho':f'{tempoTrabalho}',
