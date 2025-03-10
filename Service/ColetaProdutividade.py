@@ -566,6 +566,8 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['tempoTrabalho'] = diasUteis * tempoTrabalho
         ApontamentosOperadoresGroupBy['dataHora'] = self.tempoApontamento 
         ApontamentosOperadoresGroupBy['horarioTardeFinal'] = self.horarioTardeFinal 
+        ApontamentosOperadoresGroupBy['horarioManhaFim'] = self.horarioManhaFim 
+        ApontamentosOperadoresGroupBy['horarioTarde'] = self.horarioTarde 
 
 
 
@@ -573,19 +575,33 @@ class ColetaProdutividade():
         # Convertendo para datetime
         ApontamentosOperadoresGroupBy["Hora"] = pd.to_datetime(ApontamentosOperadoresGroupBy["dataHora"], format="%H:%M:%S").dt.time
         ApontamentosOperadoresGroupBy["horaFinal"] = pd.to_datetime(ApontamentosOperadoresGroupBy["horarioTardeFinal"], format="%H:%M:%S").dt.time
+        ApontamentosOperadoresGroupBy["horarioManhaFim_"] = pd.to_datetime(ApontamentosOperadoresGroupBy["horarioManhaFim"], format="%H:%M:%S").dt.time
+
+        ApontamentosOperadoresGroupBy["horarioTardeIni"] = pd.to_datetime(ApontamentosOperadoresGroupBy["horarioTarde"], format="%H:%M:%S").dt.time
+
 
         # Função para calcular os minutos
         def calcular_minutos(row):
             if row["Hora"] > row["horaFinal"]:
                 return 0
             else:
+                if row["Hora"] < row["horarioManhaFim_"]:
+                    
+                    hora_inicial = pd.Timestamp.combine(pd.Timestamp.today(), row["Hora"])
+                    hora_final = pd.Timestamp.combine(pd.Timestamp.today(), row["horaFinal"])
+                    horarioManhaFim_ = pd.Timestamp.combine(pd.Timestamp.today(), row["horarioManhaFim_"])
+                    horarioTardeIni_ = pd.Timestamp.combine(pd.Timestamp.today(), row["horarioTardeIni"])
+
+                    return int((horarioManhaFim_ - hora_inicial).total_seconds() // 60) + int((hora_final - horarioTardeIni_).total_seconds() // 60)
+
+
                 hora_inicial = pd.Timestamp.combine(pd.Timestamp.today(), row["Hora"])
                 hora_final = pd.Timestamp.combine(pd.Timestamp.today(), row["horaFinal"])
                 return int((hora_final - hora_inicial).total_seconds() // 60)
             
         ApontamentosOperadoresGroupBy["minutosDescontados"] = ApontamentosOperadoresGroupBy.apply(calcular_minutos, axis=1)
 
-        ApontamentosOperadoresGroupBy.drop(['Hora', 'horaFinal'], axis=1, inplace=True)
+        ApontamentosOperadoresGroupBy.drop(['Hora', 'horaFinal','horarioManhaFim_','horarioTardeIni'], axis=1, inplace=True)
         ApontamentosOperadoresGroupBy['tempoRealizado']= ApontamentosOperadoresGroupBy['tempoTrabalho']+ApontamentosOperadoresGroupBy['tempoAnterior']-ApontamentosOperadoresGroupBy["minutosDescontados"]
         ApontamentosOperadoresGroupBy['Eficiencia'] = round(ApontamentosOperadoresGroupBy['tempoPadrao(min)'] / ApontamentosOperadoresGroupBy['tempoRealizado'], 3) * 100
         ApontamentosOperadoresGroupBy['Eficiencia'] = ApontamentosOperadoresGroupBy['Eficiencia'].round(1)
