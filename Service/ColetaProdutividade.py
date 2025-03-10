@@ -583,8 +583,7 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy["minutosDescontados"] = ApontamentosOperadoresGroupBy.apply(calcular_minutos, axis=1)
 
         ApontamentosOperadoresGroupBy.drop(['Hora', 'horaFinal'], axis=1, inplace=True)
-
-
+        ApontamentosOperadoresGroupBy['tempoRealizado']= ApontamentosOperadoresGroupBy['tempoTrabalho']+ApontamentosOperadoresGroupBy['tempoAnterior']
         dados = {
                 '1-Dias Uteis':f'{diasUteis}',
                 '2-tempoTrabalho':f'{tempoTrabalho}',
