@@ -26,7 +26,7 @@ class ColetaProdutividade():
 
     def __init__(self, codOperador = None, limiteTempoMinApontamento = None, 
                  nomeOperacao = None, qtdePc = None, dataInicio = None, dataFinal = None,
-                 dataHoraOpcional = None):
+                 dataHoraOpcional = None, nomeOperador = None):
         
         self.codOperador = str(codOperador)
         self.limiteTempoMinApontamento = limiteTempoMinApontamento
@@ -39,6 +39,7 @@ class ColetaProdutividade():
         self.dataInicio = dataInicio
         self.dataFinal = dataFinal
         self.dataHoraOpcional = dataHoraOpcional
+        self.nomeOperador = nomeOperador
 
         #2 - buscar a DataHora atual do sistema
         self.dataHoraAtual()
@@ -622,6 +623,110 @@ class ColetaProdutividade():
             }
 
         return pd.DataFrame([dados])
+    
+
+    def detalhaProdutividadeOperador(self):
+        '''Metodo que detalha a produtvidade de um operador no periodo '''
+
+
+        sqlApontamentosOperadores ="""
+        select
+	        fr."codOperador" ,
+            (select o."nomeOperador"  from "Easy"."Operador" o where o."codOperador"::varchar = fr."codOperador") as "nomeOperador",
+	        fr."nomeOperacao",
+	        "dataApontamento",
+	        "dataUltimoApontamento",
+	        "qtdePcs"::dec, 
+        case 
+            when delta_dias::int >3 then 0 
+            when "dataUltimoApontamento"::date > %s then 0
+            else 
+            extract(EPOCH FROM ('17:30:00' - "dataUltimoApontamento"::time))::int/60 end as "tempoAnterior" ,
+        delta_dias 
+        from
+            "Easy"."FolhaRegistro" fr
+        inner join 
+            "Easy"."Operador" o 
+                on o."codOperador"::varchar = fr."codOperador" 
+        where
+            fr."dataApontamento" >= %s
+            and 
+            fr."dataApontamento" <= %s
+            and 
+            o."nomeOperador" = %s
+        """
+
+        sql2 = """
+            select
+	            o."nomeOperacao" ,
+	            "tempoPadrao" as "tempoPadrao(s)"
+            from
+	            "Easy"."TemposOperacao" to2
+            inner join 
+                "Easy"."Operacao" o on
+	            o."codOperacao" = to2."codOperacao" 
+            """
+        consulta2 = pd.read_sql(sql2, conn)
+
+
+        ApontamentosOperadores = pd.read_sql(sqlApontamentosOperadores, conn, params=(self.dataInicio, self.dataInicio, self.dataFinal,self.nomeOperador) )
+        ApontamentosOperadores = pd.merge(ApontamentosOperadores, consulta2 , on='nomeOperacao',how='left')
+
+
+        sqlEscala = """
+        
+        SELECT 
+            EXTRACT(EPOCH FROM 
+                (periodo1_fim::time - periodo1_inicio::time) 
+                + (periodo2_fim::time - periodo2_inicio::time)
+            ) / 60 AS tempo_em_minutos
+        FROM "Easy"."EscalaTrabalho" et;
+        
+        """
+        conn = ConexaoPostgreMPL.conexaoEngine()
+        feriados = pd.read_sql(sql, conn, params=(self.dataInicio, self.dataFinal) )
+        escala = pd.read_sql(sqlEscala, conn )
+        
+        if feriados.empty:
+            descontoFeriado = 0
+        else:
+            # Convertendo a coluna "data" para datetime
+            feriados["data"] = pd.to_datetime(feriados["data"])
+            # Criando a coluna do dia da semana (ajustando para que domingo = 1, segunda = 2, ..., sábado = 7)
+            feriados["dia_semana"] = feriados["data"].dt.weekday + 1  # Como segunda é 0, somamos 1 para ajustar
+            feriado = feriados[feriados['dia_semana']!=0]
+            feriado = feriado[feriado['dia_semana']!=7]
+            descontoFeriado = feriado['dia_semana'].count()
+
+
+        ApontamentosOperadores['tempoPadrao(min)'] =(ApontamentosOperadores['tempoPadrao(s)']*ApontamentosOperadores['qtdePcs'])/60
+        ApontamentosOperadores['0-Feriados Periodo'] = descontoFeriado
+
+                # Converter as datas para formato datetime
+        data_inicial = pd.to_datetime(self.dataInicio)
+        data_final = pd.to_datetime(self.dataFinal)
+        diasUteis = np.busday_count(data_inicial.date(), (data_final.date() + timedelta(days=1))) - descontoFeriado
+        ApontamentosOperadores['diasUteis'] = diasUteis
+
+        tempoTrabalho = escala['tempo_em_minutos'][0]
+
+        ApontamentosOperadores['tempoTrabalho'] = diasUteis * tempoTrabalho
+
+
+        eficienciaGlobal = ApontamentosOperadores['tempo PrevistoAcum'].sum()/ApontamentosOperadores['tempoTotal(min)Acum'].sum()
+        eficienciaGlobal = round(eficienciaGlobal * 100 ,2)
+
+        
+        dados = {
+                '0-Eficiencia Média Periodo':f'{eficienciaGlobal}%',
+                '1-Detalhamento':ApontamentosOperadores.to_dict(orient='records') 
+            }
+
+        return pd.DataFrame([dados])
+
+
+
+
 
 
     

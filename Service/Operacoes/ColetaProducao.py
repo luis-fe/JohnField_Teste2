@@ -174,6 +174,22 @@ from
     conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(sql, conn, params=(dataInicio, dataFim,))
 
+    sql2 = """
+            select
+	            o."nomeOperacao" ,
+	            "tempoPadrao" as "tempoPadrao(s)"
+            from
+	            "Easy"."TemposOperacao" to2
+            inner join 
+                "Easy"."Operacao" o on
+	            o."codOperacao" = to2."codOperacao" 
+            """
+    consulta2 = pd.read_sql(sql2, conn)
+
+    consulta = pd.merge(consulta, consulta2 , on='nomeOperacao',how='left')
+    consulta['tempoPadrao Total(min)'] =(consulta['tempoPadrao(s)']*consulta['qtdPcs'])/60
+
+    
 
     consulta['tempoTotal(min)'] = consulta['tempoTotal(min)'].round(2)
     consulta['Realizado pcs/Hora'] = 60*(consulta['qtdPcs']/consulta['tempoTotal(min)'])
