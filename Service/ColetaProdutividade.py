@@ -569,6 +569,8 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['horarioTardeFinal'] = self.horarioTardeFinal 
         ApontamentosOperadoresGroupBy['horarioManhaFim'] = self.horarioManhaFim 
         ApontamentosOperadoresGroupBy['horarioTarde'] = self.horarioTarde 
+        ApontamentosOperadoresGroupBy['dataApontamento'] = self.dataApontamento 
+        ApontamentosOperadoresGroupBy['dataFinal'] = self.dataFinal 
 
 
 
