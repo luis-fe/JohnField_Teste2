@@ -570,7 +570,7 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['horarioManhaFim'] = self.horarioManhaFim 
         ApontamentosOperadoresGroupBy['horarioTarde'] = self.horarioTarde 
         ApontamentosOperadoresGroupBy['dataApontamento'] = self.dataApontamento 
-        ApontamentosOperadoresGroupBy['dataFinal'] = self.dataFinal 
+        ApontamentosOperadoresGroupBy['horarioTarde'] = self.horarioTarde 
 
 
 
@@ -585,11 +585,10 @@ class ColetaProdutividade():
 
         # Função para calcular os minutos
         def calcular_minutos(row):
-            if row["Hora"] > row["horaFinal"] :
+            if row["Hora"] > row["horaFinal"]:
                 return 0
             elif self.dataApontamento != self.dataFinal:
                 return 0
-
             else:
                 if row["Hora"] < row["horarioManhaFim_"]:
                     
