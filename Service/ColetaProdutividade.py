@@ -583,7 +583,7 @@ class ColetaProdutividade():
 
         # Função para calcular os minutos
         def calcular_minutos(row):
-            if row["Hora"] > row["horaFinal"]:
+            if row["Hora"] > row["horaFinal"] and self.dataApontamento == self.dataFinal:
                 return 0
             else:
                 if row["Hora"] < row["horarioManhaFim_"]:
