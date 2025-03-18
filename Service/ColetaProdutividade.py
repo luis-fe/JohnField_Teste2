@@ -742,9 +742,9 @@ class ColetaProdutividade():
         
         # Verifica se há algum domingo na sequência de datas
         try:
-            datas = pd.date_range(start=self.dataUltimoApontamento_A_M_D, end=self.dataApontamento)
+            datas = pd.date_range(start=self.dataInicio, end=self.dataFinal)
         except ValueError as e:
-            raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{self.dataUltimoApontamento_A_M_D},fim{self.dataApontamento}")
+            raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{self.dataInicio},fim{self.dataFinal}")
 
         self.tem_sexta = any(date.weekday() == 4 for date in datas)
 
