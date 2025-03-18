@@ -472,6 +472,10 @@ class ColetaProdutividade():
     def analisePeriodo(self):
         '''Metodo para analisar a produtividade no periodo'''
 
+
+
+
+
         sql = """
                 select
                     *
@@ -571,6 +575,7 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy['horarioTarde'] = self.horarioTarde 
         ApontamentosOperadoresGroupBy['dataApontamento'] = self.dataApontamento 
         ApontamentosOperadoresGroupBy['horarioTarde'] = self.horarioTarde 
+        ApontamentosOperadoresGroupBy['qtdSextaFeira'] = self.contar_sexta_de_semana() 
 
 
 
@@ -727,6 +732,36 @@ class ColetaProdutividade():
             }
 
         return pd.DataFrame([dados])
+    
+
+
+
+    def contar_sexta_de_semana(self) -> int:
+        data_inicio = datetime.strptime(self.dataInicio, "%Y-%m-%d").date()
+        data_fim = datetime.strptime(self.dataFinal, "%Y-%m-%d").date()
+        
+        # Verifica se há algum domingo na sequência de datas
+        try:
+            datas = pd.date_range(start=self.dataUltimoApontamento_A_M_D, end=self.dataApontamento)
+        except ValueError as e:
+            raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{self.dataUltimoApontamento_A_M_D},fim{self.dataApontamento}")
+
+        self.tem_sexta = any(date.weekday() == 4 for date in datas)
+
+
+        if data_fim.weekday() in [4]:  # 5 = Sábado, 6 = Domingo
+            data_fim -= timedelta(days=1)  # Remove um dia para desconsiderar a saída
+        
+        contador = 0
+        data_atual = data_inicio
+        
+        while data_atual <= data_fim:
+            if data_atual.weekday() in [4]:  # 5 = Sábado, 6 = Domingo
+                contador += 1
+            data_atual += timedelta(days=1)
+        
+        
+        return contador
 
 
 
