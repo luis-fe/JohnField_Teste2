@@ -557,18 +557,20 @@ class ColetaProdutividade():
         
         ApontamentosOperadores = pd.merge(ApontamentosOperadores, consulta2 , on='nomeOperacao',how='left')
         ApontamentosOperadores['tempoPadrao(min)'] =(ApontamentosOperadores['tempoPadrao(s)']*ApontamentosOperadores['qtdePcs'])/60
+        ApontamentosOperadores['tempoTrabalho'] = self.contar_sexta_de_semana() * 480 + (diasUteis -self.contar_sexta_de_semana()  ) *525
 
 
         ApontamentosOperadoresGroupBy = ApontamentosOperadores.groupby("codOperador").agg({
             "tempoAnterior":"max",
             "tempoPadrao(min)":"sum",
             "nomeOperador":"first",
-            "qtdePcs":"sum"
+            "qtdePcs":"sum",
+            "tempoTrabalho":"sum"
         }).reset_index()
 
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
         ApontamentosOperadoresGroupBy['diasUteis'] = diasUteis
-        ApontamentosOperadoresGroupBy['tempoTrabalho'] = diasUteis * tempoTrabalho
+        #ApontamentosOperadoresGroupBy['tempoTrabalho'] = diasUteis * tempoTrabalho
         ApontamentosOperadoresGroupBy['dataHora'] = self.tempoApontamento 
         ApontamentosOperadoresGroupBy['horarioTardeFinal'] = self.horarioTardeFinal 
         ApontamentosOperadoresGroupBy['horarioManhaFim'] = self.horarioManhaFim 
