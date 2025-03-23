@@ -217,7 +217,7 @@ from
     Media = Agrupamento['Efi'].mean()
     Media = round(Media,2)
     consulta['tempoPadrao Total(min)'] = consulta['tempoPadrao Total(min)'].round(2)
-    consulta = consulta.sort_values(by=["codOperador",'Data', 'Hr Inicio'], ascending=[True,True, True])
+    consulta = consulta.sort_values(by=["codOperador",'Data', 'HrFim'], ascending=[True,True, True])
     consulta["NSeq"] = consulta.groupby("codOperador").cumcount() + 1
 
 
