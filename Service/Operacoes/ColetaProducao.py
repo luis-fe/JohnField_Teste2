@@ -229,6 +229,7 @@ from
 
     # Substituir os valores não finais por NaN (ou '-' para exibição)
     consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'tempoPadrao Acum'] = '-'
+    consulta['tempoPadrao Acum'] = consulta['tempoPadrao Acum'].round(2)
 
 
     dados = {
