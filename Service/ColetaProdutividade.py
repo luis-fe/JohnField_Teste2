@@ -472,10 +472,6 @@ class ColetaProdutividade():
     def analisePeriodo(self):
         '''Metodo para analisar a produtividade no periodo'''
 
-
-
-
-
         sql = """
                 select
                     *

@@ -5,6 +5,8 @@ import pytz
 from Service.Operacoes import Operadores, Opercao
 from Service import CategiaJohnField
 from datetime import datetime, time, timedelta
+import numpy as np
+
 
 def obterHoraAtual():
     fuso_horario = pytz.timezone('America/Sao_Paulo')  # Define o fuso horário do Brasil
@@ -230,6 +232,54 @@ from
 
     # Substituir os valores não finais por NaN (ou '-' para exibição)
     consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'tempoPadrao Acum'] = '-'
+    
+
+    
+    sql = """
+                select
+                    *
+                from
+                    "Easy".feriados f
+                where
+                    f."data" >= %s
+                    and 
+                    f."data" <= %s
+            """
+        
+    sqlEscala = """
+        
+        SELECT 
+            EXTRACT(EPOCH FROM 
+                (periodo1_fim::time - periodo1_inicio::time) 
+                + (periodo2_fim::time - periodo2_inicio::time)
+            ) / 60 AS tempo_em_minutos
+        FROM "Easy"."EscalaTrabalho" et;
+        """
+    
+    feriados = pd.read_sql(sql, conn, params=(dataInicio, dataFim) )
+    escala = pd.read_sql(sqlEscala, conn )
+    if feriados.empty:
+            descontoFeriado = 0
+    else:
+        # Convertendo a coluna "data" para datetime
+        feriados["data"] = pd.to_datetime(feriados["data"])
+        # Criando a coluna do dia da semana (ajustando para que domingo = 1, segunda = 2, ..., sábado = 7)
+        feriados["dia_semana"] = feriados["data"].dt.weekday + 1  # Como segunda é 0, somamos 1 para ajustar
+        feriado = feriados[feriados['dia_semana']!=0]
+        feriado = feriado[feriado['dia_semana']!=7]
+        descontoFeriado = feriado['dia_semana'].count()
+    # Converter as datas para formato datetime
+    data_inicial = pd.to_datetime(dataInicio)
+    data_final = pd.to_datetime(dataFim)
+    diasUteis = np.busday_count(data_inicial.date(), (data_final.date() + timedelta(days=1))) - descontoFeriado
+    consulta['diasUteis'] = diasUteis
+    consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'diasUteis'] = '-'
+
+        
+
+
+
+
 
 
     dados = {
