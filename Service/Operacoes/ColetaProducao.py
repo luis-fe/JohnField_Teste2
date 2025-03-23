@@ -169,6 +169,7 @@ from
              WHERE
              "Data"::date >= %s 
              AND "Data"::date <= %s
+             order by "Data" asc ,"Hr Inicio" asc 
              """
 
     conn = ConexaoPostgreMPL.conexaoEngine()
