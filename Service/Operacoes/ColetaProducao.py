@@ -217,6 +217,8 @@ from
     Media = Agrupamento['Efi'].mean()
     Media = round(Media,2)
     consulta['tempoPadrao Total(min)'] = consulta['tempoPadrao Total(min)'].round(2)
+    consulta = consulta.sort_values(by=["codOperador",'Data', 'Hr Inicio'], ascending=[True,True, True])
+
 
     dados = {
         '0- Eficiencia Média no dia': f'{Media}% ',
