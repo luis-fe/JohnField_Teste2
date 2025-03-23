@@ -226,10 +226,10 @@ from
 
     # Definir NaN para todas as linhas que não são a última sequência do nome
     consulta.loc[consulta.groupby('nomeOperador')['NSeq'].idxmax(), 'tempoPadrao Acum'] = consulta.groupby('nomeOperador')['tempoPadrao Total(min)'].transform('sum')
+    consulta['tempoPadrao Acum'] = consulta['tempoPadrao Acum'].round(2)
 
     # Substituir os valores não finais por NaN (ou '-' para exibição)
     consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'tempoPadrao Acum'] = '-'
-    consulta['tempoPadrao Acum'] = consulta['tempoPadrao Acum'].round(2)
 
 
     dados = {
