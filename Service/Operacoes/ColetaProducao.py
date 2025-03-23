@@ -221,6 +221,16 @@ from
     consulta["NSeq"] = consulta.groupby("codOperador").cumcount() + 1
 
 
+        # Calcular tempo acumulado por nome
+    consulta['tempoPadrao Acum'] = consulta.groupby('nomeOperador')['tempoPadrao Total(min)'].cumsum()
+
+    # Definir NaN para todas as linhas que não são a última sequência do nome
+    consulta.loc[consulta.groupby('nomeOperador')['NSeq'].idxmax(), 'tempoPadrao Acum'] = consulta.groupby('nomeOperador')['tempoPadrao Acum'].transform('sum')
+
+    # Substituir os valores não finais por NaN (ou '-' para exibição)
+    consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'tempoPadrao Acum'] = '-'
+
+
     dados = {
         '0- Eficiencia Média no dia': f'{Media}% ',
         '2 -DetalhamentoEmAberto': consulta.to_dict(orient='records')}
