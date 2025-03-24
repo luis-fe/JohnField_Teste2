@@ -274,11 +274,7 @@ from
     diasUteis = np.busday_count(data_inicial.date(), (data_final.date() + timedelta(days=1))) - descontoFeriado
     consulta['diasUteis'] = diasUteis
     consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'diasUteis'] = '-'
-
-        
-
-
-
+    consulta['tempoTrabalho'] = contar_sexta_de_semana(dataInicio, dataFim) * 465 + (diasUteis -contar_sexta_de_semana(dataInicio, dataFim)  ) *525
 
 
 
@@ -532,4 +528,32 @@ def ConfiguracaoIntervaloColeta():
     consulta = pd.read_sql(select, conn)
 
     return consulta 
+
+def contar_sexta_de_semana(dataInicio, dataFinal) -> int:
+    data_inicio = datetime.strptime(dataInicio, "%Y-%m-%d").date()
+    data_fim = datetime.strptime(dataFinal, "%Y-%m-%d").date() + timedelta(days=1)
+
+    
+    # Verifica se há algum domingo na sequência de datas
+    try:
+        datas = pd.date_range(start=dataInicio, end=dataFinal)
+    except ValueError as e:
+        raise ValueError(f"Erro ao gerar o range de datas: {e},inico operacao{dataInicio},fim{dataFinal}")
+
+    tem_sexta = any(date.weekday() == 4 for date in datas)
+
+
+    if data_fim.weekday() in [4]:  # 5 = Sábado, 6 = Domingo
+        data_fim -= timedelta(days=1)  # Remove um dia para desconsiderar a saída
+    
+    contador = 0
+    data_atual = data_inicio
+    
+    while data_atual <= data_fim:
+        if data_atual.weekday() in [4]:  # 5 = Sábado, 6 = Domingo
+            contador += 1
+        data_atual += timedelta(days=1)
+    
+    
+    return contador
 
