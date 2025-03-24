@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
-RUN pip install --no-build-isolation reportlab-qrcode
+
 
 
 # Copie o código da aplicação para o contêiner
