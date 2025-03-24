@@ -733,8 +733,8 @@ class ColetaProdutividade():
 
 
     def contar_sexta_de_semana(self) -> int:
-        data_inicio = datetime.strptime(self.dataInicio, "%Y-%m-%d").date()- timedelta(days=1)
-        data_fim = datetime.strptime(self.dataFinal, "%Y-%m-%d").date()+ timedelta(days=1)
+        data_inicio = datetime.strptime(self.dataInicio, "%Y-%m-%d").date()
+        data_fim = datetime.strptime(self.dataFinal, "%Y-%m-%d").date()
 
         
         # Verifica se há algum domingo na sequência de datas
