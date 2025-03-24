@@ -275,6 +275,7 @@ from
     consulta['diasUteis'] = diasUteis
     consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'diasUteis'] = '-'
     consulta['tempoTrabalho'] = contar_sexta_de_semana(dataInicio, dataFim) * 465 + (diasUteis -contar_sexta_de_semana(dataInicio, dataFim)  ) *525
+    consulta.loc[consulta.index.difference(consulta.groupby('nomeOperador')['NSeq'].idxmax()), 'tempoTrabalho'] = '-'
 
 
 
