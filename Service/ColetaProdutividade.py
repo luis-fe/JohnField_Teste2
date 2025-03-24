@@ -608,7 +608,7 @@ class ColetaProdutividade():
         ApontamentosOperadoresGroupBy["minutosDescontados"] = ApontamentosOperadoresGroupBy.apply(calcular_minutos, axis=1)
 
         ApontamentosOperadoresGroupBy.drop(['Hora', 'horaFinal','horarioManhaFim_','horarioTardeIni'], axis=1, inplace=True)
-        ApontamentosOperadoresGroupBy['tempoRealizado']= ApontamentosOperadoresGroupBy['tempoTrabalho']
+        ApontamentosOperadoresGroupBy['tempoRealizado']= ApontamentosOperadoresGroupBy['tempoTrabalho']-ApontamentosOperadoresGroupBy["minutosDescontados"] 
         ApontamentosOperadoresGroupBy['Eficiencia'] = round(ApontamentosOperadoresGroupBy['tempoPadrao(min)'] / ApontamentosOperadoresGroupBy['tempoRealizado'], 3) * 100
         ApontamentosOperadoresGroupBy['Eficiencia'] = ApontamentosOperadoresGroupBy['Eficiencia'].round(1)
         ApontamentosOperadoresGroupBy.rename(
