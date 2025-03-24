@@ -564,7 +564,7 @@ class ColetaProdutividade():
 
         ApontamentosOperadoresGroupBy['0-Feriados Periodo'] = descontoFeriado
         ApontamentosOperadoresGroupBy['diasUteis'] = diasUteis
-        ApontamentosOperadoresGroupBy['tempoTrabalho'] = self.contar_sexta_de_semana() * 480 + (diasUteis -self.contar_sexta_de_semana()  ) *525
+        ApontamentosOperadoresGroupBy['tempoTrabalho'] = self.contar_sexta_de_semana() * 465 + (diasUteis -self.contar_sexta_de_semana()  ) *525
         ApontamentosOperadoresGroupBy['dataHora'] = self.tempoApontamento 
         ApontamentosOperadoresGroupBy['horarioTardeFinal'] = self.horarioTardeFinal 
         ApontamentosOperadoresGroupBy['horarioManhaFim'] = self.horarioManhaFim 
