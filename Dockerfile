@@ -12,9 +12,12 @@ RUN python -m venv --copies /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copie o arquivo de requisitos e instale dependências Python
+
 COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
+
+RUN pip install --no-build-isolation reportlab-qrcode
 
 
 # Copie o código da aplicação para o contêiner
