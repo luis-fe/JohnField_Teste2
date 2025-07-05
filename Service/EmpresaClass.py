@@ -67,9 +67,11 @@ class Empresa():
         
         if verificar.empty :
             
-            self.__adicionar_empresa()
+            mensagem = self.__adicionar_empresa()
+            return mensagem
         else:
-            self.__atualizar_Empresa()
+            mensagem = self.__atualizar_Empresa()
+            return mensagem
 
     def __atualizar_Empresa(self):
         '''Atualizar empresa'''
