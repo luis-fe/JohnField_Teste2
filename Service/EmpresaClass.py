@@ -39,10 +39,10 @@ class Empresa():
                 with conn.cursor() as curr:
                     curr.execute(sql, (self.codEmpresa, self.nomeEmpresa, self.CNPJ))
                     conn.commit()
-            return pd.DataFrame([{'Status':True,'Mensagem':'Empresa inserida com sucesso!'}])
+            return pd.DataFrame({'Status':True,'Mensagem':'Empresa inserida com sucesso!'})
         except Exception as e:
             
-            return pd.DataFrame([{'Status':False,'Mensagem':f'Erro ao inserir empresa: {e}'}])
+            return pd.DataFrame({'Status':False,'Mensagem':f'Erro ao inserir empresa: {e}'})
 
         
 
