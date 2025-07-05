@@ -87,9 +87,9 @@ class Empresa():
                 with conn.cursor() as curr:
                     curr.execute(sql, (self.nomeEmpresa, self.CNPJ, self.codEmpresa, ))
                     conn.commit()
-            return 'Empresa atualizada com sucesso!'
+            return pd.DataFrame([{'Mensagem':'Empresa alterada com sucesso!'}])
         except Exception as e:
-            return f'Erro ao inserir empresa: {e}' 
+            return pd.DataFrame([{'Mensagem':f'Erro ao alterar empresa: {e}'}])
 
     def excluir_empresa(self):
         '''Método que realiza a exclusao da empresa'''
@@ -106,8 +106,8 @@ class Empresa():
                 with conn.cursor() as curr:
                     curr.execute(sql, (self.codEmpresa, ))
                     conn.commit()
-            return 'Empresa excluida com sucesso!'
+            return pd.DataFrame([{'Mensagem':'Empresa excluida com sucesso!'}])
         except Exception as e:
-            return f'Erro ao excluir a empresa: {e}'            
+            return pd.DataFrame([{'Mensagem':f'Erro ao exluir empresa: {e}'}])
 
 
