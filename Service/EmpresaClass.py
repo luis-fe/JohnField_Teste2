@@ -3,6 +3,7 @@ import pandas as pd
 
 
 class Empresa():
+
     def __init__(self, codEmpresa='01', nomeEmpresa='', CNPJ=''):
         self.codEmpresa = codEmpresa
         self.nomeEmpresa = nomeEmpresa
@@ -23,7 +24,7 @@ class Empresa():
 
         return consulta
 
-    def adicionar_empresa(self):
+    def __adicionar_empresa(self):
         '''Método para inserir uma nova empresa.
         
         Retorna:
@@ -43,7 +44,7 @@ class Empresa():
             return f'Erro ao inserir empresa: {e}'
         
 
-    def pesquisar_EmpresaEspecifica(self):
+    def __pesquisar_EmpresaEspecifica(self):
         '''Metodo que pesquisa uma empresa especifica'''
 
         sql = """
@@ -55,3 +56,56 @@ class Empresa():
         consulta = pd.read_sql(sql, conn, params=(self.codEmpresa,))
 
         return consulta
+    
+    def inserir_atualizar_Empresa(self):
+        '''Metodo que inseri ou atualiza a empresa '''
+
+        # pesquisar se a empresa ja exite:
+        verificar = self.__pesquisar_EmpresaEspecifica()
+        
+        if verificar.empty :
+            
+            self.__adicionar_empresa()
+        else:
+            self.__atualizar_Empresa()
+
+    def __atualizar_Empresa(self):
+        '''Atualizar empresa'''
+
+        sql = """
+                update "Easy"."Empresa"
+                    set "nomeEmpresa" = %s, 
+                        "CNPJ" = %s
+                where 
+                    "codEmpresa" = %s
+        """
+        
+        try:
+            with ConexaoPostgreMPL.conexaoJohn() as conn:
+                with conn.cursor() as curr:
+                    curr.execute(sql, (self.nomeEmpresa, self.CNPJ, self.codEmpresa, ))
+                    conn.commit()
+            return 'Empresa atualizada com sucesso!'
+        except Exception as e:
+            return f'Erro ao inserir empresa: {e}' 
+
+    def excluir_empresa(self):
+        '''Método que realiza a exclusao da empresa'''
+
+        sql = """
+            DELETE 
+                FROM "Easy"."Empresa"
+            where 
+                "codEmpresa" = %s
+        """    
+        
+        try:
+            with ConexaoPostgreMPL.conexaoJohn() as conn:
+                with conn.cursor() as curr:
+                    curr.execute(sql, (self.codEmpresa, ))
+                    conn.commit()
+            return 'Empresa excluida com sucesso!'
+        except Exception as e:
+            return f'Erro ao excluir a empresa: {e}'            
+
+

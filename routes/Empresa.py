@@ -29,3 +29,52 @@ def Obter_Empresas():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+
+@empresas_routesJohn.route('/api/JonhField/Atualiza_InserirEmpresa', methods=['POST'])
+@token_required
+def NovaEmpresa():
+
+    data = request.get_json()
+    codEmpresa = data.get('codEmpresa')
+    nomeEmpresa = data.get('nomeEmpresa', '-')
+    CNPJ = data.get('CNPJ', '')
+
+    consulta = EmpresaClass.Empresa().inserir_atualizar_Empresa(codEmpresa, nomeEmpresa, CNPJ)
+
+
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
+@empresas_routesJohn.route('/api/JonhField/Delete_Empresa', methods=['DELETE'])
+@token_required
+def Delete_Empresa():
+
+    data = request.get_json()
+    codEmpresa = data.get('codEmpresa')
+    nomeEmpresa = data.get('nomeEmpresa', '-')
+    CNPJ = data.get('CNPJ', '')
+
+    consulta = EmpresaClass.Empresa().excluir_empresa(codEmpresa)
+
+
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
