@@ -39,9 +39,11 @@ class Empresa():
                 with conn.cursor() as curr:
                     curr.execute(sql, (self.codEmpresa, self.nomeEmpresa, self.CNPJ))
                     conn.commit()
-            return 'Empresa inserida com sucesso!'
+            return pd.DataFrame([{'Mensagem':'Empresa inserida com sucesso!'}])
         except Exception as e:
-            return f'Erro ao inserir empresa: {e}'
+            
+            return pd.DataFrame([{'Mensagem':f'Erro ao inserir empresa: {e}'}])
+
         
 
     def __pesquisar_EmpresaEspecifica(self):
