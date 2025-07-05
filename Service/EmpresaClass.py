@@ -2,7 +2,7 @@ import ConexaoPostgreMPL
 import pandas as pd
 
 
-class Empresa:
+class Empresa():
     def __init__(self, codEmpresa='01', nomeEmpresa='', CNPJ=''):
         self.codEmpresa = codEmpresa
         self.nomeEmpresa = nomeEmpresa
