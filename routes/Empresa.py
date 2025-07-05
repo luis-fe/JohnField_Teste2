@@ -40,7 +40,7 @@ def NovaEmpresa():
     nomeEmpresa = data.get('nomeEmpresa', '-')
     CNPJ = data.get('CNPJ', '')
 
-    consulta = EmpresaClass.Empresa().inserir_atualizar_Empresa(codEmpresa, nomeEmpresa, CNPJ)
+    consulta = EmpresaClass.Empresa(codEmpresa, nomeEmpresa, CNPJ).inserir_atualizar_Empresa()
 
 
     # Obtém os nomes das colunas
@@ -64,7 +64,7 @@ def Delete_Empresa():
     nomeEmpresa = data.get('nomeEmpresa', '-')
     CNPJ = data.get('CNPJ', '')
 
-    consulta = EmpresaClass.Empresa().excluir_empresa(codEmpresa)
+    consulta = EmpresaClass.Empresa(codEmpresa).excluir_empresa()
 
 
     # Obtém os nomes das colunas
