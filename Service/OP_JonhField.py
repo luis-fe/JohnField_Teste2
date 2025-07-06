@@ -101,12 +101,22 @@ def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,
 
             return pd.DataFrame([{'Mensagem':'OP Gerada com Sucesso!', 'Status':True}])
 
-def ObterOP_EMAberto():
-    consulta = """
-    select * from "Easy"."DetalhaOP_Abertas"
-    """
-    conn = ConexaoPostgreMPL.conexaoJohn()
-    consulta = pd.read_sql(consulta,conn)
+def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
+    conn = ConexaoPostgreMPL.conexaoEngine()
+
+    if filtroEmpresa == 'CONSOLIDADO':
+        consulta = """
+            select * from "Easy"."DetalhaOP_Abertas"
+                    """
+        consulta = pd.read_sql(consulta,conn)
+
+    else:
+        consulta = """
+            select * from "Easy"."DetalhaOP_Abertas"
+            where nomeEmpresa = %s
+                    """
+        consulta = pd.read_sql(consulta,conn,params=(filtroEmpresa,))
+    
     consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
     select "idOP" , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
@@ -115,7 +125,6 @@ def ObterOP_EMAberto():
     consulta = pd.merge(consulta,quantidade, on ='idOP', how='left')
     consulta['quantidade'].fillna("-",inplace= True)
 
-    conn.close()
     consulta['idOP'] = consulta['idOP'].str.replace('||','&')
 
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')
