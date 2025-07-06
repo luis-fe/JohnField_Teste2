@@ -113,7 +113,7 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
     else:
         consulta = """
             select * from "Easy"."DetalhaOP_Abertas"
-            where nomeEmpresa = %s
+            where "nomeEmpresa" = %s
                     """
         consulta = pd.read_sql(consulta,conn,params=(filtroEmpresa,))
     
