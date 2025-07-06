@@ -37,7 +37,8 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
     return consulta
 
-def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro, codEmpresa = '1'):
+def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,
+             descricaoOP, codGrade, codRoteiro, codEmpresa = '1'):
 
     ChaveOP = codOP +'||'+str(codCliente)
 
@@ -65,7 +66,9 @@ def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrad
             codFaseInicial = consultaPrimeiraFase['codFase'][0]
 
             cursor = conn.cursor()
-            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, codCliente, DataCriacao, descricaoOP, codGrade,codRoteiro))
+            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, 
+                                      codCliente, DataCriacao, descricaoOP, 
+                                      codGrade,codRoteiro, codEmpresa))
             conn.commit()
 
 
