@@ -28,7 +28,7 @@ def CriarOP():
     codEmpresa = data.get('codEmpresa','1')
 
 
-    consulta = OP_JonhField.CrirarOP(codOP,idUsuarioCriacao,codCategoria,
+    consulta = OP_JonhField.criar_OP(codOP,idUsuarioCriacao,codCategoria,
                                      codCliente,descricaoOP, codGrade, codRoteiro, codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
