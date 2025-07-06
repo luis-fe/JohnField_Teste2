@@ -40,7 +40,7 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,
              descricaoOP, codGrade, codRoteiro, codEmpresa = '1'):
 
-    ChaveOP = codOP +'||'+str(codCliente)
+    ChaveOP = codOP +'||'+str(codCliente)+"||"+str(codEmpresa)
 
 
 
@@ -107,7 +107,7 @@ def ObterOP_EMAberto():
     """
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql(consulta,conn)
-    consulta['idOP'] = consulta['codOP']  + "||"+consulta['codCliente'].astype(str)
+    consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
     select "idOP" , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
     """

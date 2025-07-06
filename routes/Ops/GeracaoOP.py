@@ -81,12 +81,13 @@ def InserirOPTamanhoCores():
     data = request.get_json()
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
+    codEmpresa = data.get('codEmpresa','1')
     arrayCorTamQuantiades = data.get('arrayCorTamQuantiades')
     #arrayTamanhos = data.get('arrayTamanhos')
     #arrayQuantiades = data.get('arrayQuantiades')
 
 
-    consulta = OP_Tam_Cor_JohnField.InserirCoresTamanhos(codOP,codCliente,arrayCorTamQuantiades)
+    consulta = OP_Tam_Cor_JohnField.InserirCoresTamanhos(codOP,codCliente,arrayCorTamQuantiades, codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
