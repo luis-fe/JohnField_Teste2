@@ -37,7 +37,7 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
     return consulta
 
-def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro):
+def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro, codEmpresa = '1'):
 
     ChaveOP = codOP +'||'+str(codCliente)
 
@@ -54,8 +54,8 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrad
             """
 
             InserirOP = """
-            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade","codRoteiro")
-            VALUES (%s ,%s , %s ,%s , %s , %s , %s , %s );
+            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade","codRoteiro", "codEmpresa")
+            VALUES (%s ,%s , %s ,%s , %s , %s , %s , %s, %s );
             """
             DataCriacao = obterHoraAtual()
 
