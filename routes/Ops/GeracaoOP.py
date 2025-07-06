@@ -45,7 +45,9 @@ def CriarOP():
 @GeraoOP_routesJohn.route('/api/JonhField/ObterOPsAberto', methods=['GET'])
 @token_required
 def ObterOPsAberto():
-    consulta = OP_JonhField.ObterOP_EMAberto()
+    nomeEmpresa = request.args.get('nomeEmpresa','CONSOLIDADO')
+
+    consulta = OP_JonhField.ObterOP_EMAberto(nomeEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
