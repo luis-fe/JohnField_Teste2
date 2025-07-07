@@ -120,12 +120,11 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
     
     consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
-    select "idOP"::varchar , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
+    select "idOP"::varchar , REPLACE("idOP"::varchar, '||', '&') AS idOP2,
+    sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
     """
     # Contar ocorrências de '||'
     quantidade = pd.read_sql(quantidade,conn)
-
-    quantidade['idOP2'] = quantidade['idOP'].astype(str).str.replace(r'\|\|', '&', regex=True)
 
     quantidade['ocorrencia'] = quantidade['idOP2'].astype(str).str.count(r'&')
     # Usar np.where para verificar se a contagem é menor que 3
