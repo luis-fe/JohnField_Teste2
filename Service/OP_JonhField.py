@@ -118,7 +118,7 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
                     """
         consulta = pd.read_sql(consulta,conn,params=(filtroEmpresa,))
     
-    consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)
+    consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
     select "idOP"::varchar , 
     REPLACE("idOP"::varchar, '||', '&') AS "idOP2",
@@ -129,7 +129,7 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
 
     quantidade['ocorrencia'] = quantidade['idOP2'].astype(str).str.count(r'&')
     # Usar np.where para verificar se a contagem é menor que 3
-    quantidade['idOP2'] = np.where(quantidade['ocorrencia'] <= 1 , quantidade['idOP']+ "||"+consulta['codEmpresa'].astype(str) , quantidade['idOP'])
+    quantidade['idOP2'] = np.where(quantidade['ocorrencia'] <= 1 , quantidade['idOP'] , quantidade['idOP']+ "||"+consulta['codEmpresa'].astype(str))
 
     consulta = pd.merge(consulta,quantidade, on ='idOP', how='left')
     consulta['quantidade'].fillna("-",inplace= True)
