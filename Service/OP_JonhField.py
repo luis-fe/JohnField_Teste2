@@ -3,6 +3,7 @@ import ConexaoPostgreMPL
 import datetime
 import pytz
 from Service import Grades
+import numpy as np
 
 
 def obterHoraAtual():
