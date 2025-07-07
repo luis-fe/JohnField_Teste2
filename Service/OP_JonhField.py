@@ -129,7 +129,7 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
 
     quantidade['ocorrencia'] = quantidade['idOP2'].astype(str).str.count(r'&')
     # Usar np.where para verificar se a contagem é menor que 3
-    quantidade['idOP'] = np.where(quantidade['ocorrencia'] <= 1 , quantidade['idOP']+ "||"+consulta['codEmpresa'].astype(str) , quantidade['idOP'])
+    quantidade['idOP'] = np.where(quantidade['ocorrencia'] <= 1 , quantidade['idOP']+ "||"+"1" , quantidade['idOP'])
 
     consulta = pd.merge(consulta,quantidade, on ='idOP', how='left')
     consulta['quantidade'].fillna("-",inplace= True)
