@@ -120,7 +120,7 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
     
     consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
-    select "idOP" , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
+    select "idOP"::varchar , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
     """
     # Contar ocorrências de '||'
     quantidade = pd.read_sql(quantidade,conn)
