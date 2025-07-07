@@ -120,7 +120,8 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
     
     consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
-    select "idOP"::varchar , REPLACE("idOP"::varchar, '||', '&') AS idOP2,
+    select "idOP"::varchar , 
+    REPLACE("idOP"::varchar, '||', '&') AS "idOP2",
     sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
     """
     # Contar ocorrências de '||'
