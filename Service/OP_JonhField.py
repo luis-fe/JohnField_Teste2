@@ -133,6 +133,8 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
 
     consulta = pd.merge(consulta,quantidade, on ='idOP', how='left')
     consulta['quantidade'].fillna("-",inplace= True)
+    consulta.fillna("-",inplace= True)
+
 
     consulta['idOP'] = consulta['idOP'].str.replace('||','&')
 
