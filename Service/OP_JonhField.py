@@ -118,7 +118,7 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
                     """
         consulta = pd.read_sql(consulta,conn,params=(filtroEmpresa,))
     
-    consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
+    consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)#+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
     select "idOP"::varchar , 
     REPLACE("idOP"::varchar, '||', '&') AS "idOP2",
