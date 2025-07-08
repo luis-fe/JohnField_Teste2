@@ -209,9 +209,9 @@ def ConsultaFaseAtualOP(codOP, codCliente):
     return consulta
 
 
-def ConsultaRoteiroOP(codOP, codCliente):
+def ConsultaRoteiroOP(codOP, codCliente, codEmpresa):
 
-    ChaveOP = codOP +'||'+str(codCliente)
+    ChaveOP = codOP +'||'+str(codCliente)+'||'+str(codEmpresa)
     print(ChaveOP)
     conn = ConexaoPostgreMPL.conexaoJohn()
 

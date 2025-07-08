@@ -149,9 +149,10 @@ def get_OPTamanhoCores():
 def ConsultaRoteiroOP():
     codOP = request.args.get('codOP','')
     codCliente = request.args.get('codCliente','')
+    codEmpresa = request.args.get('codEmpresa','1')
 
 
-    consulta = OP_JonhField.ConsultaRoteiroOP(codOP,codCliente)
+    consulta = OP_JonhField.ConsultaRoteiroOP(codOP,codCliente,codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
