@@ -2,7 +2,7 @@ import pandas as pd
 import ConexaoPostgreMPL
 
 
-def OPsAbertoPorCliente(nomeCliente = ''):
+def OPsAbertoPorCliente(nomeCliente = '', codEmpresa = '1'):
 
     consulta = """
     select * from "Easy"."DetalhaOP_Abertas" doa 
@@ -17,7 +17,7 @@ def OPsAbertoPorCliente(nomeCliente = ''):
     conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta,conn)
     quantidade = pd.read_sql(quantidade,conn)
-    consulta['idOP'] = consulta["codOP"] +'||'+consulta["codCliente"].astype(str)
+    consulta['idOP'] = consulta["codOP"] +'||'+consulta["codCliente"].astype(str)+'||'+codEmpresa
 
     consulta = pd.merge(consulta,quantidade,on='idOP',how='left')
     consulta['quantidade'].fillna(0, inplace=True)
@@ -74,7 +74,7 @@ def OPsAbertoPorCliente(nomeCliente = ''):
     return pd.DataFrame([dados])
 
 
-def OpsAbertoPorFase(nomeFase = ''):
+def OpsAbertoPorFase(nomeFase = '', codEmpresa = '1'):
     consulta = """
 select * from "Easy"."DetalhaOP_Abertas" doa 
 order by "codFase"      
@@ -88,7 +88,7 @@ order by "codFase"
     conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta, conn)
     quantidade = pd.read_sql(quantidade, conn)
-    consulta['idOP'] = consulta["codOP"] + '||' + consulta["codCliente"].astype(str)
+    consulta['idOP'] = consulta["codOP"] +'||'+consulta["codCliente"].astype(str)+'||'+codEmpresa
 
 
     consulta = pd.merge(consulta, quantidade, on='idOP', how='left')

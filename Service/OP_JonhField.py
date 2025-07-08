@@ -14,13 +14,20 @@ def obterHoraAtual():
 
 
 def BuscandoOPEspecifica(idOP):
+
+
+
     consulta = """
-    select op."idOP"  from "Easy"."OrdemProducao" op 
-where "idOP" = %s
+    select 
+        op."idOP",
+        REPLACE("idOP"::varchar, '||', '&') AS "idOP2"
+    from 
+        "Easy"."OrdemProducao" op 
+    where 
+        "idOP" = %s
     """
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta,conn, params=(idOP,))
-    conn.close()
 
     return consulta
 
@@ -45,7 +52,7 @@ def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,
 
 
 
-    #Pesquisando se existe uma determinda OP
+    #Pesquisando se existe uma determinda O
     buscar = BuscandoOPEspecifica(ChaveOP)
     if not buscar.empty:
         return pd.DataFrame([{'Mensagem': f'OP {codOP} ja existe para o cliente {codCliente}', 'Status': False}])
