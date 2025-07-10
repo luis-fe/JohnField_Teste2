@@ -39,9 +39,10 @@ def MovimentarOP():
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
     codnovaFase = data.get('codnovaFase')
+    codEmpresa = data.get('codEmpresa','1')
 
 
-    consulta = Fase_OP_JohnField.MovimentarOP(idUsuarioMovimentacao, codOP, codCliente, codnovaFase)
+    consulta = Fase_OP_JohnField.MovimentarOP(idUsuarioMovimentacao, codOP, codCliente, codnovaFase, codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

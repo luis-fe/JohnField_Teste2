@@ -2,8 +2,8 @@ import pandas as pd
 import ConexaoPostgreMPL
 from Service import OP_JonhField, FaseJohnField, UsuariosJohnFild
 
-def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase):
-    idOP = str(codOP)+'||'+str(codCliente)
+def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase, codEmpresa):
+    idOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
     nomeFaseNova = ObterNomeFase(novaFase)
 
     usuarioPesquisa = UsuariosJohnFild.ConsultaUsuariosID(idUsuarioMovimentacao)
