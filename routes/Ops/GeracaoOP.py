@@ -25,9 +25,11 @@ def CriarOP():
     descricaoOP = data.get('descricaoOP','')
     codGrade = data.get('codGrade','')
     codRoteiro = data.get('codRoteiro','')
+    codEmpresa = data.get('codEmpresa','1')
 
 
-    consulta = OP_JonhField.CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro)
+    consulta = OP_JonhField.criar_OP(codOP,idUsuarioCriacao,codCategoria,
+                                     codCliente,descricaoOP, codGrade, codRoteiro, codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -43,7 +45,9 @@ def CriarOP():
 @GeraoOP_routesJohn.route('/api/JonhField/ObterOPsAberto', methods=['GET'])
 @token_required
 def ObterOPsAberto():
-    consulta = OP_JonhField.ObterOP_EMAberto()
+    nomeEmpresa = request.args.get('nomeEmpresa','CONSOLIDADO')
+
+    consulta = OP_JonhField.ObterOP_EMAberto(nomeEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -79,12 +83,13 @@ def InserirOPTamanhoCores():
     data = request.get_json()
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
+    codEmpresa = data.get('codEmpresa','1')
     arrayCorTamQuantiades = data.get('arrayCorTamQuantiades')
     #arrayTamanhos = data.get('arrayTamanhos')
     #arrayQuantiades = data.get('arrayQuantiades')
 
 
-    consulta = OP_Tam_Cor_JohnField.InserirCoresTamanhos(codOP,codCliente,arrayCorTamQuantiades)
+    consulta = OP_Tam_Cor_JohnField.InserirCoresTamanhos(codOP,codCliente,arrayCorTamQuantiades, codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -147,7 +152,7 @@ def ConsultaRoteiroOP():
     codEmpresa = request.args.get('codEmpresa','1')
 
 
-    consulta = OP_JonhField.ConsultaRoteiroOP(codOP,codCliente, codEmpresa)
+    consulta = OP_JonhField.ConsultaRoteiroOP(codOP,codCliente,codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes

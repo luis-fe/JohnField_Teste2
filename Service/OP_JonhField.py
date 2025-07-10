@@ -3,6 +3,7 @@ import ConexaoPostgreMPL
 import datetime
 import pytz
 from Service import Grades
+import numpy as np
 
 
 def obterHoraAtual():
@@ -13,13 +14,20 @@ def obterHoraAtual():
 
 
 def BuscandoOPEspecifica(idOP):
+
+
+
     consulta = """
-    select op."idOP"  from "Easy"."OrdemProducao" op 
-where "idOP" = %s
+    select 
+        op."idOP",
+        REPLACE("idOP"::varchar, '||', '&') AS "idOP2"
+    from 
+        "Easy"."OrdemProducao" op 
+    where 
+        "idOP" = %s
     """
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta,conn, params=(idOP,))
-    conn.close()
 
     return consulta
 
@@ -37,13 +45,14 @@ where f."FaseInicial" = 'SIM' and "codFase" = %s
 
     return consulta
 
-def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrade, codRoteiro):
+def criar_OP(codOP,idUsuarioCriacao,codCategoria,codCliente,
+             descricaoOP, codGrade, codRoteiro, codEmpresa = '1'):
 
-    ChaveOP = codOP +'||'+str(codCliente)
+    ChaveOP = codOP +'||'+str(codCliente)+"||"+str(codEmpresa)
 
 
 
-    #Pesquisando se existe uma determinda OP
+    #Pesquisando se existe uma determinda O
     buscar = BuscandoOPEspecifica(ChaveOP)
     if not buscar.empty:
         return pd.DataFrame([{'Mensagem': f'OP {codOP} ja existe para o cliente {codCliente}', 'Status': False}])
@@ -54,8 +63,8 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrad
             """
 
             InserirOP = """
-            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade","codRoteiro")
-            VALUES (%s ,%s , %s ,%s , %s , %s , %s , %s );
+            INSERT INTO "Easy"."OrdemProducao" ("codOP","idUsuarioCriacao","codCategoria","codCliente", "DataCriacao", "descricaoOP","codGrade","codRoteiro", "codEmpresa")
+            VALUES (%s ,%s , %s ,%s , %s , %s , %s , %s, %s );
             """
             DataCriacao = obterHoraAtual()
 
@@ -65,7 +74,9 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrad
             codFaseInicial = consultaPrimeiraFase['codFase'][0]
 
             cursor = conn.cursor()
-            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, codCliente, DataCriacao, descricaoOP, codGrade,codRoteiro))
+            cursor.execute(InserirOP,(codOP, idUsuarioCriacao, codCategoria, 
+                                      codCliente, DataCriacao, descricaoOP, 
+                                      codGrade,codRoteiro, codEmpresa))
             conn.commit()
 
 
@@ -98,21 +109,40 @@ def CrirarOP(codOP,idUsuarioCriacao,codCategoria,codCliente,descricaoOP, codGrad
 
             return pd.DataFrame([{'Mensagem':'OP Gerada com Sucesso!', 'Status':True}])
 
-def ObterOP_EMAberto():
-    consulta = """
-    select * from "Easy"."DetalhaOP_Abertas"
-    """
-    conn = ConexaoPostgreMPL.conexaoJohn()
-    consulta = pd.read_sql(consulta,conn)
-    consulta['idOP'] = consulta['codOP']  + "||"+consulta['codCliente'].astype(str)
+def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
+    conn = ConexaoPostgreMPL.conexaoEngine()
+
+    if filtroEmpresa == 'CONSOLIDADO':
+        consulta = """
+            select * from "Easy"."DetalhaOP_Abertas"
+                    """
+        consulta = pd.read_sql(consulta,conn)
+
+    else:
+        consulta = """
+            select * from "Easy"."DetalhaOP_Abertas"
+            where "nomeEmpresa" = %s
+                    """
+        consulta = pd.read_sql(consulta,conn,params=(filtroEmpresa,))
+    
+    consulta['idOP'] = consulta['codOP']+ "||"+consulta['codCliente'].astype(str)+ "||"+consulta['codEmpresa'].astype(str)
     quantidade ="""
-    select "idOP" , sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
+    select "idOP"::varchar , 
+    REPLACE("idOP"::varchar, '||', '&') AS "idOP2",
+    sum("quantidade") as quantidade from "Easy"."OP_Cores_Tam" group by "idOP" 
     """
+    # Contar ocorrências de '||'
     quantidade = pd.read_sql(quantidade,conn)
+
+    quantidade['ocorrencia'] = quantidade['idOP2'].astype(str).str.count(r'&')
+    # Usar np.where para verificar se a contagem é menor que 3
+    quantidade['idOP'] = np.where(quantidade['ocorrencia'] <= 1 , quantidade['idOP']+ "||"+"1" , quantidade['idOP'])
+
     consulta = pd.merge(consulta,quantidade, on ='idOP', how='left')
     consulta['quantidade'].fillna("-",inplace= True)
+    consulta.fillna("-",inplace= True)
 
-    conn.close()
+
     consulta['idOP'] = consulta['idOP'].str.replace('||','&')
 
     consulta['dataCriacaoOP'] = pd.to_datetime(consulta['dataCriacaoOP'], format='%a, %d %b %Y %H:%M:%S %Z')

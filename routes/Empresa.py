@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import Fase_OP_JohnField
+from Service import EmpresaClass
 import pandas as pd
-MovimentaoOP_routesJohn = Blueprint('MovimentaocaoOPJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
+
+empresas_routesJohn = Blueprint('empresasJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 def token_required(f):
     @wraps(f)
@@ -13,13 +14,11 @@ def token_required(f):
         return jsonify({'message': 'Acesso negado'}), 401
 
     return decorated_function
-@MovimentaoOP_routesJohn.route('/api/JonhField/FasesDisponivelPMovimentarOP', methods=['GET'])
-@token_required
-def FasesDisponivelPMovimentarOP():
-    codOP = request.args.get('codOP','')
-    codCliente = request.args.get('codCliente','')
 
-    consulta = Fase_OP_JohnField.FasesDisponivelPMovimentarOP(codOP, codCliente)
+@empresas_routesJohn.route('/api/JonhField/Obter_Empresas', methods=['GET'])
+@token_required
+def Obter_Empresas():
+    consulta = EmpresaClass.Empresa().get_empresas()
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -31,17 +30,19 @@ def FasesDisponivelPMovimentarOP():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
-@MovimentaoOP_routesJohn.route('/api/JonhField/MovimentarOP', methods=['POST'])
+
+@empresas_routesJohn.route('/api/JonhField/Atualiza_InserirEmpresa', methods=['POST'])
 @token_required
-def MovimentarOP():
+def NovaEmpresa():
+
     data = request.get_json()
-    idUsuarioMovimentacao = data.get('idUsuarioMovimentacao')
-    codOP = data.get('codOP')
-    codCliente = data.get('codCliente')
-    codnovaFase = data.get('codnovaFase')
+    codEmpresa = data.get('codEmpresa')
+    nomeEmpresa = data.get('nomeEmpresa', '-')
+    CNPJ = data.get('CNPJ', '')
+
+    consulta = EmpresaClass.Empresa(codEmpresa, nomeEmpresa, CNPJ).inserir_atualizar_Empresa()
 
 
-    consulta = Fase_OP_JohnField.MovimentarOP(idUsuarioMovimentacao, codOP, codCliente, codnovaFase)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -54,16 +55,18 @@ def MovimentarOP():
     return jsonify(consulta_data)
 
 
-@MovimentaoOP_routesJohn.route('/api/JonhField/EncerrarOP', methods=['POST'])
+@empresas_routesJohn.route('/api/JonhField/Delete_Empresa', methods=['DELETE'])
 @token_required
-def EncerrarOP():
+def Delete_Empresa():
+
     data = request.get_json()
-    idUsuarioMovimentacao = data.get('idUsuarioMovimentacao')
-    codOP = data.get('codOP')
-    codCliente = data.get('codCliente')
+    codEmpresa = data.get('codEmpresa')
+    nomeEmpresa = data.get('nomeEmpresa', '-')
+    CNPJ = data.get('CNPJ', '')
+
+    consulta = EmpresaClass.Empresa(codEmpresa).excluir_empresa()
 
 
-    consulta = Fase_OP_JohnField.EncerrarOP(idUsuarioMovimentacao, codOP, codCliente)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
@@ -74,3 +77,4 @@ def EncerrarOP():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+

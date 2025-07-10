@@ -2,7 +2,7 @@ import pandas as pd
 import ConexaoPostgreMPL
 from Service import OP_JonhField, FaseJohnField, UsuariosJohnFild
 
-def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase, codEmpresa):
+def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase,codEmpresa='1'):
     idOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
     nomeFaseNova = ObterNomeFase(novaFase)
 
@@ -54,9 +54,9 @@ def MovimentarOP(idUsuarioMovimentacao, codOP, codCliente ,novaFase, codEmpresa)
         conn.close()
         return pd.DataFrame([{'Mensagem':f'A OP {codOP}||{codOP} movimentada com sucesso!','status':True}])
 
-def OPAberto(codOP, codCliente):
+def OPAberto(codOP, codCliente, codEmpresa = '1'):
     ObterOP_EMAberto = OP_JonhField.ObterOP_EMAberto()
-    ObterOP_EMAberto = ObterOP_EMAberto[(ObterOP_EMAberto['codOP']==codOP) &(ObterOP_EMAberto['codCliente']==codCliente)].reset_index()
+    ObterOP_EMAberto = ObterOP_EMAberto[(ObterOP_EMAberto['codOP']==codOP) &(ObterOP_EMAberto['codCliente']==codCliente)&(ObterOP_EMAberto['codEmpresa']==codEmpresa)].reset_index()
 
 
     return ObterOP_EMAberto

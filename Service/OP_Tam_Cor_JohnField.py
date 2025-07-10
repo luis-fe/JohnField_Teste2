@@ -2,8 +2,8 @@ import pandas as pd
 import ConexaoPostgreMPL
 from Service import OP_JonhField
 
-def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
-    idOP = str(codOP)+'||'+str(codCliente)
+def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades, codEmpresa = '1'):
+    idOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
     VerificaOP = OP_JonhField.BuscandoOPEspecifica(idOP)
     consulta = ConsultaTamCor_OP(codOP,codCliente)
     if VerificaOP.empty:
@@ -36,8 +36,8 @@ def InserirCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
 
 
 
-def ConsultaTamCor_OP(codOP, codCliente):
-    idOP = str(codOP)+'||'+str(codCliente)
+def ConsultaTamCor_OP(codOP, codCliente, codEmpresa = '1'):
+    idOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
     consulta = """
     select "descCor", "tamanho", "quantidade" from "Easy"."OP_Cores_Tam" op
     inner join "Easy"."Tamanhos" t on t."DescricaoTamanho" = op.tamanho 
@@ -60,8 +60,8 @@ def ConsultaTamCor_OP(codOP, codCliente):
         return resumoConsulta
 
 
-def AtualizarCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades):
-    idOP = str(codOP)+'||'+str(codCliente)
+def AtualizarCoresTamanhos(codOP, codCliente, arrayCorTamQuantiades,codEmpresa = '1'):
+    idOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
     VerificaOP = OP_JonhField.BuscandoOPEspecifica(idOP)
 
     if VerificaOP.empty:
