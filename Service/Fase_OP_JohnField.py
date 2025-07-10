@@ -108,8 +108,8 @@ def FasesDisponivelPMovimentarOP(codOP, codCliente):
 
     return result
 
-def EncerrarOP(idUsuarioMovimentacao, codOP, codCliente):
-    idOP = str(codOP)+'||'+str(codCliente)
+def EncerrarOP(idUsuarioMovimentacao, codOP, codCliente, codEmpresa):
+    idOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
     verifica = OP_JonhField.BuscandoOPEspecifica(idOP)
 
     if verifica.empty:

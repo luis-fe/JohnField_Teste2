@@ -61,9 +61,10 @@ def EncerrarOP():
     idUsuarioMovimentacao = data.get('idUsuarioMovimentacao')
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
+    codEmpresa = data.get('codEmpresa','1')
 
 
-    consulta = Fase_OP_JohnField.EncerrarOP(idUsuarioMovimentacao, codOP, codCliente)
+    consulta = Fase_OP_JohnField.EncerrarOP(idUsuarioMovimentacao, codOP, codCliente, codEmpresa)
     # Obtém os nomes das colunas
     column_names = consulta.columns
     # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
