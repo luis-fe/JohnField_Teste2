@@ -61,6 +61,7 @@ def EncerrarOP():
     idUsuarioMovimentacao = data.get('idUsuarioMovimentacao')
     codOP = data.get('codOP')
     codCliente = data.get('codCliente')
+    codEmpresa = data.get('codEmpresa','1')
 
 
     consulta = Fase_OP_JohnField.EncerrarOP(idUsuarioMovimentacao, codOP, codCliente)
