@@ -4,19 +4,19 @@ from sqlalchemy import create_engine
 def conexao():
     db_name = "Reposicao"
     db_user = "postgres"
-    db_password = "EbfG16F4b*f6BFgfe5ge*CaG6b211eEF"
-    db_host = "viaduct.proxy.rlwy.net"
-    portbanco = "17866"
+    db_password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
+    db_host = "roundhouse.proxy.rlwy.net"
+    portbanco = "21990"
 
     return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)
 
 def Funcao_Inserir (df_tags, tamanho,tabela, metodo):
     # Configurações de conexão ao banco de dados
     database = "railway"
-    user = "postgres"
-    password = "EbfG16F4b*f6BFgfe5ge*CaG6b211eEF"
-    host = "viaduct.proxy.rlwy.net"
-    port = "17866"
+    user = "postgres"   
+    password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
+    host = "roundhouse.proxy.rlwy.net"
+    port = "21990"
 
 # Cria conexão ao banco de dados usando SQLAlchemy
     engine = create_engine(f'postgresql://{user}:{password}@{host}:{port}/{database}')
@@ -30,18 +30,18 @@ def Funcao_Inserir (df_tags, tamanho,tabela, metodo):
 def conexaoJohn():
     db_name = "railway"
     db_user = "postgres"
-    db_password = "JxTDCLllqhjvIPqxbWhqeyOMGqGLuHTD"
-    db_host = "viaduct.proxy.rlwy.net"
-    portbanco = "44412"
+    db_password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
+    db_host = "roundhouse.proxy.rlwy.net"
+    portbanco = "21990"
 
     return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)
 
 def conexaoEngine():
     db_name = "railway"
     db_user = "postgres"
-    db_password = "JxTDCLllqhjvIPqxbWhqeyOMGqGLuHTD"
-    db_host = "viaduct.proxy.rlwy.net"
-    portbanco = "44412"
+    db_password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
+    db_host = "roundhouse.proxy.rlwy.net"
+    portbanco = "21990"
 
 
     if not all([db_name, db_user, db_password, db_host]):
