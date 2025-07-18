@@ -3,8 +3,9 @@ import ConexaoPostgreMPL
 import datetime
 import pytz
 
-def cancelamentoOP(codOP, codCliente, idusuario):
-    chaveOP = str(codOP)+'||'+str(codCliente)
+def cancelamentoOP(codOP, codCliente, idusuario, codEmpresa = '1'):
+    chaveOP = str(codOP)+'||'+str(codCliente)+'||'+str(codEmpresa)
+    
     conn = ConexaoPostgreMPL.conexaoJohn()
 
     OP_Cores_Tam = """delete from "Easy"."OP_Cores_Tam"
@@ -48,7 +49,7 @@ def cancelamentoOP(codOP, codCliente, idusuario):
     return pd.DataFrame([{'status':True, 'Mensagem':'OP cancalada com sucesso !'}])
 
 
-def cancelarOP(nomeLogin, senha, codOP, codCliente):
+def cancelarOP(nomeLogin, senha, codOP, codCliente, codEmpresa = '1'):
     conn = ConexaoPostgreMPL.conexaoJohn()
     sql = """select idusuario , "nomeUsuario" , "nomeLogin" , "Senha" , permite_cancelar_op  from "Easy"."Usuario" u 
         where "nomeLogin" = %s """
@@ -66,7 +67,7 @@ def cancelarOP(nomeLogin, senha, codOP, codCliente):
 
     else:
         usuario = consulta['idusuario'][0]
-        cancelamentoOP(codOP, codCliente, usuario )
+        cancelamentoOP(codOP, codCliente, usuario,codEmpresa)
         return pd.DataFrame([{'status':True ,'Mensagem':'Op Cancelada com sucesso'}])
 
 def obterHoraAtual():
