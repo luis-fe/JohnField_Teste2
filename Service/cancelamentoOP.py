@@ -31,7 +31,7 @@ def cancelamentoOP(codOP, codCliente, idusuario, codEmpresa = '1'):
     OrdemProducao = """delete from "Easy"."OrdemProducao"
     where "idOP"  = %s """
     cursor = conn.cursor()
-    cursor.execute(FaseOP,(OrdemProducao,))
+    cursor.execute(FaseOP,(chaveOP,))
     conn.commit()
 
     RegistroExclusao = """insert into  "Easy"."RegistroOPCancelada"
