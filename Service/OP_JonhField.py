@@ -152,8 +152,8 @@ def ObterOP_EMAberto(filtroEmpresa = 'CONSOLIDADO'):
 
 
 
-def BuscarGradeOP(codOP, codCliente):
-    ChaveOP = codOP +'||'+str(codCliente)
+def BuscarGradeOP(codOP, codCliente, codEmpresa = 1):
+    ChaveOP = codOP +'||'+str(codCliente)+'||'+str(codEmpresa)
 
 
     consulta = """

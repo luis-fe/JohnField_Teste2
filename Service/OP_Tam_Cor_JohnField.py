@@ -43,9 +43,8 @@ def ConsultaTamCor_OP(codOP, codCliente, codEmpresa = '1'):
     inner join "Easy"."Tamanhos" t on t."DescricaoTamanho" = op.tamanho 
     where "idOP" = %s order by t.codsequencia asc
     """
-    conn = ConexaoPostgreMPL.conexaoJohn()
+    conn = ConexaoPostgreMPL.conexaoEngine()
     consulta = pd.read_sql(consulta,conn,params=(idOP,))
-    conn.close()
     if consulta.empty:
 
         return pd.DataFrame([{"Mensagem":"Nao foi encontrado grade para a OP informada!",'status':False}])
