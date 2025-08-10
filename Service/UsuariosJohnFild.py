@@ -1,17 +1,47 @@
 import pandas as pd
 import ConexaoPostgreMPL
-
+from Service import Usuario_empresa
 
 def ConsultaUsuarios():
     conn = ConexaoPostgreMPL.conexaoJohn()
     consulta = pd.read_sql("""
-    select idusuario ,"nomeLogin" ,"nomeUsuario" , "Perfil", permite_cancelar_op  from "Easy"."Usuario" u  
-    where u."situacaoUsuario" =  'ATIVO'  
+            select 
+                idusuario ,
+                "nomeLogin" ,
+                "nomeUsuario", 
+                "Perfil", 
+                permite_cancelar_op  
+            from 
+                "Easy"."Usuario" u  
+            where 
+                u."situacaoUsuario" = 'ATIVO'  
     """,conn)
     conn.close()
     consulta['permite_cancelar_op'].fillna('NAO',inplace=True)
 
-    return consulta
+
+    # buscar usuarios por empresa
+
+    user_emp = Usuario_empresa.Usuario_empresa()
+    
+    buscar = user_emp.consulta_usuarios_empresa()
+
+
+        # Agrupar empresas por usuário
+    empresas_por_usuario = (
+        buscar
+        .rename(columns={"codEmpresa": "empresasAutorizadas","codUsuario":"idusuario"})
+        .groupby("idusuario")["idempresa"]   # supondo que a coluna se chama idempresa
+        .agg(lambda x: list(map(str, x)))    # lista de strings
+        .reset_index()
+    )
+
+    # Fazer o merge
+    resultado = consulta.merge(empresas_por_usuario, on="idusuario", how="left")
+
+    resultado.fillna('-',inplace = True)
+
+    return resultado
 
 def NovoUsuario(idUsuario, nomeUsuario,login , Perfil, Senha, permite_cancelar_op):
 
