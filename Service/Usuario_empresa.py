@@ -17,7 +17,7 @@ class Usuario_empresa():
         '''metodo que inseri as empresas autorizadas para o usuario '''
 
         insert = """
-            insert into "easy"."UsuarioEmpresa" ("codEmpresa", "codUsuario") values ( %s, %s)
+            insert into "Easy"."UsuarioEmpresa" ("codEmpresa", "codUsuario") values ( %s, %s)
         """
 
         with ConexaoPostgreMPL.conexaoJohn() as conn:
@@ -49,7 +49,7 @@ class Usuario_empresa():
         select = """
                     select * 
                     from 
-                    "easy"."UsuarioEmpresa" where "codEmpresa" = %s  and "codUsuario" = %s
+                    "Easy"."UsuarioEmpresa" where "codEmpresa" = %s  and "codUsuario" = %s
                 """
         
         consulta = pd.read_sql(select, conn , params=(self.codEmpresa,))
@@ -58,7 +58,7 @@ class Usuario_empresa():
 
     def exclusao_usuario_empresa(self):
 
-        delete = """delete from "easy"."UsuarioEmpresa"
+        delete = """delete from "Easy"."UsuarioEmpresa"
                     where "codEmpresa" = %s  and "codUsuario" = %s
         """
 
@@ -83,7 +83,7 @@ class Usuario_empresa():
         select = """
                     select * 
                     from 
-                    "easy"."UsuarioEmpresa"
+                    "Easy"."UsuarioEmpresa"
                 """
         
         consulta = pd.read_sql(select, conn)
