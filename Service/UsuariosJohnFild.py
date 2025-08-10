@@ -31,7 +31,7 @@ def ConsultaUsuarios():
     empresas_por_usuario = (
         buscar
         .rename(columns={"codEmpresa": "empresasAutorizadas","codUsuario":"idusuario"})
-        .groupby("idusuario")["idempresa"]   # supondo que a coluna se chama idempresa
+        .groupby("idusuario")["empresasAutorizadas"]   # supondo que a coluna se chama idempresa
         .agg(lambda x: list(map(str, x)))    # lista de strings
         .reset_index()
     )
