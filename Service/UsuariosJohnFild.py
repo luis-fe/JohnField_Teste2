@@ -26,7 +26,7 @@ def ConsultaUsuarios():
     
     buscar = user_emp.consulta_usuarios_empresa()
     buscar['codUsuario'] = buscar['codUsuario'].astype(str) 
-    consulta['codUsuario'] = consulta['codUsuario'].astype(str) 
+    consulta['idusuario'] = consulta['idusuario'].astype(str) 
     
         # Agrupar empresas por usuário
     empresas_por_usuario = (
