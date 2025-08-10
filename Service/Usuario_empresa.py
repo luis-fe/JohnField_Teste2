@@ -30,16 +30,14 @@ class Usuario_empresa():
     def inserir_array(self):
 
         
-
         for emp in self.arrayEmpresa:
-
             self.codEmpresa = emp
-
             verifica = self.consulta_empresa_usuario()
-
             if verifica.empty:
 
               self.inserir_empresa_por_usuario()
+
+        return pd.DataFrame({'Status':True,'Mensagem':f'Empresas Vinculadas ao usuario {self.codUsuario}'})
 
 
     def consulta_empresa_usuario(self):

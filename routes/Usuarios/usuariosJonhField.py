@@ -1,7 +1,10 @@
+
 from flask import Blueprint, jsonify, request
 from functools import wraps
-from Service import UsuariosJohnFild
+from Service import UsuariosJohnFild, Usuario_empresa
 import pandas as pd
+
+
 usuarios_routesJohn = Blueprint('usuariosJohn', __name__) # Esse é o nome atribuido para o conjunto de rotas envolvendo usuario
 
 def token_required(f):
@@ -88,6 +91,38 @@ def NovoUsuario():
             consulta_dict[column_name] = row[column_name]
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
+
+
+@usuarios_routesJohn.route('/api/JonhField/AdicionarEmpresasUsuario', methods=['POST'])
+@token_required
+def AdicionarEmpresasUsuario():
+    data = request.get_json()
+    idUsuario = data.get('idUsuario')
+    arrayEmpresas = data.get('arrayEmpresas')
+
+    usuario_empresa = Usuario_empresa.Usuario_empresa(idUsuario, arrayEmpresas)
+    consulta = usuario_empresa.inserir_empresa_por_usuario()
+
+
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
+
+
+
+
+
+
+
+
+
 
 
 @usuarios_routesJohn.route('/api/JonhField/AlterarUsuario', methods=['PUT'])
