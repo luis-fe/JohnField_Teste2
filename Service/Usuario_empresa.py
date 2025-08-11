@@ -49,7 +49,7 @@ class Usuario_empresa():
                     "Easy"."UsuarioEmpresa" where "codEmpresa" = %s  and "codUsuario" = %s
                 """
         
-        consulta = pd.read_sql(select, conn , params=(self.codEmpresa,))
+        consulta = pd.read_sql(select, conn , params=(self.codEmpresa,self.codUsuario))
         return consulta
 
 
