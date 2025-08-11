@@ -1,6 +1,6 @@
 import ConexaoPostgreMPL
 import pandas as pd
-
+from Service import EmpresaClass
 
 
 class Usuario_empresa():
@@ -19,26 +19,34 @@ class Usuario_empresa():
         insert = """
             insert into "Easy"."UsuarioEmpresa" ("codEmpresa", "codUsuario") values ( %s, %s)
         """
-
+        
         with ConexaoPostgreMPL.conexaoJohn() as conn:
             with  conn.cursor() as curr:
-
+                
                 curr.execute(insert, (self.codEmpresa, self.codUsuario))
                 conn.commit()
 
 
     def inserir_array(self):
-
-        
+        mensagem = []
         for emp in self.arrayEmpresa:
-            self.codEmpresa = emp
+
+            empresa = EmpresaClass.Empresa(emp)
+            verifica_empresa = empresa.__pesquisar_EmpresaEspecifica()
+
             verifica = self.consulta_empresa_usuario()
-            
-            if verifica.empty:
 
+
+            if verifica.empty and not verifica_empresa.empty :
+              mensagem.append(f'{emp} vinculada')
               self.inserir_empresa_por_usuario()
+            
+            elif verifica_empresa.empty:
+                mensagem.append(f'{emp} nao existe')
 
-        return pd.DataFrame([{'Status':True,'Mensagem':f'Empresas Vinculadas ao usuario {self.codUsuario}'}])
+
+
+        return pd.DataFrame([{'Status':True,'Mensagem':f'{mensagem}'}])
 
 
     def consulta_empresa_usuario(self):
