@@ -44,6 +44,10 @@ class Usuario_empresa():
             elif verifica_empresa.empty:
                 mensagem.append(f'{emp} nao existe')
 
+            else:
+                mensagem.append(f'{emp} vinculada')
+
+
 
 
         return pd.DataFrame([{'Status':True,'Mensagem':f'{mensagem}'}])
