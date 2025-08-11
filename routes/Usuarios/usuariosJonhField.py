@@ -100,7 +100,7 @@ def AdicionarEmpresasUsuario():
     idUsuario = data.get('idUsuario')
     arrayEmpresas = data.get('arrayEmpresas')
 
-    usuario_empresa = Usuario_empresa.Usuario_empresa('',idUsuario, arrayEmpresas)
+    usuario_empresa = Usuario_empresa.Usuario_empresa('',str(idUsuario), arrayEmpresas)
     consulta = usuario_empresa.inserir_array()
 
 
@@ -123,7 +123,7 @@ def DesvicularEmpresasUsuario():
     idUsuario = data.get('idUsuario')
     arrayEmpresas = data.get('arrayEmpresas')
 
-    usuario_empresa = Usuario_empresa.Usuario_empresa('',idUsuario, arrayEmpresas)
+    usuario_empresa = Usuario_empresa.Usuario_empresa('',str(idUsuario), arrayEmpresas)
     consulta = usuario_empresa.exclusao_usuario_empresa()
 
 
