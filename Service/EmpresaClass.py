@@ -46,7 +46,7 @@ class Empresa():
 
         
 
-    def __pesquisar_EmpresaEspecifica(self):
+    def pesquisar_EmpresaEspecifica(self):
         '''Metodo que pesquisa uma empresa especifica'''
 
         sql = """
@@ -63,7 +63,7 @@ class Empresa():
         '''Metodo que inseri ou atualiza a empresa '''
 
         # pesquisar se a empresa ja exite:
-        verificar = self.__pesquisar_EmpresaEspecifica()
+        verificar = self.pesquisar_EmpresaEspecifica()
         
         if verificar.empty :
             

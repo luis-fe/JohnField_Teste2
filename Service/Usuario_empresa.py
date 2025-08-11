@@ -32,7 +32,7 @@ class Usuario_empresa():
         for emp in self.arrayEmpresa:
 
             empresa = EmpresaClass.Empresa(emp)
-            verifica_empresa = empresa.__pesquisar_EmpresaEspecifica()
+            verifica_empresa = empresa.pesquisar_EmpresaEspecifica()
 
             verifica = self.consulta_empresa_usuario()
 
