@@ -116,7 +116,7 @@ def AdicionarEmpresasUsuario():
     return jsonify(consulta_data)
 
 
-@usuarios_routesJohn.route('/api/JonhField/DesvicularEmpresasUsuario', methods=['DELETE'])
+@usuarios_routesJohn.route('/api/JonhField/DesvincularEmpresasUsuario', methods=['DELETE'])
 @token_required
 def DesvicularEmpresasUsuario():
     data = request.get_json()
@@ -124,7 +124,7 @@ def DesvicularEmpresasUsuario():
     arrayEmpresas = data.get('arrayEmpresas')
 
     usuario_empresa = Usuario_empresa.Usuario_empresa('',str(idUsuario), arrayEmpresas)
-    consulta = usuario_empresa.exclusao_usuario_empresa()
+    consulta = usuario_empresa.array_deletar_usuario_empresa()
 
 
     # Obtém os nomes das colunas

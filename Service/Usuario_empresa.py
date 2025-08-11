@@ -68,8 +68,12 @@ class Usuario_empresa():
 
     def exclusao_usuario_empresa(self):
 
-        delete = """delete from "Easy"."UsuarioEmpresa"
-                    where "codEmpresa" = %s  and "codUsuario" = %s
+        delete = """
+                delete from 
+                    "Easy"."UsuarioEmpresa"
+                where 
+                    "codEmpresa" = %s  
+                    and "codUsuario" = %s
         """
 
         with ConexaoPostgreMPL.conexaoJohn() as conn:
