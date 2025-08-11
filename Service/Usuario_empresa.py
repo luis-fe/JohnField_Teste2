@@ -33,6 +33,7 @@ class Usuario_empresa():
         for emp in self.arrayEmpresa:
             self.codEmpresa = emp
             verifica = self.consulta_empresa_usuario()
+            
             if verifica.empty:
 
               self.inserir_empresa_por_usuario()
