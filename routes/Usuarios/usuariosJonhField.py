@@ -101,7 +101,7 @@ def AdicionarEmpresasUsuario():
     arrayEmpresas = data.get('arrayEmpresas')
 
     usuario_empresa = Usuario_empresa.Usuario_empresa(idUsuario, arrayEmpresas)
-    consulta = usuario_empresa.inserir_empresa_por_usuario()
+    consulta = usuario_empresa.inserir_array()
 
 
     # Obtém os nomes das colunas
@@ -115,6 +115,28 @@ def AdicionarEmpresasUsuario():
         consulta_data.append(consulta_dict)
     return jsonify(consulta_data)
 
+
+@usuarios_routesJohn.route('/api/JonhField/DesvicularEmpresasUsuario', methods=['DELETE'])
+@token_required
+def DesvicularEmpresasUsuario():
+    data = request.get_json()
+    idUsuario = data.get('idUsuario')
+    arrayEmpresas = data.get('arrayEmpresas')
+
+    usuario_empresa = Usuario_empresa.Usuario_empresa(idUsuario, arrayEmpresas)
+    consulta = usuario_empresa.exclusao_usuario_empresa()
+
+
+    # Obtém os nomes das colunas
+    column_names = consulta.columns
+    # Monta o dicionário com os cabeçalhos das colunas e os valores correspondentes
+    consulta_data = []
+    for index, row in consulta.iterrows():
+        consulta_dict = {}
+        for column_name in column_names:
+            consulta_dict[column_name] = row[column_name]
+        consulta_data.append(consulta_dict)
+    return jsonify(consulta_data)
 
 
 

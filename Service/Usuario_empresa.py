@@ -41,7 +41,6 @@ class Usuario_empresa():
 
 
     def consulta_empresa_usuario(self):
-
         conn = ConexaoPostgreMPL.conexaoEngine()
 
         select = """
@@ -67,11 +66,17 @@ class Usuario_empresa():
                 conn.commit()
 
 
+
+
+
     def array_deletar_usuario_empresa(self):
 
         for emp in self.arrayEmpresa:
             self.codEmpresa = emp 
             self.exclusao_usuario_empresa()
+
+        return pd.DataFrame({'Status':True,'Mensagem':f'Empresas {self.arrayEmpresa} Desvinculadas ao usuario {self.codUsuario}'})
+
 
 
     def consulta_usuarios_empresa(self):
