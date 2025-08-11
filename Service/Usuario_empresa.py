@@ -30,7 +30,7 @@ class Usuario_empresa():
     def inserir_array(self):
         mensagem = []
         for emp in self.arrayEmpresa:
-
+            self.codEmpresa = emp
             empresa = EmpresaClass.Empresa(emp)
             verifica_empresa = empresa.pesquisar_EmpresaEspecifica()
 
