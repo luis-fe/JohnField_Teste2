@@ -37,7 +37,7 @@ class Usuario_empresa():
 
               self.inserir_empresa_por_usuario()
 
-        return pd.DataFrame({'Status':True,'Mensagem':f'Empresas Vinculadas ao usuario {self.codUsuario}'})
+        return pd.DataFrame([{'Status':True,'Mensagem':f'Empresas Vinculadas ao usuario {self.codUsuario}'}])
 
 
     def consulta_empresa_usuario(self):
@@ -75,7 +75,7 @@ class Usuario_empresa():
             self.codEmpresa = emp 
             self.exclusao_usuario_empresa()
 
-        return pd.DataFrame({'Status':True,'Mensagem':f'Empresas {self.arrayEmpresa} Desvinculadas ao usuario {self.codUsuario}'})
+        return pd.DataFrame([{'Status':True,'Mensagem':f'Empresas {self.arrayEmpresa} Desvinculadas ao usuario {self.codUsuario}'}])
 
 
 
