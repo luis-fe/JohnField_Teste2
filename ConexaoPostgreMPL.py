@@ -1,13 +1,13 @@
 import psycopg2
 from sqlalchemy import create_engine
 import os
-db_password = os.getenv("db_password")
+db_PASSWORD = os.getenv("db_password")
 
 
 def conexao():
     db_name = "postgres"
     db_user = "postgres"
-    db_password = db_password
+    db_password = db_PASSWORD
     db_host = "roundhouse.proxy.rlwy.net"
     portbanco = "21990"
 
@@ -17,7 +17,7 @@ def Funcao_Inserir (df_tags, tamanho,tabela, metodo):
     # Configurações de conexão ao banco de dados
     database = "postgres"
     user = "postgres"
-    password = db_password
+    password = db_PASSWORD
     host = "roundhouse.proxy.rlwy.net"
     port = "21990"
 
@@ -33,7 +33,7 @@ def Funcao_Inserir (df_tags, tamanho,tabela, metodo):
 def conexaoJohn():
     db_name = "postgres"
     db_user = "postgres"
-    db_password =  db_password
+    db_password =  db_PASSWORD
     db_host = "roundhouse.proxy.rlwy.net"
     portbanco = "21990"
 
@@ -42,7 +42,7 @@ def conexaoJohn():
 def conexaoEngine():
     db_name = "postgres"
     db_user = "postgres"
-    db_password = db_password
+    db_password = db_PASSWORD
     db_host = "roundhouse.proxy.rlwy.net"
     portbanco = "21990"
 
