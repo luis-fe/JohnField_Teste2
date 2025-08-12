@@ -2,7 +2,7 @@ import psycopg2
 from sqlalchemy import create_engine
 
 def conexao():
-    db_name = "Reposicao"
+    db_name = "postgres"
     db_user = "postgres"
     db_password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
     db_host = "roundhouse.proxy.rlwy.net"
@@ -12,7 +12,7 @@ def conexao():
 
 def Funcao_Inserir (df_tags, tamanho,tabela, metodo):
     # Configurações de conexão ao banco de dados
-    database = "railway"
+    database = "postgres"
     user = "postgres"
     password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
     host = "roundhouse.proxy.rlwy.net"
@@ -28,7 +28,7 @@ def Funcao_Inserir (df_tags, tamanho,tabela, metodo):
 
 
 def conexaoJohn():
-    db_name = "railway"
+    db_name = "postgres"
     db_user = "postgres"
     db_password =  "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
     db_host = "roundhouse.proxy.rlwy.net"
@@ -37,7 +37,7 @@ def conexaoJohn():
     return psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=portbanco)
 
 def conexaoEngine():
-    db_name = "railway"
+    db_name = "postgres"
     db_user = "postgres"
     db_password = "ssckCdSzGtlUyXkAylAqNVpaVJzKVRdh"
     db_host = "roundhouse.proxy.rlwy.net"
